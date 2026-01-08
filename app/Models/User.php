@@ -2,31 +2,29 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     * Kolom yang boleh diisi (Mass Assignment)
      */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'role',
+        'avatar',
+        'is_premium',
+        'premium_until',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
+     * Kolom yang disembunyikan saat serialization
      */
     protected $hidden = [
         'password',
@@ -34,15 +32,77 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Cast tipe data kolom
      */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'premium_until'     => 'datetime',
+            'is_premium'        => 'boolean',
+            'password'          => 'hashed',
         ];
+    }
+
+    /* ==================================================
+     | RELATIONSHIPS
+     |==================================================*/
+
+    /**
+     * Relasi ke profil coach
+     */
+    public function coachProfile()
+    {
+        return $this->hasOne(CoachProfile::class);
+    }
+
+    /**
+     * Relasi ke profil client
+     */
+    public function clientProfile()
+    {
+        return $this->hasOne(ClientProfile::class);
+    }
+
+    /**
+     * Coach memiliki banyak client
+     */
+    public function assignedClients()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'coach_client',
+            'coach_id',
+            'client_id'
+        );
+    }
+
+    /**
+     * Client memiliki banyak coach
+     */
+    public function assignedCoaches()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'coach_client',
+            'client_id',
+            'coach_id'
+        );
+    }
+
+    /**
+     * Relasi ke pembayaran
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Relasi ke progress log (khusus client)
+     */
+    public function progressLogs()
+    {
+        return $this->hasMany(ProgressLog::class, 'client_id');
     }
 }

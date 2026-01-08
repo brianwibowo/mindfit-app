@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Login - Bapenda</title>
+    <title>{{ $title ?? 'Auth' }} - MindFit</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="{{ asset('kaiadmin/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
 
@@ -21,23 +21,32 @@
 
     <link rel="stylesheet" href="{{ asset('kaiadmin/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('kaiadmin/css/kaiadmin.min.css') }}" />
-</head>
-<body class="login">
-    <div class="wrapper wrapper-login wrapper-login-full p-0">
-        <div class="login-aside w-50 d-flex flex-column align-items-center justify-content-center text-center bg-primary-gradient">
-            <h1 class="title fw-bold text-white mb-3">Sistem Monitoring Bapenda</h1>
-            <p class="subtitle text-white op-7">Manajemen dan monitoring pengajuan berkas secara terintegrasi.</p>
-        </div>
-        <div class="login-aside w-50 d-flex align-items-center justify-content-center bg-white">
-            
-            {{-- Di sinilah form login/register akan ditampilkan --}}
-            {{ $slot }}
 
+    <style>
+        body { background-color: #f5f7fd !important; }
+        .wrapper-auth { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .card-auth { width: 100%; max-width: 400px; border: none; box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03); }
+        .logo-auth { text-align: center; margin-bottom: 20px; }
+        .logo-auth h2 { font-weight: 800; color: #1a2035; }
+    </style>
+</head>
+<body>
+    <div class="wrapper-auth">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="logo-auth">
+                        <h2>MINDFIT</h2>
+                        <p class="text-muted">Healthy for Life</p>
+                    </div>
+                    {{ $slot }}
+                </div>
+            </div>
         </div>
     </div>
+
     <script src="{{ asset('kaiadmin/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('kaiadmin/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('kaiadmin/js/core/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('kaiadmin/js/kaiadmin.min.js') }}"></script>
 </body>
 </html>

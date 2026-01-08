@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>{{ $header ?? 'Dashboard' }} - Bapenda</title>
+    <title>{{ $header ?? 'Dashboard' }} - MindFit</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="{{ asset('kaiadmin/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
 
@@ -25,20 +25,26 @@
 </head>
 <body>
     <div class="wrapper">
-        
         @include('layouts.partials.sidebar')
 
         <div class="main-panel">
-            @include('layouts.partials.header')
+            <div class="main-header">
+                <div class="main-header-logo">
+                    <div class="logo-header" data-background-color="dark">
+                        <a href="#" class="logo">
+                            <img src="{{ asset('kaiadmin/img/kaiadmin/logo_light.svg') }}" alt="navbar brand" class="navbar-brand" height="20" />
+                        </a>
+                        <div class="nav-toggle">
+                            <button class="btn btn-toggle toggle-sidebar"><i class="gg-menu-right"></i></button>
+                            <button class="btn btn-toggle sidenav-toggler"><i class="gg-menu-left"></i></button>
+                        </div>
+                    </div>
+                </div>
+                @include('layouts.partials.header')
+            </div>
 
             <div class="container">
                 <div class="page-inner">
-                    @if (isset($header))
-                    <div class="page-header">
-                        <h3 class="fw-bold mb-3">{{ $header }}</h3>
-                    </div>
-                    @endif
-                    
                     {{ $slot }}
                 </div>
             </div>
@@ -46,10 +52,11 @@
             @include('layouts.partials.footer')
         </div>
     </div>
-    
+
     <script src="{{ asset('kaiadmin/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('kaiadmin/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('kaiadmin/js/core/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('kaiadmin/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
     <script src="{{ asset('kaiadmin/js/kaiadmin.min.js') }}"></script>
 </body>
 </html>
