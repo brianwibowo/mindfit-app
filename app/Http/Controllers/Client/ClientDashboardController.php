@@ -9,6 +9,8 @@ class ClientDashboardController extends Controller
 {
     public function index()
     {
-        return view('client.dashboard');
+        $payment = \Illuminate\Support\Facades\Auth::user()->payments()->latest()->first();
+        $packages = \App\Models\Package::where('is_active', true)->get();
+        return view('client.dashboard', compact('payment', 'packages'));
     }
 }

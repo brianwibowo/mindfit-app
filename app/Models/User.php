@@ -38,9 +38,9 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'premium_until'     => 'datetime',
-            'is_premium'        => 'boolean',
-            'password'          => 'hashed',
+            'premium_until' => 'datetime',
+            'is_premium' => 'boolean',
+            'password' => 'hashed',
         ];
     }
 
@@ -67,27 +67,33 @@ class User extends Authenticatable
     /**
      * Coach memiliki banyak client
      */
-    public function assignedClients()
+    /**
+     * Coach memiliki banyak client
+     */
+    public function clients()
     {
         return $this->belongsToMany(
             User::class,
             'coach_client',
             'coach_id',
             'client_id'
-        );
+        )->withPivot('type');
     }
 
     /**
      * Client memiliki banyak coach
      */
-    public function assignedCoaches()
+    /**
+     * Client memiliki banyak coach
+     */
+    public function coaches()
     {
         return $this->belongsToMany(
             User::class,
             'coach_client',
             'client_id',
             'coach_id'
-        );
+        )->withPivot('type');
     }
 
     /**

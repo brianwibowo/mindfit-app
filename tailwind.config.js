@@ -16,6 +16,12 @@ export default {
             },
         },
     },
+    corePlugins: {
+        preflight: false,
+    },
+    corePlugins: {
+        preflight: false,
+    },
 
     plugins: [forms],
 };

@@ -5,15 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProgressLog extends Model
+class CoachingSession extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['client_id', 'date', 'type', 'weight', 'waist', 'photo', 'description'];
+    protected $fillable = ['coach_id', 'client_id', 'date', 'title', 'type', 'notes', 'status'];
 
     protected $casts = [
-        'date' => 'date',
+        'date' => 'datetime',
     ];
+
+    public function coach()
+    {
+        return $this->belongsTo(User::class, 'coach_id');
+    }
 
     public function client()
     {

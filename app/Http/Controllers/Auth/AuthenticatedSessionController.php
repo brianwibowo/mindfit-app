@@ -31,10 +31,10 @@ class AuthenticatedSessionController extends Controller
         $role = $user->role;
 
         return match ($role) {
-            'admin'  => redirect()->route('admin.dashboard'),
-            'coach'  => redirect()->route('coach.dashboard'),
+            'admin' => redirect()->route('admin.dashboard'),
+            'coach' => redirect()->route('coach.dashboard'),
             'client' => redirect()->route('client.dashboard'),
-            default  => redirect()->route('/'),
+            default => redirect('/'),
         };
     }
 

@@ -9,6 +9,19 @@ class CoachDashboardController extends Controller
 {
     public function index()
     {
-        return view('coach.dashboard');
+        $coach = \Illuminate\Support\Facades\Auth::user();
+        $clients = $coach->clients()->get();
+
+        $sessions = \App\Models\CoachingSession::where('coach_id', $coach->id)->get();
+        $events = $sessions->map(function ($session) {
+            return [
+                'title' => $session->title . ' (' . $session->client->name . ')',
+                'start' => $session->date->toIso8601String(),
+                'color' => $session->type == 'online' ? '#1572e8' : '#eeff00', // Blue for Online, Yellow for Offline
+                'textColor' => $session->type == 'online' ? '#ffffff' : '#000000'
+            ];
+        });
+
+        return view('coach.dashboard', compact('clients', 'events'));
     }
 }
