@@ -50,7 +50,10 @@
                             <tbody>
                                 @forelse($payments as $p)
                                     <tr>
-                                        <td>{{ $p->created_at->format('d/m/Y') }}</td>
+                                        <td>
+                                            {{ $p->created_at->format('d M Y') }}<br>
+                                            <small class="text-muted">{{ $p->created_at->format('H:i') }} WIB</small>
+                                        </td>
                                         <td>
                                             <b>{{ $p->user->name }}</b><br>
                                             <small>{{ $p->user->email }}</small>

@@ -23,21 +23,30 @@ class AdminPackageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|in:fitness,nutrition',
+            'name' => 'required',
+            'type' => 'required',
             'price' => 'required|numeric',
-            'duration_days' => 'required|integer',
-            'description' => 'required|string',
-            'image' => 'nullable|image|max:2048',
+            'duration_days' => 'required|numeric',
+            'description' => 'required',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB per file
         ]);
 
-        $data = $request->all();
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('packages', 'public');
+        $imagePaths = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imagePaths[] = $image->store('packages', 'public');
+            }
         }
 
-        Package::create($data);
+        Package::create([
+            'name' => $request->name,
+            'type' => $request->type,
+            'price' => $request->price,
+            'duration_days' => $request->duration_days,
+            'description' => $request->description,
+            'image' => count($imagePaths) > 0 ? json_encode($imagePaths) : null, // Store as JSON
+            'is_active' => true,
+        ]);
 
         return redirect()->route('admin.packages.index')->with('success', 'Paket berhasil ditambahkan');
     }
@@ -55,21 +64,28 @@ class AdminPackageController extends Controller
     public function update(Request $request, Package $package)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|in:fitness,nutrition',
+            'name' => 'required',
+            'type' => 'required',
             'price' => 'required|numeric',
-            'duration_days' => 'required|integer',
-            'description' => 'required|string',
-            'image' => 'nullable|image|max:2048',
+            'duration_days' => 'required|numeric',
+            'description' => 'required',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
-        $data = $request->all();
+        $data = $request->except(['images']);
 
-        if ($request->hasFile('image')) {
-            if ($package->image) {
-                Storage::disk('public')->delete($package->image);
+        if ($request->hasFile('images')) {
+            // Delete old images if need OR keep them.
+            // For simplicity, we replace them if new ones are uploaded, OR we specific logic.
+            // "Standard" is usually replace.
+
+            // If you want to delete old images, you'd need to decode $package->image (if it's JSON)
+            // and delete each path. For now, we're just replacing the reference.
+            $imagePaths = [];
+            foreach ($request->file('images') as $image) {
+                $imagePaths[] = $image->store('packages', 'public');
             }
-            $data['image'] = $request->file('image')->store('packages', 'public');
+            $data['image'] = json_encode($imagePaths);
         }
 
         $data['is_active'] = $request->has('is_active'); // Checkbox handling

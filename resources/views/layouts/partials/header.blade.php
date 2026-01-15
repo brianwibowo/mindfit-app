@@ -6,8 +6,8 @@
                 <li class="nav-item dropdown hidden-caret">
                     <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                         <div class="avatar-sm">
-                            <img src="{{ asset('kaiadmin/img/profile.jpg') }}" alt="..."
-                                class="avatar-img rounded-circle" />
+                            <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('kaiadmin/img/profile.jpg') }}"
+                                alt="..." class="avatar-img rounded-circle" style="object-fit: cover" />
                         </div>
                         <span class="profile-username">
                             <span class="op-7">Hai,</span>
@@ -21,7 +21,8 @@
                                     <div class="u-text">
                                         <h4>{{ Auth::user()->name }}</h4>
                                         <p class="text-muted">{{ Auth::user()->email }}</p>
-                                        <span class="badge badge-primary">{{ strtoupper(Auth::user()->role) }}</span>
+                                        <a href="{{ route('profile.edit') }}" class="btn btn-xs btn-secondary btn-sm">View
+                                            Profile</a>
                                     </div>
                                 </div>
                             </li>

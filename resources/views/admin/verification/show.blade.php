@@ -2,7 +2,7 @@
     <x-slot name="header">Verifikasi Pembayaran</x-slot>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Data Pendaftaran</div>
@@ -19,11 +19,12 @@
                         </tr>
                         <tr>
                             <th>WhatsApp</th>
-                            <td>{{ $payment->user->phone ?? '-' }}</td>
+                            {{-- Check User Data directly --}}
+                            <td>{{ $payment->user->phone ?? 'Belum Diisi' }}</td>
                         </tr>
                         <tr>
                             <th>Alamat</th>
-                            <td>{{ $payment->user->address ?? '-' }}</td>
+                            <td>{{ $payment->user->address ?? 'Belum Diisi' }}</td>
                         </tr>
                         <tr>
                             <td colspan="2">
@@ -35,8 +36,8 @@
                             <td>{{ $payment->package_data['package_name'] ?? '-' }}</td>
                         </tr>
                         <tr>
-                            <th>Harga Paket</th>
-                            <td>Rp {{ number_format($payment->package_data['package_price'] ?? 0, 0, ',', '.') }}</td>
+                            <th>Durasi</th>
+                            <td>{{ $payment->package_data['package_duration'] ?? 0 }} Hari</td>
                         </tr>
                         <tr>
                             <th>Add-on Meal Plan</th>
@@ -61,57 +62,72 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Bukti Pembayaran</div>
+                    <div class="card-title">Bukti & Keputusan</div>
                 </div>
-                <div class="card-body text-center">
-                    <img src="{{ asset('storage/' . $payment->proof_file) }}" alt="Bukti Bayar"
-                        class="img-fluid rounded mb-3" style="max-height: 400px; cursor: pointer;"
-                        onclick="window.open(this.src)">
-                    <p class="text-muted"><small>Klik gambar untuk memperbesar</small></p>
+                <div class="card-body">
+                    {{-- Proof Image --}}
+                    <div class="text-center mb-4">
+                        <img src="{{ asset('storage/' . $payment->proof_file) }}" alt="Bukti Bayar"
+                            class="img-fluid rounded border" style="max-height: 350px; cursor: pointer;"
+                            onclick="window.open(this.src)">
+                        <p class="text-muted mt-2"><small><i class="fas fa-search-plus"></i> Klik gambar untuk
+                                memperbesar</small></p>
+                    </div>
 
                     <div
                         class="alert alert-{{ $payment->status == 'approved' ? 'success' : ($payment->status == 'pending' ? 'warning' : ($payment->status == 'rejected' ? 'danger' : 'info')) }}">
                         Status Saat Ini: <b>{{ strtoupper($payment->status) }}</b>
                     </div>
 
-                    {{-- Action Buttons (Only for pending/revision) --}}
+                    {{-- Action Form (Only for pending/revision) --}}
                     @if($payment->status != 'approved' && $payment->status != 'rejected')
                         <hr>
-                        <h4>Keputusan Admin:</h4>
-                        <div class="d-flex gap-2 justify-content-center">
-                            {{-- APPROVE --}}
-                            <form action="{{ route('admin.verification.update', $payment->id) }}" method="POST"
-                                onsubmit="return confirm('Yakin setujui? Klien akan langsung aktif.')">
-                                @csrf @request('action', 'approved')
-                                <input type="hidden" name="action" value="approved">
-                                <button class="btn btn-success">
-                                    <i class="fas fa-check"></i> SETUJUI (Active)
-                                </button>
-                            </form>
+                        <form action="{{ route('admin.verification.update', $payment->id) }}" method="POST">
+                            @csrf
 
-                            {{-- REVISE --}}
-                            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#reviseModal">
-                                <i class="fas fa-edit"></i> MINTA REVISI
-                            </button>
+                            {{-- 1. DECISION DROPDOWN --}}
+                            <div class="form-group">
+                                <label for="actionSelect" class="fw-bold fs-5">Keputusan Admin <span
+                                        class="text-danger">*</span></label>
+                                <select name="action" id="actionSelect" class="form-select form-control" required>
+                                    <option value="">-- Pilih Keputusan --</option>
+                                    <option value="approved">✅ Setujui Pendaftaran (Aktifkan Member)</option>
+                                    <option value="revision">⚠️ Minta Revisi (Kirim Catatan ke Klien)</option>
+                                    <option value="rejected">❌ Tolak Pendaftaran (Permanen)</option>
+                                </select>
+                            </div>
 
-                            {{-- REJECT --}}
-                            <form action="{{ route('admin.verification.update', $payment->id) }}" method="POST"
-                                onsubmit="return confirm('Yakin TOLAK pendaftaran ini? Aksi ini tidak bisa dibatalkan.')">
-                                @csrf
-                                <input type="hidden" name="action" value="rejected">
-                                <button class="btn btn-danger">
-                                    <i class="fas fa-times"></i> TOLAK (Failed)
+                            {{-- 2. REVISION NOTE (Conditional) --}}
+                            <div class="form-group d-none" id="revisionNoteGroup">
+                                <label class="fw-bold">Catatan Revisi <span class="text-danger">*</span></label>
+                                <textarea name="admin_note" id="adminNote" class="form-control" rows="3"
+                                    placeholder="Jelaskan apa yang salah. Contoh: Bukti transfer tidak terbaca / Nominal kurang."></textarea>
+                                <small class="text-muted">Catatan ini akan dikirimkan ke Klien.</small>
+                            </div>
+
+                            {{-- 3. CHECKLIST --}}
+                            <div class="form-check mt-3">
+                                <input class="form-check-input" type="checkbox" id="confirmCheck" required>
+                                <label class="form-check-label" for="confirmCheck">
+                                    Saya sudah meninjau bukti pembayaran dan data calon member dengan teliti.
+                                </label>
+                            </div>
+
+                            {{-- 4. SUBMIT --}}
+                            <div class="form-action mt-4">
+                                <button type="submit" class="btn btn-primary w-100 fw-bold">
+                                    <i class="fas fa-save"></i> SIMPAN KEPUTUSAN
                                 </button>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     @endif
                 </div>
             </div>
 
-            {{-- COACH ASSIGNMENT (Only for Approved) --}}
+            {{-- COACH ASSIGNMENT (Already Approved) --}}
             @if($payment->status == 'approved')
                 <div class="card mt-4">
                     <div class="card-header">
@@ -126,7 +142,6 @@
                                             <b>{{ $coach->name }}</b>
                                             <div class="text-muted">{{ ucfirst($coach->pivot->type) }} Coach</div>
                                         </td>
-                                        {{-- Optional: Add remove button later --}}
                                     </tr>
                                 @endforeach
                             </table>
@@ -141,33 +156,6 @@
                     </div>
                 </div>
             @endif
-        </div>
-    </div>
-
-    {{-- MODAL REVISI --}}
-    <div class="modal fade" id="reviseModal" tabindex="-1">
-        <div class="modal-dialog">
-            <form action="{{ route('admin.verification.update', $payment->id) }}" method="POST">
-                @csrf
-                <input type="hidden" name="action" value="revision">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Catatan Revisi</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Apa yang perlu diperbaiki oleh Klien?</label>
-                            <textarea name="admin_note" class="form-control" rows="4" required
-                                placeholder="Contoh: Bukti transfer buram, mohon upload ulang."></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-warning">Kirim Permintaan Revisi</button>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
 
@@ -210,5 +198,22 @@
             </div>
         </div>
     @endif
+
+    @push('scripts')
+        <script>
+            $(document).ready(function () {
+                $('#actionSelect').on('change', function () {
+                    var val = $(this).val();
+                    if (val === 'revision') {
+                        $('#revisionNoteGroup').removeClass('d-none');
+                        $('#adminNote').prop('required', true);
+                    } else {
+                        $('#revisionNoteGroup').addClass('d-none');
+                        $('#adminNote').prop('required', false);
+                    }
+                });
+            });
+        </script>
+    @endpush
 
 </x-app-layout>

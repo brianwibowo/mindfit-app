@@ -16,6 +16,12 @@ class ClientProgressController extends Controller
         return view('client.progress.index', compact('logs'));
     }
 
+    public function charts()
+    {
+        $logs = ProgressLog::where('client_id', Auth::id())->orderBy('date', 'asc')->get();
+        return view('client.progress.charts', compact('logs'));
+    }
+
     public function create()
     {
         return view('client.progress.create');
@@ -48,5 +54,64 @@ class ClientProgressController extends Controller
         ]);
 
         return redirect()->route('client.progress.index')->with('success', 'Progress berhasil disimpan!');
+    }
+
+    public function show($id)
+    {
+        $log = ProgressLog::where('client_id', Auth::id())->findOrFail($id);
+        return view('client.progress.show', compact('log'));
+    }
+
+    public function edit($id)
+    {
+        $log = ProgressLog::where('client_id', Auth::id())->findOrFail($id);
+        return view('client.progress.edit', compact('log'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $log = ProgressLog::where('client_id', Auth::id())->findOrFail($id);
+
+        $request->validate([
+            'date' => 'required|date',
+            'weight' => 'nullable|numeric',
+            'waist' => 'nullable|numeric',
+            'type' => 'required|in:workout,nutrition,body_check',
+            'photo' => 'nullable|image|max:2048',
+            'description' => 'nullable|string',
+        ]);
+
+        $updateData = [
+            'date' => $request->date,
+            'type' => $request->type,
+            'weight' => $request->weight,
+            'waist' => $request->waist,
+            'description' => $request->description,
+        ];
+
+        if ($request->hasFile('photo')) {
+            // Delete old photo
+            if ($log->photo) {
+                Storage::disk('public')->delete($log->photo);
+            }
+            $updateData['photo'] = $request->file('photo')->store('progress_photos', 'public');
+        }
+
+        $log->update($updateData);
+
+        return redirect()->route('client.progress.index')->with('success', 'Progress berhasil diperbarui!');
+    }
+
+    public function destroy($id)
+    {
+        $log = ProgressLog::where('client_id', Auth::id())->findOrFail($id);
+
+        if ($log->photo) {
+            Storage::disk('public')->delete($log->photo);
+        }
+
+        $log->delete();
+
+        return redirect()->route('client.progress.index')->with('success', 'Progress berhasil dihapus.');
     }
 }

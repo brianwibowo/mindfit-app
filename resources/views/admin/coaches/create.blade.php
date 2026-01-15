@@ -39,7 +39,7 @@
                         </div>
                         <div class="card-action">
                             <button class="btn btn-success">Simpan</button>
-                            <a href="{{ route('admin.dashboard') }}" class="btn btn-danger">Batal</a>
+                            <a href="{{ route('admin.coaches.index') }}" class="btn btn-danger">Batal</a>
                         </div>
                     </form>
                 </div>

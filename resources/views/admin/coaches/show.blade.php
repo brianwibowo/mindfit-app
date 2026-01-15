@@ -5,8 +5,18 @@
         <div class="col-md-4">
             {{-- INFO COACH --}}
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <div class="card-title">Profil Coach</div>
+                    {{-- DELETE BUTTON --}}
+                    <form id="delete-coach-{{ $coach->id }}" action="{{ route('admin.coaches.destroy', $coach->id) }}"
+                        method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-danger btn-sm"
+                            onclick="confirmDelete(event, 'delete-coach-{{ $coach->id }}')">
+                            <i class="fa fa-trash"></i> Hapus Akun
+                        </button>
+                    </form>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -24,7 +34,7 @@
                                 <td>
                                     <span
                                         class="badge badge-{{ $coach->specialization == 'fitness' ? 'primary' : 'success' }}">
-                                        {{ ucfirst($coach->specialization ?? 'General') }}
+                                        {{ $coach->specialization == 'fitness' ? 'Fitness Coach' : ($coach->specialization == 'nutritionist' ? 'Nutritionist' : '-') }}
                                     </span>
                                 </td>
                             </tr>
@@ -46,16 +56,19 @@
                     <form action="{{ route('admin.coaches.assign_clients', $coach->id) }}" method="POST">
                         @csrf
                         <div class="form-group p-0">
-                            <label>Pilih Klien (Multiple)</label>
-                            <select name="client_ids[]" class="form-control" multiple style="height: 200px" required>
+                            <label>Pilih Klien (Searchable)</label>
+                            <select name="client_ids[]" class="form-control select2" multiple="multiple"
+                                style="width: 100%" required>
                                 @forelse($availableClients as $client)
                                     <option value="{{ $client->id }}">{{ $client->name }} ({{ $client->email }})</option>
                                 @empty
-                                    <option disabled>Tidak ada klien aktif yang tersedia.</option>
+                                    <!-- No Clients -->
                                 @endforelse
                             </select>
-                            <small class="form-text text-muted">Tahan tombol 'Ctrl' (Windows) atau 'Command' (Mac) untuk
-                                memilih lebih dari satu.</small>
+                            @if($availableClients->isEmpty())
+                                <small class="text-danger mt-2">Tidak ada klien aktif yang tersedia/belum memiliki
+                                    coach.</small>
+                            @endif
                         </div>
                         <button type="submit" class="btn btn-primary btn-block mt-3" {{ $availableClients->isEmpty() ? 'disabled' : '' }}>
                             Simpan Klien
@@ -90,12 +103,13 @@
                                         <td>{{ $client->pivot->created_at ? $client->pivot->created_at->format('d M Y') : '-' }}
                                         </td>
                                         <td>
-                                            <form
+                                            <form id="delete-form-{{ $client->id }}"
                                                 action="{{ route('admin.coaches.unassign_client', ['coach' => $coach->id, 'client' => $client->id]) }}"
-                                                method="POST" onsubmit="return confirm('Yakin ingin melepas klien ini?');">
+                                                method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                <button type="button" class="btn btn-danger btn-sm"
+                                                    onclick="confirmDelete(event, 'delete-form-{{ $client->id }}')">
                                                     <i class="fa fa-trash"></i> Lepas
                                                 </button>
                                             </form>
@@ -113,4 +127,17 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.select2').select2({
+                    placeholder: "Pilih Klien...",
+                    allowClear: true
+                });
+            });
+        </script>
+    @endpush
 </x-app-layout>

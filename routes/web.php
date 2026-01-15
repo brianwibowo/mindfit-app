@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/coaches', [\App\Http\Controllers\Admin\AdminCoachController::class, 'store'])->name('coaches.store');
 
         Route::get('/coaches/{coach}', [\App\Http\Controllers\Admin\AdminCoachController::class, 'show'])->name('coaches.show');
+        Route::delete('/coaches/{coach}', [\App\Http\Controllers\Admin\AdminCoachController::class, 'destroy'])->name('coaches.destroy');
         Route::post('/coaches/{coach}/assign-clients', [\App\Http\Controllers\Admin\AdminCoachController::class, 'assignClients'])->name('coaches.assign_clients');
         Route::delete('/coaches/{coach}/clients/{client}', [\App\Http\Controllers\Admin\AdminCoachController::class, 'unassignClient'])->name('coaches.unassign_client');
 
@@ -60,7 +61,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Jalur khusus Coach
     Route::middleware(['role:coach'])->prefix('coach')->name('coach.')->group(function () {
-        Route::get('/dashboard', [\App\Http\Controllers\Coach\CoachDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [CoachDashboardController::class, 'index'])->name('dashboard');
 
         // Session Management
         Route::get('/sessions/create/{client}', [\App\Http\Controllers\Coach\CoachSessionController::class, 'create'])->name('sessions.create');
@@ -72,18 +73,33 @@ Route::middleware(['auth'])->group(function () {
 
     // Jalur khusus Client
     Route::middleware(['role:client'])->prefix('client')->name('client.')->group(function () {
-        Route::get('/dashboard', [\App\Http\Controllers\Client\ClientDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
+
+        // Registration / Payment Flow
+        Route::get('/register-package', [\App\Http\Controllers\Client\ClientPaymentController::class, 'create'])->name('payment.create');
         Route::post('/payment', [\App\Http\Controllers\Client\ClientPaymentController::class, 'store'])->name('payment.store');
+        Route::get('/payment/{payment}', [\App\Http\Controllers\Client\ClientPaymentController::class, 'show'])->name('payment.show');
+        Route::get('/payment/{payment}/edit', [\App\Http\Controllers\Client\ClientPaymentController::class, 'edit'])->name('payment.edit');
+        Route::patch('/payment/{payment}', [\App\Http\Controllers\Client\ClientPaymentController::class, 'update'])->name('payment.update');
 
         // Service Routes
         Route::get('/sessions', [\App\Http\Controllers\Client\ClientSessionController::class, 'index'])->name('sessions.index');
 
         // Progress Routes
         Route::get('/progress', [\App\Http\Controllers\Client\ClientProgressController::class, 'index'])->name('progress.index');
+        Route::get('/progress/visuals', [\App\Http\Controllers\Client\ClientProgressController::class, 'charts'])->name('progress.charts');
         Route::get('/progress/create', [\App\Http\Controllers\Client\ClientProgressController::class, 'create'])->name('progress.create');
         Route::post('/progress', [\App\Http\Controllers\Client\ClientProgressController::class, 'store'])->name('progress.store');
-    });
+        Route::get('/progress/{id}', [\App\Http\Controllers\Client\ClientProgressController::class, 'show'])->name('progress.show');
+        Route::get('/progress/{id}/edit', [\App\Http\Controllers\Client\ClientProgressController::class, 'edit'])->name('progress.edit');
+        Route::put('/progress/{id}', [\App\Http\Controllers\Client\ClientProgressController::class, 'update'])->name('progress.update');
+        Route::delete('/progress/{id}', [\App\Http\Controllers\Client\ClientProgressController::class, 'destroy'])->name('progress.destroy');
 
+        // AI Feature
+        Route::get('/ai', function () {
+            return view('client.ai.index');
+        })->name('ai.index');
+    });
 });
 
 /*

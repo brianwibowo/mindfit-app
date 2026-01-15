@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -23,6 +24,7 @@
     <link rel="stylesheet" href="{{ asset('kaiadmin/css/plugins.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('kaiadmin/css/kaiadmin.min.css') }}" />
 </head>
+
 <body>
     <div class="wrapper">
         @include('layouts.partials.sidebar')
@@ -32,7 +34,8 @@
                 <div class="main-header-logo">
                     <div class="logo-header" data-background-color="dark">
                         <a href="#" class="logo">
-                            <img src="{{ asset('kaiadmin/img/kaiadmin/logo_light.svg') }}" alt="navbar brand" class="navbar-brand" height="20" />
+                            <img src="{{ asset('kaiadmin/img/kaiadmin/logo_light.svg') }}" alt="navbar brand"
+                                class="navbar-brand" height="20" />
                         </a>
                         <div class="nav-toggle">
                             <button class="btn btn-toggle toggle-sidebar"><i class="gg-menu-right"></i></button>
@@ -45,6 +48,7 @@
 
             <div class="container">
                 <div class="page-inner">
+                    @include('layouts.partials.alerts')
                     {{ $slot }}
                 </div>
             </div>
@@ -58,5 +62,7 @@
     <script src="{{ asset('kaiadmin/js/core/bootstrap.min.js') }}"></script>
     <script src="{{ asset('kaiadmin/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
     <script src="{{ asset('kaiadmin/js/kaiadmin.min.js') }}"></script>
+    @stack('scripts')
 </body>
+
 </html>

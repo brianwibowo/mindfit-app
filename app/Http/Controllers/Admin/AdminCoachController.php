@@ -104,4 +104,14 @@ class AdminCoachController extends Controller
 
         return redirect()->back()->with('success', 'Coach berhasil di-assign!');
     }
+    public function destroy(User $coach)
+    {
+        // Detach all clients first (optional, cascade handles it usually but good for safety)
+        $coach->clients()->detach();
+
+        // Delete user
+        $coach->delete();
+
+        return redirect()->route('admin.coaches.index')->with('success', 'Akun Coach berhasil dihapus.');
+    }
 }

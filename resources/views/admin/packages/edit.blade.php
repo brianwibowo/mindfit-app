@@ -47,11 +47,34 @@
                                 required>{{ $package->description }}</textarea>
                         </div>
                         <div class="form-group">
-                            <label>Thumbnail (Biarkan kosong jika tidak ganti)</label>
-                            <input type="file" name="image" class="form-control">
+                            <label>Thumbnail / Gambar Produk (Maks 5 Foto)</label>
+                            <input type="file" name="images[]" class="form-control" multiple accept="image/*">
+                            <small class="text-muted" id="fileInfo"></small>
+
                             @if($package->image)
-                                <small>Saat ini: <a href="{{ asset('storage/' . $package->image) }}" target="_blank">Lihat
-                                        Gambar</a></small>
+                                <div class="mt-2">
+                                    <label>Gambar Saat Ini:</label>
+                                    <div class="d-flex" style="gap: 10px; overflow-x: auto">
+                                        @php
+                                            $currentImages = json_decode($package->image);
+                                            // Handle legacy single string
+                                            if (!is_array($currentImages) && $package->image) {
+                                                $currentImages = [$package->image];
+                                            } elseif (!$currentImages && $package->image) {
+                                                $currentImages = [$package->image];
+                                            }
+                                        @endphp
+
+                                        @if($currentImages)
+                                            @foreach($currentImages as $img)
+                                                <img src="{{ asset('storage/' . $img) }}"
+                                                    style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd;">
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                    <small class="text-warning">*Mengupload gambar baru akan menggantikan SEMUA gambar
+                                        lama.</small>
+                                </div>
                             @endif
                         </div>
                         <div class="form-check">
@@ -62,7 +85,7 @@
                         </div>
 
                         <div class="card-action">
-                            <button class="btn btn-success">Update Paket</button>
+                            <button class="btn btn-success" id="btnSubmit">Update Paket</button>
                             <a href="{{ route('admin.packages.index') }}" class="btn btn-danger">Batal</a>
                         </div>
                     </form>
@@ -70,4 +93,40 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            $(document).ready(function () {
+                $('input[name="images[]"]').on('change', function () {
+                    var files = this.files;
+                    var totalSize = 0;
+                    var maxTotalSize = 5 * 1024 * 1024; // 5MB
+
+                    if (files.length > 5) {
+                        swal('Error', 'Maksimal upload 5 gambar sekaligus.', 'error');
+                        $(this).val('');
+                        return;
+                    }
+
+                    for (var i = 0; i < files.length; i++) {
+                        totalSize += files[i].size;
+                    }
+
+                    if (totalSize > maxTotalSize) {
+                        swal('Size Limit', 'Total ukuran file terlalu besar! Maksimal 5MB untuk semua gambar.', 'error');
+                        $(this).val(''); // Reset
+                        $('#fileInfo').text('');
+                    } else {
+                        $('#fileInfo').text(files.length + ' file dipilih. Total: ' + (totalSize / 1024 / 1024).toFixed(2) + ' MB');
+                    }
+                });
+
+                $('form').on('submit', function () {
+                    var btn = $('#btnSubmit');
+                    btn.html('<i class="fa fa-spinner fa-spin"></i> Uploading...');
+                    btn.prop('disabled', true);
+                });
+            });
+        </script>
+    @endpush
 </x-app-layout>

@@ -11,13 +11,6 @@
                     </a>
                 </div>
                 <div class="card-body">
-                    {{-- GRAFIK / CHART --}}
-                    @if($logs->count() > 0)
-                        <div class="chart-container mb-4" style="position: relative; height:40vh; width:100%;">
-                            <canvas id="weightChart"></canvas>
-                        </div>
-                    @endif
-
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
@@ -26,6 +19,8 @@
                                     <th>Capaian Fisik</th>
                                     <th>Foto</th>
                                     <th>Tipe/Catatan</th>
+                                    <th width="25%">Catatan Coach</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,10 +48,38 @@
                                             <span class="badge badge-info mb-1">{{ ucfirst($log->type) }}</span>
                                             <p class="small mb-0">{{ Str::limit($log->description, 50) }}</p>
                                         </td>
+                                        <td>
+                                            @if($log->coach_note)
+                                                <div class="alert alert-warning p-2 mb-0">
+                                                    <small class="fw-bold"><i class="fas fa-comment-dots"></i>
+                                                        {{ $log->coach->name ?? 'Coach' }}:</small>
+                                                    <p class="mb-0 small fst-italic">"{{ $log->coach_note }}"</p>
+                                                </div>
+                                            @else
+                                                <span class="text-muted small">- Belum ada feedback -</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a href="{{ route('client.progress.show', $log->id) }}" class="btn btn-link btn-info" data-bs-toggle="tooltip" title="Lihat">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                                <a href="{{ route('client.progress.edit', $log->id) }}" class="btn btn-link btn-warning" data-bs-toggle="tooltip" title="Edit">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                                <form action="{{ route('client.progress.destroy', $log->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-link btn-danger" data-bs-toggle="tooltip" title="Hapus">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center">Belum ada catatan progress. Yuk mulai catat!
+                                        <td colspan="6" class="text-center">Belum ada catatan progress. Yuk mulai catat!
                                         </td>
                                     </tr>
                                 @endforelse
@@ -67,47 +90,4 @@
             </div>
         </div>
     </div>
-    @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const ctx = document.getElementById('weightChart');
-                if (ctx) {
-                    const logs = @json($logs);
-                    // Sort ascending by date
-                    logs.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-                    const labels = logs.map(log => new Date(log.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }));
-                    const weights = logs.map(log => log.weight);
-
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Berat Badan (Kg)',
-                                data: weights,
-                                borderColor: '#1572e8', // Primary Blue
-                                backgroundColor: 'rgba(21, 114, 232, 0.1)',
-                                borderWidth: 2,
-                                tension: 0.4,
-                                fill: true,
-                                pointRadius: 4
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                y: { beginAtZero: false, title: { display: true, text: 'Kg' } }
-                            },
-                            plugins: {
-                                legend: { display: true, position: 'top' }
-                            }
-                        }
-                    });
-                }
-            });
-        </script>
-    @endpush
 </x-app-layout>

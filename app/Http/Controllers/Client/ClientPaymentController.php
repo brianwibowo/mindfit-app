@@ -9,6 +9,90 @@ use Illuminate\Support\Facades\Auth;
 
 class ClientPaymentController extends Controller
 {
+    public function create()
+    {
+        $packages = \App\Models\Package::where('is_active', true)->get();
+        return view('client.register', compact('packages'));
+    }
+
+    public function show(Payment $payment)
+    {
+        if ($payment->user_id !== Auth::id()) {
+            abort(403);
+        }
+        return view('client.payment.show', compact('payment'));
+    }
+
+    public function edit(Payment $payment)
+    {
+        if ($payment->user_id !== Auth::id()) {
+            abort(403);
+        }
+        if ($payment->status != 'revision') {
+            return redirect()->route('client.dashboard')->with('error', 'Hanya status Revisi yang dapat diedit.');
+        }
+
+        $packages = \App\Models\Package::where('is_active', true)->get();
+        $user = Auth::user()->fresh();
+        return view('client.payment.edit', compact('payment', 'packages', 'user'));
+    }
+
+    public function update(Request $request, Payment $payment)
+    {
+        if ($payment->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'phone' => 'required|string',
+            'address' => 'required|string',
+            'package_id' => 'required|exists:packages,id',
+            'proof_file' => 'nullable|image|max:5048', // Optional for update
+        ]);
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // 1. Update User Profile
+        $user->update([
+            'phone' => $request->phone,
+            'address' => $request->address,
+        ]);
+
+        // 2. Prepare Snapshot Data
+        $package = \App\Models\Package::find($request->package_id);
+        $hasMealPlan = $request->has('meal_plan');
+        $mealPlanPrice = 400000;
+
+        $snapshot = [
+            'package_name' => $package->name,
+            'package_price' => $package->price,
+            'package_duration' => $package->duration_days,
+            'addon_meal_plan' => $hasMealPlan,
+            'addon_price' => $hasMealPlan ? $mealPlanPrice : 0,
+            'total_price' => $package->price + ($hasMealPlan ? $mealPlanPrice : 0),
+        ];
+
+        // 3. Update Payment
+        $updateData = [
+            'package_id' => $package->id,
+            'package_data' => $snapshot,
+            'status' => 'pending', // Reset status to pending
+            'admin_note' => null,   // Clear revision note
+            // Update legacy duration if needed, though we rely on snapshot
+            'duration_months' => round($package->duration_days / 30),
+        ];
+
+        if ($request->hasFile('proof_file')) {
+            $path = $request->file('proof_file')->store('payments', 'public');
+            $updateData['proof_file'] = $path;
+        }
+
+        $payment->update($updateData);
+
+        return redirect()->route('client.dashboard')->with('success', 'Perbaikan berhasil dikirim! Mohon tunggu verifikasi admin.');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -18,6 +102,7 @@ class ClientPaymentController extends Controller
             'proof_file' => 'required|image|max:5048',
         ]);
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         // 1. Update User Profile
@@ -66,6 +151,6 @@ class ClientPaymentController extends Controller
         // Allow multiple records history. If updateOrCreate created a NEW one (wasn't revision), good.
         // If it updated Revision, also good.
 
-        return redirect()->back()->with('success', 'Pendaftaran berhasil dikirim! Mohon tunggu verifikasi admin.');
+        return redirect()->route('client.dashboard')->with('success', 'Pendaftaran berhasil dikirim! Mohon tunggu verifikasi admin.');
     }
 }

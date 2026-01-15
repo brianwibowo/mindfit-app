@@ -28,9 +28,19 @@
                                 @forelse($packages as $package)
                                     <tr>
                                         <td>
-                                            @if($package->image)
-                                                <img src="{{ asset('storage/' . $package->image) }}" alt="img" width="50"
-                                                    class="rounded">
+                                            @php
+                                                $images = json_decode($package->image);
+                                                $validImage = null;
+                                                if (is_array($images) && count($images) > 0) {
+                                                    $validImage = $images[0];
+                                                } elseif ($package->image && !is_array($images)) {
+                                                    $validImage = $package->image;
+                                                }
+                                            @endphp
+
+                                            @if($validImage)
+                                                <img src="{{ asset('storage/' . $validImage) }}" alt="img" width="50"
+                                                    height="50" style="object-fit: cover" class="rounded">
                                             @else
                                                 <span class="text-muted">No Img</span>
                                             @endif

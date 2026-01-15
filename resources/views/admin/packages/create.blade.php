@@ -42,8 +42,9 @@
                                 placeholder="Jelaskan benefit paket ini..."></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Thumbnail</label>
-                            <input type="file" name="image" class="form-control">
+                            <label>Thumbnail / Gambar Produk (Maks 5 Foto, Total 5MB)</label>
+                            <input type="file" name="images[]" class="form-control" multiple accept="image/*">
+                            <small class="text-muted" id="fileInfo"></small>
                         </div>
 
                         <div class="card-action">
@@ -58,23 +59,36 @@
 
     @push('scripts')
         <script>
-            document.querySelector('input[name="image"]').addEventListener('change', function (e) {
-                const file = this.files[0];
-                if (file) {
-                    if (file.size > 2 * 1024 * 1024) { // 2MB
-                        alert('Ukuran file terlalu besar! Maksimal 2MB.');
-                        this.value = ''; // Reset
-                    } else {
-                        // Optional: Show preview or success indicator
-                        // alert('File siap diupload: ' + file.name);
-                    }
-                }
-            });
+            $(document).ready(function () {
+                $('input[name="images[]"]').on('change', function () {
+                    var files = this.files;
+                    var totalSize = 0;
+                    var maxTotalSize = 5 * 1024 * 1024; // 5MB
 
-            document.querySelector('form').addEventListener('submit', function () {
-                const btn = document.getElementById('btnSubmit');
-                btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...';
-                btn.disabled = true;
+                    if (files.length > 5) {
+                        swal('Error', 'Maksimal upload 5 gambar sekaligus.', 'error');
+                        $(this).val('');
+                        return;
+                    }
+
+                    for (var i = 0; i < files.length; i++) {
+                        totalSize += files[i].size;
+                    }
+
+                    if (totalSize > maxTotalSize) {
+                        swal('Size Limit', 'Total ukuran file terlalu besar! Maksimal 5MB untuk semua gambar.', 'error');
+                        $(this).val(''); // Reset
+                        $('#fileInfo').text('');
+                    } else {
+                        $('#fileInfo').text(files.length + ' file dipilih. Total: ' + (totalSize / 1024 / 1024).toFixed(2) + ' MB');
+                    }
+                });
+
+                $('form').on('submit', function () {
+                    var btn = $('#btnSubmit');
+                    btn.html('<i class="fa fa-spinner fa-spin"></i> Uploading...');
+                    btn.prop('disabled', true);
+                });
             });
         </script>
     @endpush

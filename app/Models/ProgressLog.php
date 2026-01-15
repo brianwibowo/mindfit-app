@@ -9,7 +9,17 @@ class ProgressLog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['client_id', 'date', 'type', 'weight', 'waist', 'photo', 'description'];
+    protected $fillable = [
+        'client_id',
+        'coach_id',
+        'date',
+        'type',
+        'weight',
+        'waist',
+        'photo',
+        'description',
+        'coach_note'
+    ];
 
     protected $casts = [
         'date' => 'date',
@@ -18,5 +28,10 @@ class ProgressLog extends Model
     public function client()
     {
         return $this->belongsTo(User::class, 'client_id');
+    }
+
+    public function coach()
+    {
+        return $this->belongsTo(User::class, 'coach_id');
     }
 }
