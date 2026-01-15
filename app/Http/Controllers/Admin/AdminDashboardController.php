@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class AdminDashboardController extends Controller
 {
     public function index()
     {
         $status = request('status', 'pending');
+        $chartFilter = request('chart_filter', 'week'); // week, month, year
 
         // 1. Stats
         $totalMembers = User::where('role', 'client')->count();
@@ -19,17 +21,44 @@ class AdminDashboardController extends Controller
         $activeClients = User::where('role', 'client')->where('is_premium', true)->count();
         $totalCoaches = User::where('role', 'coach')->count();
 
-        // 2. Trend Chart (7 Days)
+        // 2. Trend Chart
         $dates = collect();
         $registrations = collect();
-        for ($i = 6; $i >= 0; $i--) {
-            $date = \Carbon\Carbon::today()->subDays($i);
-            $dates->push($date->format('d M'));
-            $registrations->push(User::where('role', 'client')->whereDate('created_at', $date)->count());
+
+        if ($chartFilter == 'month') {
+            // Daily for current month
+            $daysInMonth = \Carbon\Carbon::now()->daysInMonth;
+            for ($i = 1; $i <= $daysInMonth; $i++) {
+                $date = \Carbon\Carbon::createFromDate(null, null, $i);
+                $dates->push($date->format('d'));
+                $registrations->push(User::where('role', 'client')->whereDate('created_at', $date)->count());
+            }
+        } elseif ($chartFilter == 'year') {
+            // Monthly for current year
+            for ($i = 1; $i <= 12; $i++) {
+                $date = \Carbon\Carbon::createFromDate(null, $i, 1);
+                $dates->push($date->format('M'));
+                $registrations->push(User::where('role', 'client')->whereMonth('created_at', $i)->whereYear('created_at', date('Y'))->count());
+            }
+        } else {
+            // Default: Week (Last 7 Days)
+            for ($i = 6; $i >= 0; $i--) {
+                $date = \Carbon\Carbon::today()->subDays($i);
+                $dates->push($date->format('d M'));
+                $registrations->push(User::where('role', 'client')->whereDate('created_at', $date)->count());
+            }
         }
 
-        // 3. Stats
-        // Data charts passed via compact
+        // 3. Status Filter for other lists if any (not used in current view but kept for safety)
+        $now = Carbon::now();
+
+        if ($chartFilter === 'month') {
+            $chartTitle = 'Tren Pendaftaran Bulan ' . $now->translatedFormat('F Y');
+        } elseif ($chartFilter === 'year') {
+            $chartTitle = 'Tren Pendaftaran Tahun ' . $now->format('Y');
+        } else {
+            $chartTitle = 'Tren Pendaftaran Minggu Ini (7 Hari Terakhir)';
+        }
 
         return view('admin.dashboard', compact(
             'totalMembers',
@@ -37,7 +66,9 @@ class AdminDashboardController extends Controller
             'activeClients',
             'totalCoaches',
             'dates',
-            'registrations'
+            'registrations',
+            'chartFilter',
+            'chartTitle'
         ));
     }
 }

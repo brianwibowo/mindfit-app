@@ -93,7 +93,23 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">Tren Pendaftaran Seminggu Terakhir</div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="card-title">{{ $chartTitle }}</div>
+                            <div class="d-flex align-items-center">
+                                <a href="{{ request()->fullUrlWithQuery(['chart_filter' => 'week']) }}"
+                                    class="btn btn-sm {{ $chartFilter == 'week' ? 'btn-primary' : 'btn-outline-primary' }} me-1">
+                                    Minggu
+                                </a>
+                                <a href="{{ request()->fullUrlWithQuery(['chart_filter' => 'month']) }}"
+                                    class="btn btn-sm {{ $chartFilter == 'month' ? 'btn-primary' : 'btn-outline-primary' }} me-1">
+                                    Bulan
+                                </a>
+                                <a href="{{ request()->fullUrlWithQuery(['chart_filter' => 'year']) }}"
+                                    class="btn btn-sm {{ $chartFilter == 'year' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                    Tahun
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="chart-container" style="min-height: 300px">
@@ -109,52 +125,57 @@
     </div>
     </div>
     @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            var ctx = document.getElementById('registrationChart').getContext('2d');
-            var registrationChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: @json($dates),
-                    datasets: [{
-                        label: 'Pendaftaran Baru',
-                        borderColor: "#1d7af3",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#1d7af3",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: true,
-                        borderWidth: 2,
-                        data: @json($registrations)
-                    }]
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('registrationChart').getContext('2d');
+        var registrationChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @json($dates),
+                datasets: [{
+                    label: 'Pendaftaran Baru',
+                    borderColor: "#1d7af3",
+                    pointBorderColor: "#FFF",
+                    pointBackgroundColor: "#1d7af3",
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 4,
+                    backgroundColor: 'transparent',
+                    fill: true,
+                    borderWidth: 2,
+                    data: @json($registrations)
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 10,
+                        fontColor: '#1d7af3',
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 10,
-                            fontColor: '#1d7af3',
-                        }
-                    },
-                    tooltips: {
-                        bodySpacing: 4,
-                        mode: "nearest",
-                        intersect: 0,
-                        position: "nearest",
-                        xPadding: 10,
-                        yPadding: 10,
-                        caretPadding: 10
-                    },
-                    layout: {
-                        padding: { left: 15, right: 15, top: 15, bottom: 15 }
+                tooltips: {
+                    bodySpacing: 4,
+                    mode: "nearest",
+                    intersect: 0,
+                    position: "nearest",
+                    xPadding: 10,
+                    yPadding: 10,
+                    caretPadding: 10
+                },
+                layout: {
+                    padding: {
+                        left: 15,
+                        right: 15,
+                        top: 15,
+                        bottom: 15
                     }
                 }
-            });
-        </script>
+            }
+        });
+    </script>
     @endpush
 </x-app-layout>

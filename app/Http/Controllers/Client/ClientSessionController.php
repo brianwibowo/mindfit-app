@@ -9,12 +9,28 @@ use App\Models\CoachingSession;
 
 class ClientSessionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $sessions = CoachingSession::where('client_id', Auth::id())
-            ->orderBy('date', 'desc')
-            ->get();
+        $type = $request->input('type'); // 'coach' or 'nutritionist' or null
 
-        return view('client.sessions.index', compact('sessions'));
+        $query = CoachingSession::where('client_id', Auth::id());
+
+        if ($type) {
+            $query->whereHas('coach', function ($q) use ($type) {
+                if ($type === 'coach') {
+                    // Coach biasa bisa punya spec: 'fitness', 'coach', atau NULL/Empty
+                    $q->whereIn('specialization', ['fitness', 'coach'])
+                        ->orWhereNull('specialization')
+                        ->orWhere('specialization', '');
+                } else {
+                    // Nutritionist spesifik
+                    $q->where('specialization', $type); // 'nutritionist'
+                }
+            });
+        }
+
+        $sessions = $query->orderBy('date', 'desc')->get();
+
+        return view('client.sessions.index', compact('sessions', 'type'));
     }
 }

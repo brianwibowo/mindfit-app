@@ -29,10 +29,14 @@
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
+            // Pass data from Blade to JavaScript
+            window.progressLogs = json_encode($logs);
+        </script>
+        <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const ctx = document.getElementById('progressChart');
                 if (ctx) {
-                    const logs = @json($logs);
+                    const logs = window.progressLogs || [];
 
                     // Logs already sorted ASC from controller
                     const labels = logs.map(log => new Date(log.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }));

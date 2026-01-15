@@ -60,8 +60,28 @@
                             <p>Manajemen Produk</p>
                         </a>
                     </li>
+
+                    <li class="nav-section">
+                        <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
+                        <h4 class="text-section">MONITORING</h4>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('admin.sessions.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.sessions.index') }}">
+                            <i class="fas fa-calendar-alt"></i>
+                            <p>Monitoring Sesi</p>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('admin.progress.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.progress.index') }}">
+                            <i class="fas fa-chart-line"></i>
+                            <p>Monitoring Progress</p>
+                        </a>
+                    </li>
                 @endif
 
+                {{-- ==================================================================================
+                ROLE: CLIENT
+                ================================================================================== --}}
                 {{-- ==================================================================================
                 ROLE: CLIENT
                 ================================================================================== --}}
@@ -94,30 +114,35 @@
 
                     {{-- FASE PREMIUM --}}
                     @if($isPremium)
-                        <li class="nav-item">
+                        <li
+                            class="nav-item {{ request()->routeIs('client.sessions.*') || request()->routeIs('client.progress.*') ? 'active submenu' : '' }}">
                             <a data-bs-toggle="collapse" href="#layananMenu">
                                 <i class="fas fa-dumbbell"></i>
                                 <p>Layanan</p>
                                 <span class="caret"></span>
                             </a>
-                            <div class="collapse show" id="layananMenu">
+                            <div class="collapse {{ request()->routeIs('client.sessions.*') || request()->routeIs('client.progress.*') ? 'show' : '' }}"
+                                id="layananMenu">
                                 <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="{{ route('client.sessions.index') }}">
+                                    <li
+                                        class="{{ request()->routeIs('client.sessions.*') && request('type') == 'coach' ? 'active' : '' }}">
+                                        <a href="{{ route('client.sessions.index', ['type' => 'coach']) }}">
                                             <span class="sub-item">Sesi Coach</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="{{ route('client.sessions.index') }}">
+                                    <li
+                                        class="{{ request()->routeIs('client.sessions.*') && request('type') == 'nutritionist' ? 'active' : '' }}">
+                                        <a href="{{ route('client.sessions.index', ['type' => 'nutritionist']) }}">
                                             <span class="sub-item">Sesi Nutritionist</span>
                                         </a>
                                     </li>
-                                    <li>
+                                    <li
+                                        class="{{ request()->routeIs('client.progress.index') || request()->routeIs('client.progress.create') || request()->routeIs('client.progress.edit') || request()->routeIs('client.progress.show') ? 'active' : '' }}">
                                         <a href="{{ route('client.progress.index') }}">
                                             <span class="sub-item">Progress (Input)</span>
                                         </a>
                                     </li>
-                                    <li>
+                                    <li class="{{ request()->routeIs('client.progress.charts') ? 'active' : '' }}">
                                         <a href="{{ route('client.progress.charts') }}">
                                             <span class="sub-item">Hasil (Visualisasi)</span>
                                         </a>
@@ -126,20 +151,22 @@
                             </div>
                         </li>
 
-                        <li class="nav-item">
+                        <li
+                            class="nav-item {{ request()->routeIs('client.dashboard') || request()->routeIs('client.ai.*') ? 'active submenu' : '' }}">
                             <a data-bs-toggle="collapse" href="#langgananMenu">
                                 <i class="fas fa-crown"></i>
                                 <p>Langganan</p>
                                 <span class="caret"></span>
                             </a>
-                            <div class="collapse" id="langgananMenu">
+                            <div class="collapse {{ request()->routeIs('client.dashboard') || request()->routeIs('client.ai.*') ? 'show' : '' }}"
+                                id="langgananMenu">
                                 <ul class="nav nav-collapse">
-                                    <li>
+                                    <li class="{{ request()->routeIs('client.dashboard') ? 'active' : '' }}">
                                         <a href="{{ route('client.dashboard') }}">
                                             <span class="sub-item">Status Berlangganan</span>
                                         </a>
                                     </li>
-                                    <li>
+                                    <li class="{{ request()->routeIs('client.ai.*') ? 'active' : '' }}">
                                         <a href="{{ route('client.ai.index') }}">
                                             <span class="sub-item">Fitur AI</span>
                                         </a>
@@ -165,20 +192,14 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('coach.clients.*') ? 'active' : '' }}">
-                        <a href="{{ route('coach.dashboard') }}">
-                            <i class="fas fa-users"></i>
-                            <p>Daftar Klien</p>
-                        </a>
-                    </li>
                     <li class="nav-item {{ request()->routeIs('coach.sessions.*') ? 'active' : '' }}">
-                        <a href="{{ route('coach.dashboard') }}">
+                        <a href="{{ route('coach.sessions.index') }}">
                             <i class="fas fa-calendar-check"></i>
                             <p>Manajemen Sesi</p>
                         </a>
                     </li>
                     <li class="nav-item {{ request()->routeIs('coach.progress.*') ? 'active' : '' }}">
-                        <a href="#">
+                        <a href="{{ route('coach.progress.index') }}">
                             <i class="fas fa-chart-line"></i>
                             <p>Monitoring Progress</p>
                         </a>

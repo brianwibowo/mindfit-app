@@ -13,6 +13,13 @@ class CoachDashboardController extends Controller
         $clients = $coach->clients()->get();
 
         $sessions = \App\Models\CoachingSession::where('coach_id', $coach->id)->get();
+
+        $sessionsThisWeek = \App\Models\CoachingSession::where('coach_id', $coach->id)
+            ->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])
+            ->count();
+
+        $totalClients = $clients->count();
+
         $events = $sessions->map(function ($session) {
             return [
                 'title' => $session->title . ' (' . $session->client->name . ')',
@@ -22,6 +29,6 @@ class CoachDashboardController extends Controller
             ];
         });
 
-        return view('coach.dashboard', compact('clients', 'events'));
+        return view('coach.dashboard', compact('clients', 'events', 'sessionsThisWeek', 'totalClients'));
     }
 }

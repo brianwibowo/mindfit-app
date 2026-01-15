@@ -22,25 +22,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-md-3">
-            <div class="card card-stats card-round">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-icon">
-                            <div class="icon-big text-center icon-success bubble-shadow-small">
-                                <i class="fas fa-calendar-check"></i>
-                            </div>
-                        </div>
-                        <div class="col col-stats ms-3 ms-sm-0">
-                            <div class="numbers">
-                                <p class="card-category">Sesi Minggu Ini</p>
-                                <h4 class="card-title">-</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="row">
@@ -58,7 +39,6 @@
                                     <th>Nama Klien</th>
                                     <th>Email & Kontak</th>
                                     <th>Tipe Bimbingan</th>
-                                    <th>Progress Terakhir</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -83,9 +63,6 @@
                                             <span class="badge badge-info">{{ ucfirst($client->pivot->type) }}</span>
                                         </td>
                                         <td>
-                                            <span class="text-muted">Belum ada data</span>
-                                        </td>
-                                        <td>
                                             <div class="dropdown">
                                                 <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
                                                     data-bs-toggle="dropdown">
@@ -99,9 +76,8 @@
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('coach.clients.progress', $client->id) }}">
-                                                            <i class="fas fa-chart-line me-2"></i> Lihat Progress
+                                                        <a class="dropdown-item" href="{{ route('coach.progress.index') }}">
+                                                            <i class="fas fa-chart-line me-2"></i> Lihat Progress All
                                                         </a>
                                                     </li>
                                                     <li>
@@ -125,39 +101,4 @@
             </div>
         </div>
     </div>
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Kalender Sesi Coaching</div>
-                </div>
-                <div class="card-body">
-                    <div id="calendar"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 </x-app-layout>
-
-@push('styles')
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
-@endpush
-
-@push('scripts')
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: @json($events),
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                }
-            });
-            calendar.render();
-        });
-    </script>
-@endpush

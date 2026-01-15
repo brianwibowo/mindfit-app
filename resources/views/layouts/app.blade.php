@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>{{ $header ?? 'Dashboard' }} - MindFit</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="{{ asset('kaiadmin/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('storage/images/logo.png') }}" type="image/x-icon" />
 
     <script src="{{ asset('kaiadmin/js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
@@ -34,8 +34,8 @@
                 <div class="main-header-logo">
                     <div class="logo-header" data-background-color="dark">
                         <a href="#" class="logo">
-                            <img src="{{ asset('kaiadmin/img/kaiadmin/logo_light.svg') }}" alt="navbar brand"
-                                class="navbar-brand" height="20" />
+                            <img src="{{ asset('storage/images/logo.png') }}" alt="navbar brand" class="navbar-brand"
+                                height="30" />
                         </a>
                         <div class="nav-toggle">
                             <button class="btn btn-toggle toggle-sidebar"><i class="gg-menu-right"></i></button>

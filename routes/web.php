@@ -54,6 +54,13 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('packages', \App\Http\Controllers\Admin\AdminPackageController::class);
         Route::get('/packages/{package}', [\App\Http\Controllers\Admin\AdminPackageController::class, 'show'])->name('packages.show');
 
+
+        // Admin Monitoring
+        Route::resource('sessions', \App\Http\Controllers\Admin\AdminSessionController::class);
+        Route::resource('monitor-progress', \App\Http\Controllers\Admin\AdminProgressController::class)
+            ->only(['index', 'show'])
+            ->names('progress');
+
         // Verification Flows
         Route::get('/verification/{id}', [\App\Http\Controllers\Admin\AdminVerificationController::class, 'show'])->name('verification.show');
         Route::post('/verification/{id}', [\App\Http\Controllers\Admin\AdminVerificationController::class, 'update'])->name('verification.update');
@@ -64,11 +71,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [CoachDashboardController::class, 'index'])->name('dashboard');
 
         // Session Management
-        Route::get('/sessions/create/{client}', [\App\Http\Controllers\Coach\CoachSessionController::class, 'create'])->name('sessions.create');
-        Route::post('/sessions/{client}', [\App\Http\Controllers\Coach\CoachSessionController::class, 'store'])->name('sessions.store');
+        Route::get('/sessions', [\App\Http\Controllers\Coach\CoachSessionController::class, 'index'])->name('sessions.index');
+        Route::get('/sessions/create/{client?}', [\App\Http\Controllers\Coach\CoachSessionController::class, 'create'])->name('sessions.create');
+        Route::post('/sessions', [\App\Http\Controllers\Coach\CoachSessionController::class, 'store'])->name('sessions.store');
+        Route::get('/sessions/{session}', [\App\Http\Controllers\Coach\CoachSessionController::class, 'show'])->name('sessions.show');
+        Route::get('/sessions/{session}/edit', [\App\Http\Controllers\Coach\CoachSessionController::class, 'edit'])->name('sessions.edit');
+        Route::put('/sessions/{session}', [\App\Http\Controllers\Coach\CoachSessionController::class, 'update'])->name('sessions.update');
+        Route::delete('/sessions/{session}', [\App\Http\Controllers\Coach\CoachSessionController::class, 'destroy'])->name('sessions.destroy');
 
         // Monitoring
-        Route::get('/clients/{client}/progress', [\App\Http\Controllers\Coach\CoachClientProgressController::class, 'show'])->name('clients.progress');
+        Route::get('/progress', [\App\Http\Controllers\Coach\CoachClientProgressController::class, 'index'])->name('progress.index');
+        Route::get('/progress/{id}', [\App\Http\Controllers\Coach\CoachClientProgressController::class, 'show'])->name('progress.show');
+        Route::put('/progress/{id}', [\App\Http\Controllers\Coach\CoachClientProgressController::class, 'update'])->name('progress.update');
     });
 
     // Jalur khusus Client
