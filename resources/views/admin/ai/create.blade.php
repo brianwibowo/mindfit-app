@@ -213,4 +213,18 @@
             </div>
         </div>
     </div>
+    {{-- Loading Overlay --}}
+    <div id="loadingOverlay"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; align-items: center; justify-content: center; flex-direction: column;">
+        <div class="spinner-border text-light mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+        <h4 class="text-white fw-bold">Sedang Menganalisa...</h4>
+        <p class="text-white small">Sabar ya, Admin :)</p>
+    </div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function () {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            this.querySelector('button[type="submit"]').disabled = true;
+        });
+    </script>
 </x-app-layout>

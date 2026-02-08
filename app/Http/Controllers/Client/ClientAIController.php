@@ -51,38 +51,49 @@ class ClientAIController extends Controller
         ];
 
         // 3. Call API
-        $apiUrl = 'https://n8n.sejarah-bot.datains.id/webhook/mindfit-fix';
+        $apiUrl = 'https://n8n.sejarah-bot.datains.id/webhook/31b56c1f-9626-474e-9736-f8dbf68bfbb7';
 
         try {
             $response = Http::timeout(10)->post($apiUrl, $payload);
 
             if ($response->successful()) {
-                $result = $response->json();
+                $check = $response->json();
 
-                // If API returns valid data
-                if (isset($result['rekomendasi_paket'])) {
+                // New API format: [ { "output": "..." } ]
+                if (isset($check[0]['output'])) {
+                    $output = $check[0]['output'];
+                    $result = [];
 
-                    // 1. Calculate stats locally (API might not return them)
+                    // 1. Calculate Stats Locally
                     $stats = $this->calculateStats($payload);
                     $result['bmr'] = $stats['bmr'];
                     $result['tdee'] = $stats['tdee'];
 
-                    // 2. Map API String to Local Package Details
-                    // Expected API String: "MindFit Starter Plus" or "Starter Plus"
-                    $apiRec = strtolower($result['rekomendasi_paket']);
+                    // 2. Parse Package from Output String
+                    // Look for patterns like "MINDFIT STARTER (Basic)" or just keywords
+                    $lowerOutput = strtolower($output);
                     $key = 'plus'; // Default fallback
 
-                    if (str_contains($apiRec, 'basic'))
+                    if (str_contains($lowerOutput, 'starter (basic)') || str_contains($lowerOutput, 'starter basic')) {
                         $key = 'basic';
-                    if (str_contains($apiRec, 'complete') || str_contains($apiRec, 'squad'))
+                    } elseif (str_contains($lowerOutput, 'starter (complete)') || str_contains($lowerOutput, 'starter complete')) {
                         $key = 'complete';
+                    } elseif (str_contains($lowerOutput, 'squad')) {
+                        // If Squad is suggested, we might stick to Plus or define a Squad key, 
+                        // but for now let's map to Basic/Plus based on freq or just default to Plus if vague.
+                        // Or create a 'squad' entry? Let's stick to the 3 main ones for web app consistency
+                        $key = 'basic';
+                    }
 
+                    // Attach Details
                     $packages = $this->getPackageDictionary();
                     $result['details'] = $packages[$key] ?? $packages['plus'];
 
-                    // Ensure format consistency
-                    if (!isset($result['pesan']))
-                        $result['pesan'] = $result['details']['message'];
+                    // Set Result Keys
+                    $result['rekomendasi_paket'] = 'MindFit ' . $result['details']['name'];
+
+                    // Parse Markdown & Fix Name
+                    $result['pesan'] = $this->parseMarkdown($output, $payload['nama']);
 
                 } else {
                     $result = $this->fallbackLogic($payload);
@@ -203,6 +214,34 @@ class ClientAIController extends Controller
             'bmr' => round($bmr),
             'tdee' => round($bmr * $multiplier)
         ];
+    }
+
+
+
+    private function parseMarkdown($text, $userName)
+    {
+        // 1. Fix Name Placeholder
+        $text = str_replace(['=User', 'User', '= User'], $userName, $text);
+
+        // 2. Headings (### Header)
+        $text = preg_replace('/^### (.*)$/m', '<h5 class="fw-bold text-primary mt-3">$1</h5>', $text);
+
+        // 3. Bold (**text**)
+        $text = preg_replace('/\*\*(.*?)\*\*/', '<strong>$1</strong>', $text);
+
+        // 4. Bullet Points (* text) -> Convert to a cleaner list style or just bullet char
+        // Regex to find lines starting with "* " and replacing with a div/span dot
+        $text = preg_replace('/^\* (.*)$/m', '<div class="d-flex align-items-start mb-1"><i class="fas fa-check-circle text-success me-2 mt-1"></i> <span>$1</span></div>', $text);
+
+        // 5. Horizontal Rule (---)
+        $text = preg_replace('/^---$/m', '<hr class="my-3 opacity-25">', $text);
+
+        // 6. Convert remaining newlines to <br> if not already handled by block elements? 
+        // Actually, we should just use nl2br on the whole thing, but we introduced HTML tags. 
+        // So let's just do simple replacement of \n
+        $text = nl2br($text);
+
+        return $text;
     }
 
     private function getPackageDictionary()

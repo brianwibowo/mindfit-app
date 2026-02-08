@@ -60,32 +60,39 @@ class AdminAIController extends Controller
         ];
 
         // 3. Call API (With Fallback)
-        $apiUrl = 'https://n8n.sejarah-bot.datains.id/webhook/mindfit-fix';
+        $apiUrl = 'https://n8n.sejarah-bot.datains.id/webhook/31b56c1f-9626-474e-9736-f8dbf68bfbb7';
 
         try {
             $response = Http::timeout(10)->post($apiUrl, $payload);
 
             if ($response->successful()) {
-                $result = $response->json();
+                $check = $response->json();
 
-                if (isset($result['rekomendasi_paket'])) {
+                // New API format: [ { "output": "..." } ]
+                if (isset($check[0]['output'])) {
+                    $output = $check[0]['output'];
+                    $result = [];
+
                     // Enrich Data
                     $stats = $this->calculateStats($payload);
                     $result['bmr'] = $stats['bmr'];
                     $result['tdee'] = $stats['tdee'];
 
-                    $apiRec = strtolower($result['rekomendasi_paket']);
+                    // Parse Package
+                    $lowerOutput = strtolower($output);
                     $key = 'plus';
-                    if (str_contains($apiRec, 'basic'))
+                    if (str_contains($lowerOutput, 'starter (basic)') || str_contains($lowerOutput, 'starter basic')) {
                         $key = 'basic';
-                    if (str_contains($apiRec, 'complete') || str_contains($apiRec, 'squad'))
+                    } elseif (str_contains($lowerOutput, 'starter (complete)') || str_contains($lowerOutput, 'starter complete')) {
                         $key = 'complete';
+                    }
 
                     $packages = $this->getPackageDictionary();
                     $result['details'] = $packages[$key] ?? $packages['plus'];
 
-                    if (!isset($result['pesan']))
-                        $result['pesan'] = $result['details']['message'];
+                    $result['rekomendasi_paket'] = 'MindFit ' . $result['details']['name'];
+                    $result['pesan'] = $this->parseMarkdown($output, $payload['nama']);
+
                 } else {
                     $result = $this->fallbackLogic($payload);
                 }
@@ -174,6 +181,28 @@ class AdminAIController extends Controller
             'tdee' => $stats['tdee'],
             'details' => $selected
         ];
+    }
+
+    private function parseMarkdown($text, $userName)
+    {
+        // 1. Fix Name Placeholder
+        $text = str_replace(['=User', 'User', '= User'], $userName, $text);
+
+        // 2. Headings (### Header)
+        $text = preg_replace('/^### (.*)$/m', '<h5 class="fw-bold text-primary mt-3">$1</h5>', $text);
+
+        // 3. Bold (**text**)
+        $text = preg_replace('/\*\*(.*?)\*\*/', '<strong>$1</strong>', $text);
+
+        // 4. Bullet Points (* text)
+        $text = preg_replace('/^\* (.*)$/m', '<div class="d-flex align-items-start mb-1"><i class="fas fa-check-circle text-success me-2 mt-1"></i> <span>$1</span></div>', $text);
+
+        // 5. Horizontal Rule (---)
+        $text = preg_replace('/^---$/m', '<hr class="my-3 opacity-25">', $text);
+
+        $text = nl2br($text);
+
+        return $text;
     }
 
     private function calculateStats($data)

@@ -42,27 +42,17 @@
                         </div>
                     </div>
 
-                    {{-- AI Diagnosis Message --}}
-                    <div class="alert alert-info border-info" role="alert">
-                        <h4 class="alert-heading fw-bold"><i class="fas fa-robot me-2"></i> DIAGNOSA AI:</h4>
-                        <p class="mb-0" style="font-size: 1.1rem; line-height: 1.6;">
-                            "{{ $result['pesan'] ?? 'Halo, berdasarkan data yang kamu berikan, kami telah menyusun rekomendasi terbaik untukmu.' }}"
-                        </p>
-                    </div>
-
-                    {{-- Recommendation Card --}}
+                    {{-- Recommendation Card (Priority 1) --}}
                     @if(isset($result['details']))
-                        <div class="card border-primary mb-3 mt-4 overflow-hidden" style="border-width: 2px;">
+                        <div class="card border-primary mb-4 mt-2 overflow-hidden shadow-sm" style="border-width: 2px;">
                             <div class="card-header bg-primary text-white text-center py-3">
-                                <span class="text-uppercase ls-1" style="font-size: 0.9rem; opacity: 0.9;">Rekomendasi
-                                    Terbaik</span>
+                                <span class="text-uppercase ls-1" style="font-size: 0.9rem; opacity: 0.9;">Rekomendasi Terbaik Untukmu</span>
                                 <h2 class="fw-bold mb-0 mt-1">MindFit {{ $result['details']['name'] }}</h2>
                             </div>
                             <div class="card-body p-4">
                                 <div class="row align-items-center">
                                     <div class="col-md-7 border-end-md">
-                                        <h5 class="fw-bold text-primary mb-3"><i class="fas fa-bullseye me-2"></i> Fokus
-                                            Program:</h5>
+                                        <h5 class="fw-bold text-primary mb-3"><i class="fas fa-bullseye me-2"></i> Fokus Program:</h5>
                                         <ul class="list-unstyled">
                                             <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>
                                                 <strong>Target:</strong> {{ $result['details']['target'] }}</li>
@@ -75,41 +65,48 @@
                                         </ul>
                                     </div>
                                     <div class="col-md-5 text-center mt-3 mt-md-0">
-                                        <h6 class="text-muted text-uppercase fw-bold">Frekuensi</h6>
-                                        <h4 class="fw-bold text-dark">{{ $result['details']['freq'] }}</h4>
-                                        <hr class="w-50 mx-auto opacity-25">
-
                                         <h6 class="text-muted text-uppercase fw-bold">Investasi Sehat</h6>
                                         <h2 class="fw-bold text-primary display-6">{{ $result['details']['price'] }}</h2>
                                         <small class="text-muted">per bulan</small>
+                                        <br>
+                                        <span class="badge bg-light text-dark mt-2 border">{{ $result['details']['freq'] }}</span>
                                     </div>
                                 </div>
 
-                                <div class="d-flex justify-content-center gap-3 mt-5">
+                                <div class="d-flex justify-content-center gap-3 mt-4">
                                     <a href="{{ route('client.payment.create') }}?package={{ Str::slug($result['details']['name']) }}"
                                         class="btn btn-primary btn-lg btn-round shadow pulse-button px-5">
-                                        <i class="fas fa-cart-plus me-2"></i> AMBIL PAKET INI
+                                        <i class="fas fa-cart-plus me-2"></i> AMBIL PAKET
                                     </a>
                                     <a href="https://wa.me/6281234567890?text=Halo%20Coach,%20saya%20tertarik%20paket%20{{ urlencode($result['details']['name']) }}"
                                         target="_blank" class="btn btn-outline-success btn-lg btn-round">
-                                        <i class="fab fa-whatsapp me-2"></i> KONSULTASI DULU
+                                        <i class="fab fa-whatsapp me-2"></i> TANYA COACH
                                     </a>
                                 </div>
                             </div>
-                            <div class="card-footer bg-light text-center py-3">
-                                <small class="text-muted"><i class="fas fa-shield-alt me-1"></i> Garansi bimbingan
-                                    profesional oleh Coach tersertifikasi</small>
-                            </div>
                         </div>
                     @else
-                        {{-- Fallback Card for "Special/Consultation" cases or Error --}}
-                        <div class="text-center mt-4">
+                         {{-- Fallback --}}
+                         <div class="text-center mt-4 mb-4">
                             <a href="https://wa.me/6281234567890?text=Halo%20Coach,%20saya%20butuh%20konsultasi%20khusus"
                                 class="btn btn-success btn-lg btn-round">
                                 <i class="fab fa-whatsapp me-2"></i> HUBUNGI COACH SEKARANG
                             </a>
                         </div>
                     @endif
+
+                    {{-- AI Diagnosis Message (Priority 2 - Explanation) --}}
+                    <div class="card bg-white border">
+                        <div class="card-header bg-light">
+                            <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-file-alt me-2"></i> Penjelasan Detail AI</h5>
+                        </div>
+                        <div class="card-body text-start">
+                            <div class="ai-content">
+                                {{-- Render Parsed HTML --}}
+                                {!! $result['pesan'] !!}
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="text-center mt-3 d-flex justify-content-center gap-3">
                         <a href="{{ route('client.ai.history') }}" class="btn btn-outline-secondary btn-round">

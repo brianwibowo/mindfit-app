@@ -16,7 +16,8 @@
             <div class="card card-round">
                 <div class="card-header bg-primary text-white">
                     <h3 class="mb-0 fw-bold"><i class="fas fa-clipboard-check me-2"></i> HASIL ANALISA:
-                        {{ strtoupper($analysis->name) }}</h3>
+                        {{ strtoupper($analysis->name) }}
+                    </h3>
                 </div>
                 <div class="card-body">
 
@@ -118,8 +119,10 @@
                             <div class="card-header bg-primary text-white text-center py-2">
                                 <h4 class="fw-bold mb-0 text-white">Rekomendasi: {{ $result['details']['name'] }}</h4>
                             </div>
-                            <div class="card-body p-3 text-center">
-                                <p class="lead">"{{ $result['pesan'] }}"</p>
+                            <div class="card-body p-3 text-start">
+                                <div class="alert alert-light border">
+                                    {!! $result['pesan'] !!}
+                                </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-6 text-end border-end">

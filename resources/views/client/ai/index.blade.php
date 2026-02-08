@@ -9,7 +9,8 @@
                         <div class="card-title mb-0">
                             <i class="fas fa-brain text-primary me-2"></i> Analisa Kebutuhan Program
                         </div>
-                        <a href="{{ route('client.ai.history') }}" class="btn btn-outline-secondary btn-sm rounded-pill">
+                        <a href="{{ route('client.ai.history') }}"
+                            class="btn btn-outline-secondary btn-sm rounded-pill">
                             <i class="fas fa-history me-1"></i> Riwayat Analisa
                         </a>
                     </div>
@@ -211,6 +212,14 @@
         </div>
     </div>
 
+    {{-- Loading Overlay --}}
+    <div id="loadingOverlay"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; align-items: center; justify-content: center; flex-direction: column;">
+        <div class="spinner-border text-light mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+        <h4 class="text-white fw-bold">Sedang Menganalisa...</h4>
+        <p class="text-white small">Mohon tunggu sebentar, AI sedang meracik program untukmu.</p>
+    </div>
+
     @push('scripts')
         <script>
             function toggleMedis(source) {
@@ -226,6 +235,12 @@
                     });
                 }
             }
+
+            // Loading Handler
+            document.querySelector('form').addEventListener('submit', function () {
+                document.getElementById('loadingOverlay').style.display = 'flex';
+                this.querySelector('button[type="submit"]').disabled = true;
+            });
         </script>
     @endpush
 </x-app-layout>
