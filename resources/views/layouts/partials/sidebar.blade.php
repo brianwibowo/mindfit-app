@@ -77,6 +77,12 @@
                             <p>Monitoring Progress</p>
                         </a>
                     </li>
+                    <li class="nav-item {{ request()->routeIs('admin.ai.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.ai.index') }}">
+                            <i class="fas fa-robot"></i>
+                            <p>Analisa AI</p>
+                        </a>
+                    </li>
                 @endif
 
                 {{-- ==================================================================================

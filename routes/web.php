@@ -61,6 +61,12 @@ Route::middleware(['auth'])->group(function () {
             ->only(['index', 'show'])
             ->names('progress');
 
+        // Monitoring AI Analysis
+        Route::get('/monitoring/ai', [\App\Http\Controllers\Admin\AdminAIController::class, 'index'])->name('ai.index');
+        Route::get('/monitoring/ai/create', [\App\Http\Controllers\Admin\AdminAIController::class, 'create'])->name('ai.create');
+        Route::post('/monitoring/ai', [\App\Http\Controllers\Admin\AdminAIController::class, 'store'])->name('ai.store');
+        Route::get('/monitoring/ai/{id}', [\App\Http\Controllers\Admin\AdminAIController::class, 'show'])->name('ai.show');
+
         // Verification Flows
         Route::get('/verification/{id}', [\App\Http\Controllers\Admin\AdminVerificationController::class, 'show'])->name('verification.show');
         Route::post('/verification/{id}', [\App\Http\Controllers\Admin\AdminVerificationController::class, 'update'])->name('verification.update');
@@ -110,9 +116,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/progress/{id}', [\App\Http\Controllers\Client\ClientProgressController::class, 'destroy'])->name('progress.destroy');
 
         // AI Feature
-        Route::get('/ai', function () {
-            return view('client.ai.index');
-        })->name('ai.index');
+        Route::get('/ai', [\App\Http\Controllers\Client\ClientAIController::class, 'index'])->name('ai.index');
+        Route::post('/ai/analyze', [\App\Http\Controllers\Client\ClientAIController::class, 'analyze'])->name('ai.analyze');
+        Route::get('/ai/history', [\App\Http\Controllers\Client\ClientAIController::class, 'history'])->name('ai.history');
+        Route::get('/ai/history/{id}', [\App\Http\Controllers\Client\ClientAIController::class, 'show'])->name('ai.show');
     });
 });
 
