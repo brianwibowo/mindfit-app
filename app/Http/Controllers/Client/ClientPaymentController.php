@@ -61,16 +61,14 @@ class ClientPaymentController extends Controller
 
         // 2. Prepare Snapshot Data
         $package = \App\Models\Package::find($request->package_id);
-        $hasMealPlan = $request->has('meal_plan');
-        $mealPlanPrice = 400000;
 
         $snapshot = [
             'package_name' => $package->name,
             'package_price' => $package->price,
             'package_duration' => $package->duration_days,
-            'addon_meal_plan' => $hasMealPlan,
-            'addon_price' => $hasMealPlan ? $mealPlanPrice : 0,
-            'total_price' => $package->price + ($hasMealPlan ? $mealPlanPrice : 0),
+            'addon_meal_plan' => false,
+            'addon_price' => 0,
+            'total_price' => $package->price,
         ];
 
         // 3. Update Payment
@@ -113,16 +111,14 @@ class ClientPaymentController extends Controller
 
         // 2. Prepare Snapshot Data
         $package = \App\Models\Package::find($request->package_id);
-        $hasMealPlan = $request->has('meal_plan');
-        $mealPlanPrice = 400000;
 
         $snapshot = [
             'package_name' => $package->name,
             'package_price' => $package->price,
             'package_duration' => $package->duration_days,
-            'addon_meal_plan' => $hasMealPlan,
-            'addon_price' => $hasMealPlan ? $mealPlanPrice : 0,
-            'total_price' => $package->price + ($hasMealPlan ? $mealPlanPrice : 0),
+            'addon_meal_plan' => false, // Hardcode false or remove
+            'addon_price' => 0,
+            'total_price' => $package->price,
         ];
 
         // 3. Store Payment
