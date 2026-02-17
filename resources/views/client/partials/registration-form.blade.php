@@ -137,8 +137,20 @@
     {{-- 3. PEMBAYARAN --}}
     <h5 class="text-primary mb-3">3. Pembayaran & Konfirmasi</h5>
     <div class="p-3 bg-light mb-3 rounded">
-        <p class="mb-1"><b>Bank Mandiri:</b> 1800015799309 (a.n MINDFIT)</p>
-        <p class="mb-0"><b>E-Wallet (Dana/OVO):</b> 085719713074</p>
+        <h6 class="fw-bold mb-2 text-primary">Transfer Bank (a.n RIO SETIOBUDI):</h6>
+        <ul class="list-unstyled mb-3 ms-2">
+            <li><span class="fw-bold" style="width: 140px; display: inline-block;">BRI</span> : 6820-01-024177-53-6</li>
+            <li><span class="fw-bold" style="width: 140px; display: inline-block;">BSI</span> : 7294376733</li>
+            <li><span class="fw-bold" style="width: 140px; display: inline-block;">Jago Syariah</span> : 508542930068</li>
+        </ul>
+        
+        <h6 class="fw-bold mb-2 text-primary">E-Wallet:</h6>
+        <ul class="list-unstyled mb-0 ms-2">
+            <li><span class="fw-bold" style="width: 140px; display: inline-block;">Shopee Pay</span> : 085642501572</li>
+            <li><span class="fw-bold" style="width: 140px; display: inline-block;">GO-PAY</span> : 085869155931</li>
+        </ul>
+        <hr class="my-2">
+        <small class="text-muted"><i class="fas fa-info-circle me-1"></i> Konfirmasi pembayaran ke Admin: <b>0851-9961-5786</b> (WhatsApp)</small>
     </div>
 
     <div class="form-group">
