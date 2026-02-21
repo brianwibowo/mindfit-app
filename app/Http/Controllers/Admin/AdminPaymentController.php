@@ -21,9 +21,15 @@ class AdminPaymentController extends Controller
 
         // Jika approved, update user jadi premium
         if ($request->status == 'approved') {
+            // Gunakan durasi hari dari snapshot paket jika ada, fallback ke bulan * 30
+            $packageData = $payment->package_data;
+            $durationDays = isset($packageData['package_duration'])
+                ? $packageData['package_duration']
+                : round($payment->duration_months * 30);
+
             $payment->user->update([
                 'is_premium' => true,
-                'premium_until' => now()->addMonths($payment->duration_months),
+                'premium_until' => now()->addDays($durationDays),
             ]);
         } else {
             // Jika rejected/revision, pastikan premium dicabut (jika sebelumnya pxremium)
