@@ -15,60 +15,51 @@ class DetailedPackagesSeeder extends Seeder
 
         $packages = [
             // ==================================================================================
-            // 1. MINDFIT PRIVATE CLASS (STARTER EVOLVE)
+            // 1. MINDFIT PRIVATE CLASS (1 ON 1)
             // ==================================================================================
             [
-                'name' => '[Private] STARTER BASIC',
+                'name' => '[Private] 1-ON-1 (4 Sesi)',
                 'type' => 'fitness',
-                'price' => 450000,
+                'price' => 799400,
                 'duration_days' => 30,
                 'description' => '
-                    <table class="table table-bordered table-sm text-start">
-                        <tr><th width="35%">Target</th><td>Pemula (Adaptasi)</td></tr>
-                        <tr><th>Frekuensi</th><td>4 Sesi / bulan (1x seminggu)</td></tr>
-                        <tr><th>Durasi</th><td>45–60 Menit</td></tr>
-                        <tr><th>Tipe Latihan</th><td>Full Body (Adaptasi Ringan)</td></tr>
-                        <tr><th>Goal Utama</th><td>Bangun Kebiasaan (Habit)</td></tr>
-                        <tr><th>Nutrisi</th><td>Estimasi Kalori Dasar</td></tr>
-                        <tr><th>Monitoring</th><td>Saat sesi latihan</td></tr>
-                        <tr><th>Mode</th><td>Online / Offline Gym</td></tr>
-                    </table>
+                    <p><strong>Paket Private Personal Trainer</strong></p>
+                    <ul>
+                        <li>Total Sesi: 4 Sesi Per Bulan</li>
+                        <li>Harga Per Sesi: Rp 199.850</li>
+                        <li>Masa Aktif: 1 Bulan</li>
+                        <li>Eksklusif: 1 Klien, 1 Coach</li>
+                    </ul>
                 '
             ],
             [
-                'name' => '[Private] STARTER PLUS',
+                'name' => '[Private] 1-ON-1 (8 Sesi)',
                 'type' => 'fitness',
-                'price' => 850000,
+                'price' => 1518800,
                 'duration_days' => 30,
                 'description' => '
-                    <table class="table table-bordered table-sm text-start">
-                        <tr><th width="35%">Target</th><td>Pemula</td></tr>
-                        <tr><th>Frekuensi</th><td>8 Sesi / bulan (2x seminggu)</td></tr>
-                        <tr><th>Durasi</th><td>60 Menit</td></tr>
-                        <tr><th>Tipe Latihan</th><td>Full Body (Terstruktur)</td></tr>
-                        <tr><th>Goal Utama</th><td>Fat Loss Awal & Stamina</td></tr>
-                        <tr><th>Nutrisi</th><td>Rekomendasi Makro Simpel</td></tr>
-                        <tr><th>Monitoring</th><td>Evaluasi Mingguan</td></tr>
-                        <tr><th>Mode</th><td>Online / Offline / Home Visit*</td></tr>
-                    </table>
+                    <p><strong>Paket Private Personal Trainer</strong></p>
+                    <ul>
+                        <li>Total Sesi: 8 Sesi Per Bulan</li>
+                        <li>Harga Per Sesi: Rp 189.850</li>
+                        <li>Masa Aktif: 1 Bulan</li>
+                        <li>Eksklusif: 1 Klien, 1 Coach</li>
+                    </ul>
                 '
             ],
             [
-                'name' => '[Private] STARTER COMPLETE',
+                'name' => '[Private] 1-ON-1 (12 Sesi)',
                 'type' => 'fitness',
-                'price' => 1250000,
-                'duration_days' => 30,
+                'price' => 2158200,
+                'duration_days' => 45,
                 'description' => '
-                    <table class="table table-bordered table-sm text-start">
-                        <tr><th width="35%">Target</th><td>Overweight / Komitmen Tinggi</td></tr>
-                        <tr><th>Frekuensi</th><td>12 Sesi / bulan (3x seminggu)</td></tr>
-                        <tr><th>Durasi</th><td>60 Menit</td></tr>
-                        <tr><th>Tipe Latihan</th><td>Full Body + Focus Area</td></tr>
-                        <tr><th>Goal Utama</th><td>Fat Loss, Postur, & Strength</td></tr>
-                        <tr><th>Nutrisi</th><td>Personal Meal Plan Harian</td></tr>
-                        <tr><th>Monitoring</th><td>Full Monitoring</td></tr>
-                        <tr><th>Mode</th><td>Online / Offline / Home Visit*</td></tr>
-                    </table>
+                    <p><strong>Paket Private Personal Trainer</strong></p>
+                    <ul>
+                        <li>Total Sesi: 12 Sesi</li>
+                        <li>Harga Per Sesi: Rp 179.850</li>
+                        <li>Masa Aktif: 45 Hari (1.5 Bulan)</li>
+                        <li>Eksklusif: 1 Klien, 1 Coach</li>
+                    </ul>
                 '
             ],
 
@@ -78,143 +69,143 @@ class DetailedPackagesSeeder extends Seeder
             [
                 'name' => '[Group] Squad 2 Pax (4 Sesi)',
                 'type' => 'fitness',
-                'price' => 350000,
+                'price' => 599700,
                 'duration_days' => 30,
                 'description' => '
-                    <p><strong>Paket Berdua (2 Orang)</strong></p>
+                    <p><strong>Paket Grup (2 Orang)</strong></p>
                     <ul>
-                        <li>Total Harga Grup: Rp 700.000</li>
-                        <li>Harga Per Orang: Rp 350.000 (Yang dibayarkan saat ini)</li>
+                        <li><strong>Catatan: Harga tertera adalah per orang</strong> (Total Grup: Rp 1.199.400)</li>
+                        <li>Harga Per Sesi (Total): Rp 299.850</li>
+                        <li>Harga Per Sesi (Per Orang): Rp 149.925</li>
                         <li>Masa Aktif: 1 Bulan</li>
-                        <li>Bonus: -</li>
                     </ul>
                 '
             ],
             [
                 'name' => '[Group] Squad 2 Pax (8 Sesi)',
                 'type' => 'fitness',
-                'price' => 650000,
+                'price' => 1139400,
                 'duration_days' => 30,
                 'description' => '
-                    <p><strong>Paket Berdua (2 Orang)</strong></p>
+                    <p><strong>Paket Grup (2 Orang)</strong></p>
                     <ul>
-                        <li>Total Harga Grup: Rp 1.300.000</li>
-                        <li>Harga Per Orang: Rp 650.000 (Yang dibayarkan saat ini)</li>
+                        <li><strong>Catatan: Harga tertera adalah per orang</strong> (Total Grup: Rp 2.278.800)</li>
+                        <li>Harga Per Sesi (Total): Rp 284.850</li>
+                        <li>Harga Per Sesi (Per Orang): Rp 142.425</li>
                         <li>Masa Aktif: 1 Bulan</li>
-                        <li>Bonus: Evaluasi Mingguan</li>
                     </ul>
                 '
             ],
             [
-                'name' => '[Group] Squad 2 Pax (10 Sesi)',
+                'name' => '[Group] Squad 2 Pax (12 Sesi)',
                 'type' => 'fitness',
-                'price' => 750000,
-                'duration_days' => 45, // 6 Minggu approx
+                'price' => 1619100,
+                'duration_days' => 45,
                 'description' => '
-                    <p><strong>Paket Berdua (2 Orang)</strong></p>
+                    <p><strong>Paket Grup (2 Orang)</strong></p>
                     <ul>
-                        <li>Total Harga Grup: Rp 1.500.000</li>
-                        <li>Harga Per Orang: Rp 750.000 (Yang dibayarkan saat ini)</li>
-                        <li>Masa Aktif: 6 Minggu</li>
-                        <li>Bonus: Evaluasi Mingguan + Free 1x Body Assessment</li>
+                        <li><strong>Catatan: Harga tertera adalah per orang</strong> (Total Grup: Rp 3.238.200)</li>
+                        <li>Harga Per Sesi (Total): Rp 269.850</li>
+                        <li>Harga Per Sesi (Per Orang): Rp 134.925</li>
+                        <li>Masa Aktif: 45 Hari</li>
                     </ul>
                 '
             ],
 
             // ==================================================================================
-            // 2. MINDFIT GROUP (SQUAD) - 4 ORANG
+            // 3. MINDFIT GROUP (SQUAD) - 4 ORANG
             // ==================================================================================
             [
                 'name' => '[Group] Squad 4 Pax (4 Sesi)',
                 'type' => 'fitness',
-                'price' => 250000,
+                'price' => 299850,
                 'duration_days' => 30,
                 'description' => '
-                    <p><strong>Paket Berempat (4 Orang)</strong></p>
+                    <p><strong>Paket Grup (4 Orang)</strong></p>
                     <ul>
-                        <li>Total Harga Grup: Rp 1.000.000</li>
-                        <li>Harga Per Orang: Rp 250.000 (Yang dibayarkan saat ini)</li>
+                        <li><strong>Catatan: Harga tertera adalah per orang</strong> (Total Grup: Rp 1.199.400)</li>
+                        <li>Harga Per Sesi (Total): Rp 299.850</li>
+                        <li>Harga Per Sesi (Per Orang): Rp 74.962</li>
                         <li>Masa Aktif: 1 Bulan</li>
-                        <li>Bonus: -</li>
                     </ul>
                 '
             ],
             [
                 'name' => '[Group] Squad 4 Pax (8 Sesi)',
                 'type' => 'fitness',
-                'price' => 450000,
+                'price' => 569700,
                 'duration_days' => 30,
                 'description' => '
-                    <p><strong>Paket Berempat (4 Orang)</strong></p>
+                    <p><strong>Paket Grup (4 Orang)</strong></p>
                     <ul>
-                        <li>Total Harga Grup: Rp 1.800.000</li>
-                        <li>Harga Per Orang: Rp 450.000 (Yang dibayarkan saat ini)</li>
+                        <li><strong>Catatan: Harga tertera adalah per orang</strong> (Total Grup: Rp 2.278.800)</li>
+                        <li>Harga Per Sesi (Total): Rp 284.850</li>
+                        <li>Harga Per Sesi (Per Orang): Rp 71.212</li>
                         <li>Masa Aktif: 1 Bulan</li>
-                        <li>Bonus: Grup WA Monitoring</li>
                     </ul>
                 '
             ],
             [
-                'name' => '[Group] Squad 4 Pax (10 Sesi)',
+                'name' => '[Group] Squad 4 Pax (12 Sesi)',
                 'type' => 'fitness',
-                'price' => 525000,
+                'price' => 809550,
                 'duration_days' => 45,
                 'description' => '
-                    <p><strong>Paket Berempat (4 Orang)</strong></p>
+                    <p><strong>Paket Grup (4 Orang)</strong></p>
                     <ul>
-                        <li>Total Harga Grup: Rp 2.100.000</li>
-                        <li>Harga Per Orang: Rp 525.000 (Yang dibayarkan saat ini)</li>
-                        <li>Masa Aktif: 6 Minggu</li>
-                        <li>Bonus: Grup WA Monitoring + Free Body Assessment</li>
+                        <li><strong>Catatan: Harga tertera adalah per orang</strong> (Total Grup: Rp 3.238.200)</li>
+                        <li>Harga Per Sesi (Total): Rp 269.850</li>
+                        <li>Harga Per Sesi (Per Orang): Rp 67.462</li>
+                        <li>Masa Aktif: 45 Hari</li>
                     </ul>
                 '
             ],
 
             // ==================================================================================
-            // 2. MINDFIT GROUP (SQUAD) - 6 ORANG
+            // 4. MINDFIT GROUP (SQUAD) - 6 ORANG
             // ==================================================================================
             [
                 'name' => '[Group] Squad 6 Pax (4 Sesi)',
                 'type' => 'fitness',
-                'price' => 200000,
+                'price' => 333233,
                 'duration_days' => 30,
                 'description' => '
-                    <p><strong>Paket Berenam (6 Orang)</strong></p>
+                    <p><strong>Paket Grup (6 Orang)</strong></p>
                     <ul>
-                        <li>Total Harga Grup: Rp 1.200.000</li>
-                        <li>Harga Per Orang: Rp 200.000 (Yang dibayarkan saat ini)</li>
+                        <li><strong>Catatan: Harga tertera adalah per orang</strong> (Total Grup: Rp 1.999.400)</li>
+                        <li>Harga Per Sesi (Total): Rp 499.850</li>
+                        <li>Harga Per Sesi (Per Orang): Rp 83.308</li>
                         <li>Masa Aktif: 1 Bulan</li>
-                        <li>Bonus: -</li>
                     </ul>
                 '
             ],
             [
                 'name' => '[Group] Squad 6 Pax (8 Sesi)',
                 'type' => 'fitness',
-                'price' => 350000,
+                'price' => 643800,
                 'duration_days' => 30,
                 'description' => '
-                    <p><strong>Paket Berenam (6 Orang)</strong></p>
+                    <p><strong>Paket Grup (6 Orang)</strong></p>
                     <ul>
-                        <li>Total Harga Grup: Rp 2.100.000</li>
-                        <li>Harga Per Orang: Rp 350.000 (Yang dibayarkan saat ini)</li>
+                        <li><strong>Catatan: Harga tertera adalah per orang</strong> (Total Grup: Rp 3.862.800)</li>
+                        <li>Harga Per Sesi (Total): Rp 482.850</li>
+                        <li>Harga Per Sesi (Per Orang): Rp 80.475</li>
                         <li>Masa Aktif: 1 Bulan</li>
-                        <li>Bonus: Grup WA Support</li>
                     </ul>
                 '
             ],
             [
-                'name' => '[Group] Squad 6 Pax (10 Sesi)',
+                'name' => '[Group] Squad 6 Pax (12 Sesi)',
                 'type' => 'fitness',
-                'price' => 400000,
+                'price' => 927700,
                 'duration_days' => 45,
                 'description' => '
-                    <p><strong>Paket Berenam (6 Orang)</strong></p>
+                    <p><strong>Paket Grup (6 Orang)</strong></p>
                     <ul>
-                        <li>Total Harga Grup: Rp 2.400.000</li>
-                        <li>Harga Per Orang: Rp 400.000 (Yang dibayarkan saat ini)</li>
-                        <li>Masa Aktif: 6 Minggu</li>
-                        <li>Bonus: Prioritas Booking + Voucher Diskon + Body Assessment</li>
+                        <li><strong>Catatan: Harga tertera adalah per orang</strong> (Total Grup: Rp 5.566.200)</li>
+                        <li>Harga Per Sesi (Total): Rp 463.850</li>
+                        <li>Harga Per Sesi (Per Orang): Rp 77.308</li>
+                        <li>Masa Aktif: 45 Hari</li>
                     </ul>
                 '
             ],

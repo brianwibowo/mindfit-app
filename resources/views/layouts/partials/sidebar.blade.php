@@ -32,13 +32,13 @@
                         <h4 class="text-section">MANAJEMEN</h4>
                     </li>
                     <li
-                        class="nav-item {{ request()->routeIs('admin.clients.*') || request()->routeIs('admin.coaches.*') ? 'active submenu' : '' }}">
+                        class="nav-item {{ request()->routeIs('admin.clients.*') || request()->routeIs('admin.coaches.*') || request()->routeIs('admin.admins.*') ? 'active submenu' : '' }}">
                         <a data-bs-toggle="collapse" href="#manageUser">
                             <i class="fas fa-users-cog"></i>
                             <p>Manajemen User</p>
                             <span class="caret"></span>
                         </a>
-                        <div class="collapse {{ request()->routeIs('admin.clients.*') || request()->routeIs('admin.coaches.*') ? 'show' : '' }}"
+                        <div class="collapse {{ request()->routeIs('admin.clients.*') || request()->routeIs('admin.coaches.*') || request()->routeIs('admin.admins.*') ? 'show' : '' }}"
                             id="manageUser">
                             <ul class="nav nav-collapse">
                                 <li class="{{ request()->routeIs('admin.clients.*') ? 'active' : '' }}">
@@ -49,6 +49,11 @@
                                 <li class="{{ request()->routeIs('admin.coaches.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.coaches.index') }}">
                                         <span class="sub-item">Manage Coach & Nutritionist</span>
+                                    </a>
+                                </li>
+                                <li class="{{ request()->routeIs('admin.admins.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.admins.index') }}">
+                                        <span class="sub-item">Manage Admin Sistem</span>
                                     </a>
                                 </li>
                             </ul>

@@ -30,7 +30,7 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             // Pass data from Blade to JavaScript
-            window.progressLogs = json_encode($logs);
+            window.progressLogs = @json($logs);
         </script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {

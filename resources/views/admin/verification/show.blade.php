@@ -19,8 +19,16 @@
                         </tr>
                         <tr>
                             <th>WhatsApp</th>
-                            {{-- Check User Data directly --}}
-                            <td>{{ $payment->user->phone ?? 'Belum Diisi' }}</td>
+                            <td>
+                                @if($payment->user->phone)
+                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $payment->user->phone) }}"
+                                        target="_blank" class="btn btn-sm btn-success">
+                                        <i class="fab fa-whatsapp"></i> {{ $payment->user->phone }}
+                                    </a>
+                                @else
+                                    <span class="text-muted">Belum Diisi</span>
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <th>Alamat</th>
@@ -38,6 +46,17 @@
                         <tr>
                             <th>Durasi</th>
                             <td>{{ $payment->package_data['package_duration'] ?? 0 }} Hari</td>
+                        </tr>
+                        <tr>
+                            <th>Paket Berakhir</th>
+                            <td>
+                                @if($payment->user->is_premium && $payment->user->premium_until)
+                                    <span
+                                        class="badge badge-info">{{ \Carbon\Carbon::parse($payment->user->premium_until)->format('d M Y') }}</span>
+                                @else
+                                    <span class="text-muted">Belum Aktif</span>
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <th>Add-on Meal Plan</th>

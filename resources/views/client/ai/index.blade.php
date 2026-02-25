@@ -214,10 +214,13 @@
 
     {{-- Loading Overlay --}}
     <div id="loadingOverlay"
-        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; align-items: center; justify-content: center; flex-direction: column;">
-        <div class="spinner-border text-light mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
-        <h4 class="text-white fw-bold">Sedang Menganalisa...</h4>
-        <p class="text-white small">Mohon tunggu sebentar, AI sedang meracik program untukmu.</p>
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+        <div class="bg-white p-4 rounded text-center shadow-lg"
+            style="min-width: 320px; border-top: 5px solid #1d7af3;">
+            <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+            <h4 class="text-dark fw-bold">Tunggu Hasil...</h4>
+            <p class="text-muted small mb-0">AI sedang memproses datamu.</p>
+        </div>
     </div>
 
     @push('scripts')

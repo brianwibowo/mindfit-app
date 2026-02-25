@@ -33,7 +33,11 @@ class CoachClientProgressController extends Controller
             abort(403, 'Unauthorized access to this client log.');
         }
 
-        return view('coach.progress.show', compact('log'));
+        $clientLogs = ProgressLog::where('client_id', $log->client_id)
+            ->orderBy('date', 'asc')
+            ->get();
+
+        return view('coach.progress.show', compact('log', 'clientLogs'));
     }
 
     public function update(Request $request, $id)

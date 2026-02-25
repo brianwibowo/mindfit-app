@@ -63,15 +63,17 @@
                 </div>
 
                 <div class="form-group mb-4">
-                    <label for="password_confirmation" class="form-label fw-semibold small text-muted">Konfirmasi Password</label>
+                    <label for="password_confirmation" class="form-label fw-semibold small text-muted">Konfirmasi
+                        Password</label>
                     <div class="input-group">
                         <span class="input-group-text bg-light">
                             <i class="fas fa-check-circle text-primary"></i>
                         </span>
                         <input id="password_confirmation" type="password" name="password_confirmation"
-                            class="form-control bg-light border-start-0 border-end-0"
-                            placeholder="Ulangi password" required>
-                        <span class="input-group-text bg-light" style="cursor: pointer;" id="togglePasswordConfirmation">
+                            class="form-control bg-light border-start-0 border-end-0" placeholder="Ulangi password"
+                            required>
+                        <span class="input-group-text bg-light" style="cursor: pointer;"
+                            id="togglePasswordConfirmation">
                             <i class="fas fa-eye text-muted" id="eyeIconConfirmation"></i>
                         </span>
                     </div>

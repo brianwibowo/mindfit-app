@@ -45,6 +45,12 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/coaches/{coach}/assign-clients', [\App\Http\Controllers\Admin\AdminCoachController::class, 'assignClients'])->name('coaches.assign_clients');
         Route::delete('/coaches/{coach}/clients/{client}', [\App\Http\Controllers\Admin\AdminCoachController::class, 'unassignClient'])->name('coaches.unassign_client');
 
+        // Admin User Management
+        Route::get('/admins', [\App\Http\Controllers\Admin\AdminAdminController::class, 'index'])->name('admins.index');
+        Route::get('/admins/create', [\App\Http\Controllers\Admin\AdminAdminController::class, 'create'])->name('admins.create');
+        Route::post('/admins', [\App\Http\Controllers\Admin\AdminAdminController::class, 'store'])->name('admins.store');
+        Route::delete('/admins/{admin}', [\App\Http\Controllers\Admin\AdminAdminController::class, 'destroy'])->name('admins.destroy');
+
         Route::post('/coaches/assign', [\App\Http\Controllers\Admin\AdminCoachController::class, 'assign'])->name('coaches.assign'); // Old fallback if needed
 
         // Payment Management

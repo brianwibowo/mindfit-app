@@ -42,6 +42,7 @@
                                     <th>Tgl Daftar</th>
                                     <th>Klien</th>
                                     <th>Paket</th>
+                                    <th>Berakhir</th>
                                     <th>Total</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
@@ -59,6 +60,13 @@
                                             <small>{{ $p->user->email }}</small>
                                         </td>
                                         <td>{{ $p->package_data['package_name'] ?? '-' }}</td>
+                                        <td>
+                                            @if($p->user->is_premium && $p->user->premium_until)
+                                                {{ \Carbon\Carbon::parse($p->user->premium_until)->format('d M y') }}
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
                                         <td>Rp {{ number_format($p->package_data['total_price'] ?? 0, 0, ',', '.') }}</td>
                                         <td>
                                             <span
@@ -69,7 +77,7 @@
                                         <td>
                                             <a href="{{ route('admin.verification.show', $p->id) }}"
                                                 class="btn btn-primary btn-sm">
-                                                Verifikasi
+                                                Lihat
                                             </a>
                                         </td>
                                     </tr>

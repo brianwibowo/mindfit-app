@@ -243,7 +243,7 @@ class AdminAIController extends Controller
                 'goal' => 'Bangun Kebiasaan (Habit)',
                 'nutrition' => 'Estimasi Kalori Dasar',
                 'monitoring' => 'Saat sesi latihan',
-                'price' => 'Rp 450.000',
+                'price' => 'Rp 799.400',
                 'message' => "Tubuhmu butuh adaptasi. Kita mulai dari membangun pondasi gerak dan metabolisme dasar."
             ],
             'plus' => [
@@ -255,7 +255,7 @@ class AdminAIController extends Controller
                 'goal' => 'Fat Loss Awal & Stamina',
                 'nutrition' => 'Rekomendasi Makro Simpel',
                 'monitoring' => 'Evaluasi Mingguan',
-                'price' => 'Rp 850.000',
+                'price' => 'Rp 1.518.800',
                 'message' => "Pilihan paling seimbang! Frekuensi 2x seminggu cukup untuk memicu pembakaran lemak tanpa membuatmu kaget."
             ],
             'complete' => [
@@ -267,7 +267,7 @@ class AdminAIController extends Controller
                 'goal' => 'Fat Loss, Postur, & Strength',
                 'nutrition' => 'Personal Meal Plan Harian',
                 'monitoring' => 'Full Monitoring (Daily)',
-                'price' => 'Rp 1.250.000',
+                'price' => 'Rp 2.158.200',
                 'message' => "Komitmen tinggi menghasilkan hasil maksimal. Dengan 3x seminggu dan meal plan, targetmu akan tercapai lebih cepat."
             ]
         ];

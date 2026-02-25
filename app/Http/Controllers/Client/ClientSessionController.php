@@ -16,16 +16,11 @@ class ClientSessionController extends Controller
         $query = CoachingSession::where('client_id', Auth::id());
 
         if ($type) {
-            $query->whereHas('coach', function ($q) use ($type) {
-                if ($type === 'coach') {
-                    // Coach biasa bisa punya spec: 'fitness', 'coach', atau NULL/Empty
-                    $q->whereIn('specialization', ['fitness', 'coach'])
-                        ->orWhereNull('specialization')
-                        ->orWhere('specialization', '');
-                } else {
-                    // Nutritionist spesifik
-                    $q->where('specialization', $type); // 'nutritionist'
-                }
+            $query->whereIn('coach_id', function ($subquery) use ($type) {
+                $subquery->select('coach_id')
+                    ->from('coach_client')
+                    ->where('client_id', Auth::id())
+                    ->where('type', $type);
             });
         }
 

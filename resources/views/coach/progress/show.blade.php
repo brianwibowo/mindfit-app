@@ -113,6 +113,25 @@
         </div>
     </div>
 
+    {{-- CHART SECTION --}}
+    <div class="row mt-4">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header border-bottom">
+                    <div class="card-title"><i class="fas fa-chart-line text-primary me-2"></i> Grafik Perkembangan:
+                        {{ $log->client->name }}</div>
+                    <p class="card-category">Pantau trend berat badan dan lingkar pinggang klien ini sepanjang waktu.
+                    </p>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height:40vh; width:100%;">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @push('scripts')
         <script>
             function toggleEditFeedback() {
@@ -129,6 +148,78 @@
                     formDiv.style.display = 'block';
                 }
             }
+        </script>
+
+        {{-- ChartJS Logic --}}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Prepare data from PHP
+                const logs = @json($clientLogs);
+
+                // Filter only weight/waist logs for chart
+                const weightLogs = logs.filter(l => l.weight > 0 || l.waist > 0);
+
+                const labels = weightLogs.map(l => new Date(l.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }));
+                const weightData = weightLogs.map(l => l.weight);
+                const waistData = weightLogs.map(l => l.waist);
+
+                const ctx = document.getElementById('progressChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Berat Badan (kg)',
+                                data: weightData,
+                                borderColor: '#1d7af3',
+                                backgroundColor: 'rgba(29, 122, 243, 0.1)',
+                                borderWidth: 2,
+                                tension: 0.4,
+                                fill: true,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Lingkar Pinggang (cm)',
+                                data: waistData,
+                                borderColor: '#f3545d',
+                                backgroundColor: 'rgba(243, 84, 93, 0.1)',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                tension: 0.4,
+                                fill: false,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: { display: true, text: 'Berat (kg)' }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: { display: true, text: 'Lingkar Pinggang (cm)' },
+                                grid: {
+                                    drawOnChartArea: false,
+                                },
+                            },
+                        }
+                    }
+                });
+            });
         </script>
     @endpush
 </x-app-layout>

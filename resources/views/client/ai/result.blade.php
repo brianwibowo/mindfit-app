@@ -42,6 +42,62 @@
                         </div>
                     </div>
 
+                    {{-- Full Data Accordion --}}
+                    <div class="accordion mb-4" id="accordionData">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed py-3 bg-light" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne">
+                                    <h6 class="mb-0 fw-bold text-dark"><i class="fas fa-list me-2"></i> Lihat Data Lengkap Input Anda</h6>
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionData">
+                                <div class="accordion-body p-0">
+                                    <table class="table table-bordered mb-0">
+                                        <tr>
+                                            <th width="35%" class="bg-light">Jenis Kelamin</th>
+                                            <td>{{ $payload['jenis_kelamin'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">Usia</th>
+                                            <td>{{ $payload['usia'] }} Tahun</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">Tinggi / Berat</th>
+                                            <td>{{ $payload['tinggi'] }} cm / {{ $payload['berat'] }} kg</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">Riwayat Kesehatan</th>
+                                            <td class="text-danger fw-bold">{{ $payload['riwayatKesehatan'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">Frek. Olahraga</th>
+                                            <td>{{ $payload['frekuensiOlahraga'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">Pengalaman Gym</th>
+                                            <td>{{ $payload['pengalaman'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">Pola Makan</th>
+                                            <td>{{ $payload['polaMakan'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">Target Utama</th>
+                                            <td><span class="badge bg-primary">{{ $payload['targetUtama'] }}</span></td>
+                                        </tr>
+                                        @if(!empty($payload['keluhan']))
+                                        <tr>
+                                            <th class="bg-light">Keluhan Tambahan</th>
+                                            <td>{{ $payload['keluhan'] }}</td>
+                                        </tr>
+                                        @endif
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {{-- Recommendation Card (Priority 1) --}}
                     @if(isset($result['details']))
                         <div class="card border-primary mb-4 mt-2 overflow-hidden shadow-sm" style="border-width: 2px;">
@@ -78,7 +134,7 @@
                                         class="btn btn-primary btn-lg btn-round shadow pulse-button px-5">
                                         <i class="fas fa-cart-plus me-2"></i> AMBIL PAKET
                                     </a>
-                                    <a href="https://wa.me/6281234567890?text=Halo%20Coach,%20saya%20tertarik%20paket%20{{ urlencode($result['details']['name']) }}"
+                                    <a href="https://wa.me/6285199615786?text=Halo%20Coach,%20saya%20tertarik%20paket%20{{ urlencode($result['details']['name']) }}"
                                         target="_blank" class="btn btn-outline-success btn-lg btn-round">
                                         <i class="fab fa-whatsapp me-2"></i> TANYA COACH
                                     </a>
@@ -88,7 +144,7 @@
                     @else
                          {{-- Fallback --}}
                          <div class="text-center mt-4 mb-4">
-                            <a href="https://wa.me/6281234567890?text=Halo%20Coach,%20saya%20butuh%20konsultasi%20khusus"
+                            <a href="https://wa.me/6285199615786?text=Halo%20Coach,%20saya%20butuh%20konsultasi%20khusus"
                                 class="btn btn-success btn-lg btn-round">
                                 <i class="fab fa-whatsapp me-2"></i> HUBUNGI COACH SEKARANG
                             </a>

@@ -91,7 +91,6 @@
                                 <tr>
                                     <th>Nama Klien</th>
                                     <th>Email</th>
-                                    <th>Sejak</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -100,8 +99,6 @@
                                     <tr>
                                         <td><b>{{ $client->name }}</b></td>
                                         <td>{{ $client->email }}</td>
-                                        <td>{{ $client->pivot->created_at ? $client->pivot->created_at->format('d M Y') : '-' }}
-                                        </td>
                                         <td>
                                             <form id="delete-form-{{ $client->id }}"
                                                 action="{{ route('admin.coaches.unassign_client', ['coach' => $coach->id, 'client' => $client->id]) }}"
