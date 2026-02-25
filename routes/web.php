@@ -39,6 +39,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/coaches', [\App\Http\Controllers\Admin\AdminCoachController::class, 'index'])->name('coaches.index');
         Route::get('/coaches/create', [\App\Http\Controllers\Admin\AdminCoachController::class, 'create'])->name('coaches.create');
         Route::post('/coaches', [\App\Http\Controllers\Admin\AdminCoachController::class, 'store'])->name('coaches.store');
+        Route::get('/coaches/{coach}/edit', [\App\Http\Controllers\Admin\AdminCoachController::class, 'edit'])->name('coaches.edit');
+        Route::put('/coaches/{coach}', [\App\Http\Controllers\Admin\AdminCoachController::class, 'update'])->name('coaches.update');
 
         Route::get('/coaches/{coach}', [\App\Http\Controllers\Admin\AdminCoachController::class, 'show'])->name('coaches.show');
         Route::delete('/coaches/{coach}', [\App\Http\Controllers\Admin\AdminCoachController::class, 'destroy'])->name('coaches.destroy');
@@ -110,6 +112,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Service Routes
         Route::get('/sessions', [\App\Http\Controllers\Client\ClientSessionController::class, 'index'])->name('sessions.index');
+        Route::get('/sessions/{session}', [\App\Http\Controllers\Client\ClientSessionController::class, 'show'])->name('sessions.show');
 
         // Progress Routes
         Route::get('/progress', [\App\Http\Controllers\Client\ClientProgressController::class, 'index'])->name('progress.index');

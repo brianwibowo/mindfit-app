@@ -18,9 +18,11 @@
                                     <th>#</th>
                                     <th>Nama</th>
                                     <th>Email</th>
+                                    <th>No. WhatsApp</th>
                                     <th>Spesialisasi</th>
                                     <th>Klien Diampu</th>
                                     <th>Status</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -29,6 +31,7 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td><b>{{ $coach->name }}</b></td>
                                         <td>{{ $coach->email }}</td>
+                                        <td>{{ $coach->phone ?? '-' }}</td>
                                         <td>
                                             <span
                                                 class="badge badge-{{ $coach->specialization == 'fitness' ? 'primary' : 'success' }}">
@@ -42,11 +45,15 @@
                                                 class="btn btn-sm btn-info">
                                                 <i class="fa fa-cogs"></i> Atur Coach
                                             </a>
+                                            <a href="{{ route('admin.coaches.edit', $coach->id) }}"
+                                                class="btn btn-sm btn-warning">
+                                                <i class="fa fa-edit"></i> Edit Data
+                                            </a>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center">Belum ada data coach.</td>
+                                        <td colspan="8" class="text-center">Belum ada data coach.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

@@ -18,6 +18,7 @@
                                     <th>Tipe</th>
                                     <th>Catatan</th>
                                     <th>Status</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -44,10 +45,16 @@
                                                 <span class="badge badge-success">Akan Datang</span>
                                             @endif
                                         </td>
+                                        <td>
+                                            <a href="{{ route('client.sessions.show', $session->id) }}"
+                                                class="btn btn-sm btn-info">
+                                                <i class="fa fa-eye"></i> Detail
+                                            </a>
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">Belum ada jadwal sesi.</td>
+                                        <td colspan="7" class="text-center">Belum ada jadwal sesi.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

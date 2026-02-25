@@ -16,16 +16,30 @@ class ClientSessionController extends Controller
         $query = CoachingSession::where('client_id', Auth::id());
 
         if ($type) {
-            $query->whereIn('coach_id', function ($subquery) use ($type) {
+            // Map the URL parameter 'coach' to the database pivot enums ('fitness' or 'nutritionist')
+            $pivotType = ($type === 'coach') ? 'fitness' : $type;
+
+            $query->whereIn('coach_id', function ($subquery) use ($pivotType) {
                 $subquery->select('coach_id')
                     ->from('coach_client')
                     ->where('client_id', Auth::id())
-                    ->where('type', $type);
+                    ->where('type', $pivotType);
             });
         }
 
         $sessions = $query->orderBy('date', 'desc')->get();
 
         return view('client.sessions.index', compact('sessions', 'type'));
+    }
+
+    public function show($id)
+    {
+        // Cari sesi dan pastikan sesi tersebut milik klien yang sedang login
+        $session = CoachingSession::where('id', $id)
+            ->where('client_id', Auth::id())
+            ->with('coach')
+            ->firstOrFail();
+
+        return view('client.sessions.show', compact('session'));
     }
 }

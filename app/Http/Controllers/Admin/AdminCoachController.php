@@ -26,6 +26,7 @@ class AdminCoachController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'phone' => ['required', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'specialization' => ['required', 'in:fitness,nutritionist'],
         ]);
@@ -33,12 +34,50 @@ class AdminCoachController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'role' => 'coach',
             'specialization' => $request->specialization,
         ]);
 
         return redirect()->route('admin.coaches.index')->with('success', 'Akun Coach berhasil dibuat.');
+    }
+
+    public function edit(User $coach)
+    {
+        return view('admin.coaches.edit', compact('coach'));
+    }
+
+    public function update(Request $request, User $coach)
+    {
+        $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $coach->id],
+            'phone' => ['required', 'string', 'max:20'],
+            'specialization' => ['required', 'in:fitness,nutritionist'],
+        ];
+
+        // Jika password diisi, maka tambahkan rule validasi password
+        if ($request->filled('password')) {
+            $rules['password'] = ['required', 'confirmed', Rules\Password::defaults()];
+        }
+
+        $request->validate($rules);
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'specialization' => $request->specialization,
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $coach->update($data);
+
+        return redirect()->route('admin.coaches.index')->with('success', 'Data Coach berhasil diperbarui.');
     }
 
     public function show(User $coach)
