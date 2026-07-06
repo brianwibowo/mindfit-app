@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Langkah SSH untuk masuk ke cPanel dan menjalankan perintah pembaruan
       - name: Execute SSH Commands on cPanel
@@ -22,7 +22,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd ~/mindfit-app
+            cd ~/mindfit_app
             
             # Tarik kode terbaru dari GitHub
             git pull origin main
