@@ -1,0 +1,37 @@
+name: Deploy Laravel to Shared Hosting
+
+on:
+  push:
+    branches:
+      - main # Memicu deploy otomatis setiap kali melakukan push ke branch main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Langkah SSH untuk masuk ke cPanel dan menjalankan perintah pembaruan
+      - name: Execute SSH Commands on cPanel
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ~/mindfit-app
+            
+            # Tarik kode terbaru dari GitHub
+            git pull origin main
+            
+            # Pasang dependensi PHP (optimize autoloader)
+            composer install --no-dev --optimize-autoloader
+            
+            # Jalankan migrasi database
+            php artisan migrate --force
+            
+            # Bersihkan dan buat cache konfigurasi/route baru
+            php artisan optimize
