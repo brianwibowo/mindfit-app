@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>MindFit - Healthy for Life</title>
+    <title>MindFit - App Portal</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="{{ asset('storage/images/logo.png') }}" type="image/x-icon" />
     
@@ -26,327 +26,271 @@
         :root {
             --primary: #4a90e2;
             --primary-hover: #357abd;
-            --bg-dark: #1a2035;
-            --text-light: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.65);
-            --accent-glow: rgba(74, 144, 226, 0.35);
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border-color: rgba(255, 255, 255, 0.15);
         }
 
         *, *::before, *::after { box-sizing: border-box; }
 
         html, body {
-            width: 100%;
-            max-width: 100%;
-            overflow-x: hidden;
             margin: 0;
             padding: 0;
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-        }
-
-        /* ─── NAVBAR ─── */
-        .navbar-custom {
-            background: rgba(26, 32, 53, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 0.85rem 0;
-            position: fixed;
             width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(74, 144, 226, 0.12);
-        }
-
-        .navbar-custom .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-left: 16px;
-            padding-right: 16px;
-        }
-
-        .navbar-brand {
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: var(--text-light) !important;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            letter-spacing: -0.5px;
-            text-decoration: none;
-            flex-shrink: 0;
-        }
-
-        .navbar-brand img {
-            height: 32px;
-            width: 32px;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-
-        .nav-link-custom {
-            color: var(--text-muted) !important;
-            font-weight: 500;
-            font-size: 0.875rem;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-
-        .btn-nav-signup {
-            background: var(--primary);
-            color: white !important;
-            padding: 7px 16px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            text-decoration: none;
-            white-space: nowrap;
-            display: inline-block;
-        }
-
-        /* ─── HERO ─── */
-        .hero-section {
-            display: flex;
-            align-items: center;
-            padding-top: 70px;
-            padding-bottom: 48px;
-            position: relative;
+            min-height: 100vh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             overflow: hidden;
-            min-height: 100svh; /* safe viewport height */
         }
 
-        /* Glow blobs — desktop only */
-        @media (min-width: 992px) {
-            .hero-section::before {
-                content: '';
-                position: absolute;
-                top: -10%;
-                right: -8%;
-                width: 480px;
-                height: 480px;
-                background: radial-gradient(circle, rgba(74, 144, 226, 0.15) 0%, transparent 65%);
-                border-radius: 50%;
-                pointer-events: none;
+        /* Full-Screen Immersive Background */
+        .portal-page {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100svh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 1;
+        }
+
+        .portal-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .portal-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 70%; /* Shift image up so training people are visible */
+        }
+
+        /* Dark overlay for readability */
+        .portal-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(15, 23, 42, 0.95) 0%,
+                rgba(30, 41, 59, 0.85) 50%,
+                rgba(15, 23, 42, 0.95) 100%
+            );
+        }
+
+        /* Portal Glass Card */
+        .portal-card {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 28px;
+            padding: 40px 30px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            color: var(--text-dark);
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            .hero-section::after {
-                content: '';
-                position: absolute;
-                bottom: -15%;
-                left: -6%;
-                width: 380px;
-                height: 380px;
-                background: radial-gradient(circle, rgba(74, 144, 226, 0.08) 0%, transparent 65%);
-                border-radius: 50%;
-                pointer-events: none;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        /* ─── TEXT ─── */
-        .badge-pill-custom {
+        .logo-portal {
+            height: 80px;
+            width: 80px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(74, 144, 226, 0.2));
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .portal-title {
+            font-size: clamp(1.6rem, 5vw, 2rem);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .portal-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* Buttons */
+        .btn-portal-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            border: none;
+            color: #ffffff !important;
+            border-radius: 14px;
+            padding: 14px 28px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 24px rgba(74, 144, 226, 0.25);
+            text-decoration: none !important;
+            width: 100%;
+            margin-bottom: 14px;
+        }
+
+        .btn-portal-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(74, 144, 226, 0.4);
+        }
+
+        .btn-portal-outline {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: var(--text-dark) !important;
+            border-radius: 14px;
+            padding: 14px 28px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.25s ease;
+            text-decoration: none !important;
+            width: 100%;
+            margin-bottom: 14px;
+        }
+
+        .btn-portal-outline:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
+
+        /* Divider (Fixed to show grey line on left/right of 'ATAU') */
+        .divider {
+            height: 1px;
+            background: #cbd5e1;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::after {
+            content: 'ATAU';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ffffff;
+            padding: 0 12px;
+            color: #94a3b8;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-radius: 4px;
+        }
+
+        .btn-back-main {
+            color: var(--text-muted) !important;
+            text-decoration: none !important;
+            font-size: 0.82rem;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            background: rgba(74, 144, 226, 0.12);
-            border: 1px solid rgba(74, 144, 226, 0.3);
-            color: var(--primary);
-            padding: 5px 12px;
-            border-radius: 99px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            margin-bottom: 1.2rem;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 30px;
+            border: 1px solid #cbd5e1;
+            transition: all 0.2s ease;
+            background: #f1f5f9;
+            margin-top: 10px;
         }
 
-        .hero-text h1 {
-            /* fluid: min 1.8rem → max 3.5rem based on viewport */
-            font-size: clamp(1.9rem, 5.5vw, 3.5rem);
-            font-weight: 800;
-            line-height: 1.18;
-            margin-bottom: 1.2rem;
-            letter-spacing: -0.5px;
-            word-break: break-word;
-            overflow-wrap: break-word;
+        .btn-back-main:hover {
+            color: var(--text-dark) !important;
+            border-color: #94a3b8;
+            background: #e2e8f0;
+            transform: translateX(-2px);
         }
 
-        .hero-text h1 span { color: var(--primary); }
-
-        .hero-text p.lead {
-            color: var(--text-muted);
-            font-size: clamp(0.88rem, 2.5vw, 1.05rem);
-            margin-bottom: 2rem;
-            line-height: 1.72;
-        }
-
-        /* ─── BUTTONS ─── */
-        .btn-group-hero {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .btn-main {
-            background-color: var(--primary);
-            color: white !important;
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border: 2px solid var(--primary);
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.2s;
-        }
-
-        .btn-main:hover {
-            background-color: var(--primary-hover);
-            border-color: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px -5px var(--accent-glow);
-        }
-
-        .btn-outline-custom {
-            background: transparent;
-            color: rgba(255,255,255,0.85) !important;
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border: 2px solid rgba(255,255,255,0.2);
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.2s;
-        }
-
-        .btn-outline-custom:hover {
-            border-color: rgba(255,255,255,0.5);
-            background: rgba(255,255,255,0.05);
-            color: white !important;
-        }
-
-        /* ─── IMAGE ─── */
-        .hero-image-wrapper {
-            position: relative;
-            display: flex;
-            justify-content: center;
-        }
-
-        .hero-img-main {
-            width: 100%;
-            max-width: 520px;
-            height: auto;
-            border-radius: 18px;
-            box-shadow:
-                0 20px 40px -10px rgba(0,0,0,0.5),
-                0 0 0 1px rgba(74,144,226,0.15);
-            object-fit: cover;
-            display: block;
-        }
-
-        .img-glow {
-            position: absolute;
-            inset: -20px;
-            background: radial-gradient(ellipse at center, rgba(74,144,226,0.1) 0%, transparent 70%);
-            border-radius: 32px;
-            z-index: -1;
-        }
-
-        /* ─── RESPONSIVE ─── */
-        @media (max-width: 991px) {
-            .hero-section {
-                padding-top: 80px;
-                padding-bottom: 48px;
-                min-height: auto;
-            }
-
-            .hero-text { text-align: center; }
-
-            .badge-pill-custom {
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .btn-group-hero { justify-content: center; }
-
-            .hero-image-wrapper { margin-top: 36px; }
-
-            .hero-img-main { max-width: 100%; border-radius: 14px; }
-        }
-
+        /* Responsive Mobile adjustment */
         @media (max-width: 480px) {
-            .btn-group-hero {
-                flex-direction: column;
-                align-items: stretch;
+            .portal-card {
+                padding: 30px 20px;
+                border-radius: 20px;
             }
-
-            .btn-main, .btn-outline-custom {
-                text-align: center;
+            .portal-title {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="{{ asset('storage/images/logo.png') }}" alt="MindFit">
-                MindFit
-            </a>
-            
-            <div class="d-flex align-items-center gap-3">
-                @auth
-                    <a href="{{ route('dashboard') }}" class="btn-nav-signup">Dashboard</a>
-                @else
-                    <a href="{{ route('login') }}" class="nav-link-custom d-none d-sm-inline">Log In</a>
-                    <a href="{{ route('register') }}" class="btn-nav-signup">Sign Up</a>
-                @endauth
-            </div>
+    <div class="portal-page">
+        <!-- Full-Screen Gym/Fitness Background -->
+        <div class="portal-bg">
+            <img src="{{ asset('images/people-training-gym-full-shot.webp') }}" 
+                 alt="MindFit Training Room">
         </div>
-    </nav>
 
-    <div class="hero-section">
-        <div class="container">
-            <div class="row align-items-center g-4">
+        <!-- Central Portal Glass Card -->
+        <div class="portal-card">
+            <!-- Brand Logo -->
+            <img src="{{ asset('storage/images/logo.png') }}" alt="MindFit Logo" class="logo-portal">
+            
+            <h1 class="portal-title">MindFit Portal</h1>
+            <p class="portal-subtitle">
+                Akses aplikasi coaching, pantau log perkembangan fisik harian, dan jalankan analisis kesehatan berbasis AI.
+            </p>
 
-                <div class="col-lg-6">
-                    <div class="hero-text">
-                        <div class="badge-pill-custom">
-                            <i class="fas fa-check-circle"></i> Smart Health Platform
-                        </div>
+            @auth
+                <!-- User is authenticated -->
+                <a href="{{ route('dashboard') }}" class="btn-portal-primary">
+                    <i class="fas fa-tachometer-alt"></i> Masuk ke Dashboard
+                </a>
+            @else
+                <!-- Guest users -->
+                <a href="{{ route('login') }}" class="btn-portal-primary">
+                    <i class="fas fa-sign-in-alt"></i> Masuk ke Akun
+                </a>
+                
+                <a href="{{ route('register') }}" class="btn-portal-outline">
+                    <i class="fas fa-user-plus"></i> Daftar Klien Baru
+                </a>
+            @endauth
 
-                        <h1>Train smart <br class="d-none d-lg-block"><span>Live balanced.</span></h1>
+            <div class="divider"></div>
 
-                        <p class="lead">
-                            Platform penyedia kebugaran dan panduan nutrisi terpadu. Dapatkan bimbingan terarah dari Personal Trainer dan capai target impian Anda mulai hari ini.
-                        </p>
-                        
-                        <div class="btn-group-hero">
-                            @auth
-                                <a href="{{ route('dashboard') }}" class="btn-main">
-                                    <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
-                                </a>
-                            @else
-                                <a href="{{ route('register') }}" class="btn-main">Mulai Sekarang</a>
-                                <a href="{{ route('login') }}" class="btn-outline-custom">Masuk</a>
-                            @endauth
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6">
-                    <div class="hero-image-wrapper">
-                        <div class="img-glow"></div>
-                        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                             alt="MindFit Training" 
-                             class="hero-img-main">
-                    </div>
-                </div>
-
-            </div>
+            <!-- Back to marketing main domain -->
+            <a href="https://mindfit.id" target="_blank" rel="noopener noreferrer" class="btn-back-main">
+                <i class="fas fa-arrow-left"></i> Kembali ke mindfit.id
+            </a>
         </div>
     </div>
 
