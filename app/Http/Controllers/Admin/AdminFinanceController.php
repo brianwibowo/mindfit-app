@@ -100,7 +100,7 @@ class AdminFinanceController extends Controller
                 $incomeData[] = $dayIncome;
 
                 // Expenses for day
-                $dayExpense = Expense::whereDate('date', $date)->sum('amount');
+                $dayExpense = Expense::query()->whereDate('date', $date)->sum('amount');
                 $expenseData[] = (int) $dayExpense;
             }
         } elseif ($filter == 'mingguan') {
@@ -257,7 +257,7 @@ class AdminFinanceController extends Controller
         $row2 = 2;
         foreach ($expenses as $index => $exp) {
             $sheet2->setCellValue('A' . $row2, $index + 1);
-            $sheet2->setCellValue('B' . $row2, \Carbon\Carbon::parse($exp->date)->format('d/m/Y'));
+            $sheet2->setCellValue('B' . $row2, Carbon::parse($exp->date)->format('d/m/Y'));
             $sheet2->setCellValue('C' . $row2, ucfirst($exp->category));
             $sheet2->setCellValue('D' . $row2, $exp->description);
             $sheet2->setCellValue('E' . $row2, $exp->amount);
