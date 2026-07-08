@@ -18,7 +18,7 @@ class AdminAdminController extends Controller
 
     public function create()
     {
-        return view('admin.admins.create');
+        return redirect()->route('admin.admins.index');
     }
 
     public function store(Request $request)

@@ -46,6 +46,24 @@
                 </div>
             </div>
 
+            <!-- Jenis Kelamin -->
+            <div class="form-group mb-3">
+                <label for="gender" class="form-label">Jenis Kelamin</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fas fa-venus-mars"></i>
+                    </span>
+                    <select id="gender" name="gender" class="form-select border-start-0 @error('gender') is-invalid @enderror" required>
+                        <option value="" disabled selected>Pilih Jenis Kelamin</option>
+                        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Laki-laki (Male)</option>
+                        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Perempuan (Female)</option>
+                    </select>
+                </div>
+                @error('gender')
+                    <small class="text-danger d-block mt-1" style="font-size: 0.78rem;">{{ $message }}</small>
+                @enderror
+            </div>
+
             <!-- Password & Konfirmasi Password (Baris 2) -->
             <div class="row">
                 <div class="col-md-6 form-group mb-3">

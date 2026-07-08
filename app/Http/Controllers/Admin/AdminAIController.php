@@ -15,7 +15,7 @@ class AdminAIController extends Controller
     {
         $analyses = AiAnalysis::with('user')
             ->latest()
-            ->paginate(15);
+            ->paginate(7);
 
         return view('admin.ai.index', compact('analyses'));
     }

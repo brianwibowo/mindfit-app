@@ -9,9 +9,20 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminPackageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $packages = Package::all();
+        $query = Package::query();
+
+        if ($request->filled('type') && in_array($request->type, ['nutritionist', 'fitness'])) {
+            $query->where('type', $request->type);
+        }
+
+        $packages = $query->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('admin.packages.partials.table', compact('packages'))->render();
+        }
+
         return view('admin.packages.index', compact('packages'));
     }
 
@@ -53,12 +64,18 @@ class AdminPackageController extends Controller
 
     public function show(Package $package)
     {
-        return view('admin.packages.show', compact('package'));
-    }
+        $images = json_decode($package->image);
+        $imageUrl = null;
+        if (is_array($images) && count($images) > 0) {
+            $imageUrl = asset('storage/' . $images[0]);
+        } elseif ($package->image && !is_array($images)) {
+            $imageUrl = asset('storage/' . $package->image);
+        }
 
-    public function edit(Package $package)
-    {
-        return view('admin.packages.edit', compact('package'));
+        return response()->json(array_merge($package->toArray(), [
+            'image_url' => $imageUrl,
+            'decoded_images' => $images
+        ]));
     }
 
     public function update(Request $request, Package $package)
@@ -75,10 +92,6 @@ class AdminPackageController extends Controller
         $data = $request->except(['images']);
 
         if ($request->hasFile('images')) {
-            // Delete old images if need OR keep them.
-            // For simplicity, we replace them if new ones are uploaded, OR we specific logic.
-            // "Standard" is usually replace.
-
             // If you want to delete old images, you'd need to decode $package->image (if it's JSON)
             // and delete each path. For now, we're just replacing the reference.
             $imagePaths = [];
@@ -88,7 +101,7 @@ class AdminPackageController extends Controller
             $data['image'] = json_encode($imagePaths);
         }
 
-        $data['is_active'] = $request->has('is_active'); // Checkbox handling
+        $data['is_active'] = $request->has('is_active') ? (bool) $request->is_active : false;
 
         $package->update($data);
 

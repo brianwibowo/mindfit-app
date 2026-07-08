@@ -15,6 +15,32 @@ class CoachSessionController extends Controller
         if ($session->coach_id !== Auth::id()) {
             abort(403);
         }
+
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id' => $session->id,
+                    'title' => $session->title,
+                    'type' => ucfirst($session->type),
+                    'type_raw' => $session->type,
+                    'coach_id' => $session->coach_id,
+                    'coach_name' => $session->coach->name ?? '-',
+                    'coach_role' => ucfirst($session->coach->role ?? '-'),
+                    'coach_spec' => ucfirst($session->coach->specialization ?? '-'),
+                    'client_id' => $session->client_id,
+                    'client_name' => $session->client->name ?? '-',
+                    'date_formatted' => $session->date->translatedFormat('l, d F Y'),
+                    'date_raw' => $session->date->format('Y-m-d'),
+                    'time_formatted' => $session->date->format('H:i') . ' WIB',
+                    'time_raw' => $session->date->format('H:i'),
+                    'status' => ucfirst($session->status),
+                    'status_raw' => $session->status,
+                    'notes' => $session->notes ?: 'Tidak ada catatan.'
+                ]
+            ]);
+        }
+
         return view('coach.sessions.show', compact('session'));
     }
 
@@ -24,7 +50,8 @@ class CoachSessionController extends Controller
             ->with('client')
             ->orderBy('date', 'desc')
             ->get();
-        return view('coach.sessions.index', compact('sessions'));
+        $clients = Auth::user()->clients;
+        return view('coach.sessions.index', compact('sessions', 'clients'));
     }
 
     public function create(User $client = null)

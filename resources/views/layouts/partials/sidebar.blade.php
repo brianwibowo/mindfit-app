@@ -27,48 +27,16 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
+                    
                     <li class="nav-section">
                         <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
-                        <h4 class="text-section">MANAJEMEN</h4>
+                        <h4 class="text-section">OPERASIONAL HARIAN</h4>
                     </li>
-                    <li
-                        class="nav-item {{ request()->routeIs('admin.clients.*') || request()->routeIs('admin.coaches.*') || request()->routeIs('admin.admins.*') ? 'active submenu' : '' }}">
-                        <a data-bs-toggle="collapse" href="#manageUser">
-                            <i class="fas fa-users-cog"></i>
-                            <p>Manajemen User</p>
-                            <span class="caret"></span>
+                    <li class="nav-item {{ request()->routeIs('admin.clients.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.clients.index') }}">
+                            <i class="fas fa-user-check"></i>
+                            <p>Manage Klien</p>
                         </a>
-                        <div class="collapse {{ request()->routeIs('admin.clients.*') || request()->routeIs('admin.coaches.*') || request()->routeIs('admin.admins.*') ? 'show' : '' }}"
-                            id="manageUser">
-                            <ul class="nav nav-collapse">
-                                <li class="{{ request()->routeIs('admin.clients.*') ? 'active' : '' }}">
-                                    <a href="{{ route('admin.clients.index') }}">
-                                        <span class="sub-item">Manage Klien</span>
-                                    </a>
-                                </li>
-                                <li class="{{ request()->routeIs('admin.coaches.*') ? 'active' : '' }}">
-                                    <a href="{{ route('admin.coaches.index') }}">
-                                        <span class="sub-item">Manage Coach & Nutritionist</span>
-                                    </a>
-                                </li>
-                                <li class="{{ request()->routeIs('admin.admins.*') ? 'active' : '' }}">
-                                    <a href="{{ route('admin.admins.index') }}">
-                                        <span class="sub-item">Manage Admin Sistem</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item {{ request()->routeIs('admin.packages.*') ? 'active' : '' }}">
-                        <a href="{{ route('admin.packages.index') }}">
-                            <i class="fas fa-box-open"></i>
-                            <p>Manajemen Produk</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-section">
-                        <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
-                        <h4 class="text-section">MONITORING</h4>
                     </li>
                     <li class="nav-item {{ request()->routeIs('admin.sessions.*') ? 'active' : '' }}">
                         <a href="{{ route('admin.sessions.index') }}">
@@ -82,11 +50,84 @@
                             <p>Monitoring Progress</p>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('admin.ai.*') ? 'active' : '' }}">
-                        <a href="{{ route('admin.ai.index') }}">
-                            <i class="fas fa-robot"></i>
-                            <p>Analisa AI</p>
+
+                    <li class="nav-section">
+                        <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
+                        <h4 class="text-section">ADMINISTRASI & SISTEM</h4>
+                    </li>
+                    
+                    {{-- DROPDOWN: ANALITIK & KEUANGAN --}}
+                    <li class="nav-item {{ request()->routeIs('admin.finance.*') || request()->routeIs('admin.discounts.*') ? 'active submenu' : '' }}">
+                        <a data-bs-toggle="collapse" href="#analitikMenu">
+                            <i class="fas fa-wallet"></i>
+                            <p>Analitik & Keuangan</p>
+                            <span class="caret"></span>
                         </a>
+                        <div class="collapse {{ request()->routeIs('admin.finance.*') || request()->routeIs('admin.discounts.*') ? 'show' : '' }}" id="analitikMenu">
+                            <ul class="nav nav-collapse">
+                                <li class="{{ request()->routeIs('admin.finance.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.finance.index') }}">
+                                        <span class="sub-item">Laporan Keuangan</span>
+                                    </a>
+                                </li>
+                                <li class="{{ request()->routeIs('admin.discounts.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.discounts.index') }}">
+                                        <span class="sub-item">Manajemen Diskon</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    {{-- DROPDOWN: MANAJEMEN --}}
+                    <li class="nav-item {{ request()->routeIs('admin.packages.*') || request()->routeIs('admin.coaches.*') ? 'active submenu' : '' }}">
+                        <a data-bs-toggle="collapse" href="#manajemenMenu">
+                            <i class="fas fa-folder-open"></i>
+                            <p>Manajemen</p>
+                            <span class="caret"></span>
+                        </a>
+                        <div class="collapse {{ request()->routeIs('admin.packages.*') || request()->routeIs('admin.coaches.*') ? 'show' : '' }}" id="manajemenMenu">
+                            <ul class="nav nav-collapse">
+                                <li class="{{ request()->routeIs('admin.packages.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.packages.index') }}">
+                                        <span class="sub-item">Manajemen Produk</span>
+                                    </a>
+                                </li>
+                                <li class="{{ request()->routeIs('admin.coaches.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.coaches.index') }}">
+                                        <span class="sub-item">Manage Coach & Nutritionist</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    {{-- DROPDOWN: SISTEM --}}
+                    <li class="nav-item {{ request()->routeIs('admin.ai.*') || request()->routeIs('admin.admins.*') || request()->routeIs('admin.clients.create') ? 'active submenu' : '' }}">
+                        <a data-bs-toggle="collapse" href="#sistemMenu">
+                            <i class="fas fa-cogs"></i>
+                            <p>Sistem</p>
+                            <span class="caret"></span>
+                        </a>
+                        <div class="collapse {{ request()->routeIs('admin.ai.*') || request()->routeIs('admin.admins.*') || request()->routeIs('admin.clients.create') ? 'show' : '' }}" id="sistemMenu">
+                            <ul class="nav nav-collapse">
+                                <li class="{{ request()->routeIs('admin.ai.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.ai.index') }}">
+                                        <span class="sub-item">Analisa AI</span>
+                                    </a>
+                                </li>
+                                <li class="{{ request()->routeIs('admin.clients.create') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.clients.create') }}">
+                                        <span class="sub-item">Tambah Klien Manual</span>
+                                    </a>
+                                </li>
+                                <li class="{{ request()->routeIs('admin.admins.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.admins.index') }}">
+                                        <span class="sub-item">Manage Admin Sistem</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                 @endif
 
@@ -220,7 +261,8 @@
                 <li class="nav-item mt-4">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();"
+                        <a href="{{ route('logout') }}" 
+                            onclick="event.preventDefault(); if(confirm('Apakah Anda yakin ingin keluar dari sistem MindFit?')) { this.closest('form').submit(); }"
                             class="text-danger">
                             <i class="fas fa-sign-out-alt"></i>
                             <p>Logout</p>

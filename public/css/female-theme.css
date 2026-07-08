@@ -1,0 +1,178 @@
+/* Female / Feminine Theme Override for MindFit (Kaiadmin) */
+
+:root {
+    --primary-pink: #ec4899;
+    --primary-pink-hover: #db2777;
+    --primary-pink-dark: #be185d;
+    --primary-pink-light: #fbcfe8;
+    --primary-pink-transparent: rgba(236, 72, 153, 0.15);
+    --dark-plum: #31081f;
+    --dark-plum-light: #44102d;
+}
+
+/* 1. Sidebar & Logo Header overrides */
+.sidebar,
+.sidebar[data-background-color="dark"],
+.logo-header,
+.logo-header[data-background-color="dark"] {
+    background: var(--dark-plum) !important;
+    border-right: 1px solid rgba(236, 72, 153, 0.1) !important;
+}
+
+/* Sidebar Wrapper scrollbar overlay */
+.sidebar-wrapper {
+    background: var(--dark-plum) !important;
+}
+
+/* Logo brand text */
+.logo .navbar-brand {
+    filter: drop-shadow(0 0 4px var(--primary-pink));
+}
+
+/* Active navigation item background and text */
+.sidebar .nav-secondary .nav-item.active > a {
+    background: var(--primary-pink-transparent) !important;
+    color: var(--primary-pink) !important;
+    border-left: 4px solid var(--primary-pink) !important;
+}
+
+.sidebar .nav-secondary .nav-item.active > a i,
+.sidebar .nav-secondary .nav-item.active > a p,
+.sidebar .nav-secondary .nav-item.active > a .caret {
+    color: var(--primary-pink) !important;
+}
+
+/* Hover navigation item */
+.sidebar .nav-secondary .nav-item a:hover {
+    background: rgba(236, 72, 153, 0.05) !important;
+    color: var(--primary-pink) !important;
+}
+
+.sidebar .nav-secondary .nav-item a:hover i,
+.sidebar .nav-secondary .nav-item a:hover p {
+    color: var(--primary-pink) !important;
+}
+
+/* Collapse submenu items */
+.sidebar .nav-secondary .nav-item .collapse .nav-collapse li.active a {
+    color: var(--primary-pink) !important;
+    font-weight: 600 !important;
+}
+
+.sidebar .nav-secondary .nav-item .collapse .nav-collapse li.active a:before {
+    background-color: var(--primary-pink) !important;
+}
+
+/* Section titles in sidebar */
+.sidebar .sidebar-content .nav-section .text-section {
+    color: #f472b6 !important; /* Soft light pink */
+    opacity: 0.8;
+}
+
+/* Toggle menu button */
+.btn-toggle, 
+.sidenav-toggler {
+    color: #f472b6 !important;
+}
+
+/* 2. Button Overrides */
+.btn-primary {
+    background-color: var(--primary-pink) !important;
+    border-color: var(--primary-pink) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+    background-color: var(--primary-pink-hover) !important;
+    border-color: var(--primary-pink-hover) !important;
+    color: #fff !important;
+}
+
+.btn-outline-primary {
+    color: var(--primary-pink) !important;
+    border-color: var(--primary-pink) !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+    background-color: var(--primary-pink) !important;
+    border-color: var(--primary-pink) !important;
+    color: #fff !important;
+}
+
+.btn-link {
+    color: var(--primary-pink) !important;
+}
+
+/* 3. Text & Background Accents */
+.text-primary {
+    color: var(--primary-pink) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-pink) !important;
+}
+
+.badge-primary {
+    background-color: var(--primary-pink) !important;
+}
+
+/* Card layout enhancements for female theme */
+.card-primary {
+    background: linear-gradient(135deg, var(--dark-plum), var(--primary-pink-hover)) !important;
+    border: none !important;
+}
+
+/* Active links or text in general tables/lists */
+a {
+    color: var(--primary-pink);
+}
+
+a:hover {
+    color: var(--primary-pink-hover);
+}
+
+/* Accent for headers */
+.card-title {
+    color: var(--dark-plum);
+}
+
+/* Special inputs focusing */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-pink) !important;
+    box-shadow: 0 0 0 0.2rem rgba(236, 72, 153, 0.25) !important;
+}
+
+/* Custom coach card active state */
+.coach-card.border-primary {
+    border-color: var(--primary-pink) !important;
+    background-color: var(--primary-pink-transparent) !important;
+}
+
+.coach-card.border-primary h6 {
+    color: var(--primary-pink-hover) !important;
+}
+
+/* Progress charts customization or other soft backgrounds */
+.bg-primary-light {
+    background-color: var(--primary-pink-transparent) !important;
+}
+
+/* 4. Dark Mode integration for Female Theme */
+[data-theme="dark"] .card-title {
+    color: var(--text-main) !important;
+}
+
+[data-theme="dark"] a {
+    color: #f472b6 !important;
+}
+
+[data-theme="dark"] a:hover {
+    color: var(--primary-pink) !important;
+}

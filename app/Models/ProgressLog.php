@@ -16,6 +16,7 @@ class ProgressLog extends Model
         'type',
         'weight',
         'waist',
+        'height',
         'photo',
         'description',
         'coach_note'

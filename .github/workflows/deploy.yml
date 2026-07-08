@@ -13,7 +13,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Langkah SSH untuk masuk ke cPanel dan menjalankan perintah pembaruan
+      # 1. Setup Node dan Build Asset Vite di GitHub Runner
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install & Build NPM Assets
+        run: |
+          npm ci
+          npm run build
+
+      # 2. Langkah SSH untuk masuk ke cPanel dan menjalankan perintah pembaruan
       - name: Execute SSH Commands on cPanel
         uses: appleboy/ssh-action@master
         with:
@@ -35,3 +46,14 @@ jobs:
             
             # Bersihkan dan buat cache konfigurasi/route baru
             php artisan optimize
+
+      # 3. Upload folder public/build hasil compile ke server via SCP
+      - name: Upload compiled assets via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "public/build"
+          target: "~/mindfit_app"

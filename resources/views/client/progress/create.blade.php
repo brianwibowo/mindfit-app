@@ -32,17 +32,24 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Berat Badan (kg)</label>
                                     <input type="number" step="0.1" name="weight" class="form-control"
                                         placeholder="Contoh: 65.5">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Lingkar Pinggang (cm)</label>
                                     <input type="number" step="0.1" name="waist" class="form-control"
+                                        placeholder="Opsional">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Tinggi Badan (cm)</label>
+                                    <input type="number" step="0.1" name="height" class="form-control"
                                         placeholder="Opsional">
                                 </div>
                             </div>

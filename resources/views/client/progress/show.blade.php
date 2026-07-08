@@ -5,11 +5,16 @@
         <div class="col-md-8 offset-md-2">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
                         <div class="card-title">Detail Log Progress</div>
-                        <a href="{{ route('client.progress.index') }}" class="btn btn-sm btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Kembali
-                        </a>
+                        <div>
+                            <a href="{{ route('client.progress.pdf', $log->id) }}" target="_blank" class="btn btn-sm btn-outline-primary me-2">
+                                <i class="fas fa-file-pdf me-1"></i> Unduh PDF
+                            </a>
+                            <a href="{{ route('client.progress.index') }}" class="btn btn-sm btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Kembali
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -32,8 +37,11 @@
                                     <th>Lingkar Pinggang</th>
                                     <td>{{ $log->waist ? $log->waist . ' cm' : '-' }}</td>
                                 </tr>
+                                <tr>
+                                    <th>Tinggi Badan</th>
+                                    <td>{{ $log->height ? $log->height . ' cm' : '-' }}</td>
+                                </tr>
                             </table>
-
                             <hr>
 
                             <h6>Catatan Anda:</h6>

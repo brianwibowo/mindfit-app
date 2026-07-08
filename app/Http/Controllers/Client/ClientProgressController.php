@@ -33,6 +33,7 @@ class ClientProgressController extends Controller
             'date' => 'required|date',
             'weight' => 'nullable|numeric',
             'waist' => 'nullable|numeric',
+            'height' => 'nullable|numeric',
             'type' => 'required|in:workout,nutrition,body_check',
             'photo' => 'nullable|image|max:2048', // 2MB
             'description' => 'nullable|string',
@@ -49,6 +50,7 @@ class ClientProgressController extends Controller
             'type' => $request->type,
             'weight' => $request->weight,
             'waist' => $request->waist,
+            'height' => $request->height,
             'photo' => $photoPath,
             'description' => $request->description,
         ]);
@@ -76,6 +78,7 @@ class ClientProgressController extends Controller
             'date' => 'required|date',
             'weight' => 'nullable|numeric',
             'waist' => 'nullable|numeric',
+            'height' => 'nullable|numeric',
             'type' => 'required|in:workout,nutrition,body_check',
             'photo' => 'nullable|image|max:2048',
             'description' => 'nullable|string',
@@ -86,6 +89,7 @@ class ClientProgressController extends Controller
             'type' => $request->type,
             'weight' => $request->weight,
             'waist' => $request->waist,
+            'height' => $request->height,
             'description' => $request->description,
         ];
 
@@ -113,5 +117,16 @@ class ClientProgressController extends Controller
         $log->delete();
 
         return redirect()->route('client.progress.index')->with('success', 'Progress berhasil dihapus.');
+    }
+
+    public function downloadPdf($id)
+    {
+        $log = ProgressLog::where('client_id', Auth::id())->with(['client', 'coach'])->findOrFail($id);
+
+        $clientLogs = ProgressLog::where('client_id', $log->client_id)
+            ->orderBy('date', 'asc')
+            ->get();
+
+        return view('layouts.pdf_report', compact('log', 'clientLogs'));
     }
 }

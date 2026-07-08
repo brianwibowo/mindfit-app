@@ -23,6 +23,64 @@
     <link rel="stylesheet" href="{{ asset('kaiadmin/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('kaiadmin/css/plugins.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('kaiadmin/css/kaiadmin.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/dark-theme.css') }}" />
+    <!-- Driver.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css" />
+    
+    <!-- Theme Initialization Script (Prevent White Flashing) -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'system';
+            if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    @if(Auth::check() && Auth::user()->gender === 'female')
+        <link rel="stylesheet" href="{{ asset('css/female-theme.css') }}" />
+    @endif
+    <style>
+        /* ─── Flexbox layout for sticky footer ─── */
+        .main-panel {
+            min-height: 100vh !important;
+            height: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            padding-bottom: 0 !important;
+        }
+
+        .main-panel > .container, 
+        .main-panel > .container-full {
+            margin-top: 52px !important;
+            flex: 1 0 auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+        }
+
+        .main-panel > .container > .page-inner {
+            flex: 1 0 auto !important;
+        }
+
+        /* ─── Footer styling (standard static block pushed to bottom) ─── */
+        .footer {
+            position: static !important;
+            margin-top: auto !important;
+            width: 100% !important;
+            padding: 20px 25px !important;
+            background: #fff !important;
+            border-top: 1px solid #eee !important;
+            z-index: 5;
+        }
+
+        /* ─── Dark-mode footer ─── */
+        [data-theme="dark"] .footer {
+            background: #1f283e !important;
+            border-top-color: #293247 !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -30,7 +88,7 @@
         @include('layouts.partials.sidebar')
 
         <div class="main-panel">
-            <div class="main-header">
+            <div class="main-header" style="min-height: 52px !important; height: 52px !important;">
                 <div class="main-header-logo">
                     <div class="logo-header" data-background-color="dark">
                         <a href="#" class="logo">
@@ -62,6 +120,13 @@
     <script src="{{ asset('kaiadmin/js/core/bootstrap.min.js') }}"></script>
     <script src="{{ asset('kaiadmin/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
     <script src="{{ asset('kaiadmin/js/kaiadmin.min.js') }}"></script>
+    
+    <!-- Driver.js Script -->
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+    
+    <!-- Include Help Center Accordion & Onboarding scripts -->
+    @include('layouts.partials.help_and_tour')
+    
     @stack('scripts')
 </body>
 

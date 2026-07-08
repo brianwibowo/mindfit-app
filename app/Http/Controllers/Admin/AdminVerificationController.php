@@ -34,7 +34,7 @@ class AdminVerificationController extends Controller
                 'premium_until' => now()->addDays($payment->package_data['package_duration'] ?? 30),
             ]);
 
-            return redirect()->route('admin.dashboard')->with('success', 'Pendaftaran Disetujui! Klien kini Aktif.');
+            return redirect()->route('admin.clients.index')->with('success', 'Pendaftaran Disetujui! Klien kini Aktif.');
 
         } elseif ($action == 'revision') {
             $request->validate(['admin_note' => 'required|string']);
@@ -44,11 +44,11 @@ class AdminVerificationController extends Controller
                 'admin_note' => $request->admin_note,
             ]);
 
-            return redirect()->route('admin.dashboard')->with('success', 'Permintaan Revisi dikirim ke Klien.');
+            return redirect()->route('admin.clients.index')->with('success', 'Permintaan Revisi dikirim ke Klien.');
 
         } elseif ($action == 'rejected') {
             $payment->update(['status' => 'rejected']);
-            return redirect()->route('admin.dashboard')->with('success', 'Pendaftaran Ditolak.');
+            return redirect()->route('admin.clients.index')->with('success', 'Pendaftaran Ditolak.');
         }
 
         return redirect()->back();

@@ -19,11 +19,13 @@ class User extends Authenticatable
         'password',
         'phone',
         'address',
+        'gender',
         'role',
         'specialization',
         'avatar',
         'is_premium',
         'premium_until',
+        'is_active',
     ];
 
     /**
@@ -43,6 +45,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'premium_until' => 'datetime',
             'is_premium' => 'boolean',
+            'is_active' => 'boolean',
             'password' => 'hashed',
         ];
     }

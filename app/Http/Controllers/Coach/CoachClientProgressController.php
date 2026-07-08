@@ -58,4 +58,20 @@ class CoachClientProgressController extends Controller
 
         return redirect()->route('coach.progress.show', $id)->with('success', 'Feedback berhasil dikirim!');
     }
+
+    public function downloadPdf($id)
+    {
+        $log = ProgressLog::with(['client', 'coach'])->findOrFail($id);
+
+        // Authorization check
+        if (!Auth::user()->clients->contains($log->client_id)) {
+            abort(403, 'Unauthorized access to this client log.');
+        }
+
+        $clientLogs = ProgressLog::where('client_id', $log->client_id)
+            ->orderBy('date', 'asc')
+            ->get();
+
+        return view('layouts.pdf_report', compact('log', 'clientLogs'));
+    }
 }

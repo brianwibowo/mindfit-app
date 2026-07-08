@@ -10,9 +10,16 @@ use Illuminate\Validation\Rules;
 
 class AdminCoachController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $coaches = User::where('role', 'coach')->withCount('clients')->get();
+        $coaches = User::where('role', 'coach')->with(['coachProfile'])->withCount('clients')->paginate(8);
+
+        // Return partial HTML for AJAX
+        // requests (pagination without full reload)
+        if ($request->ajax()) {
+            return view('admin.coaches.partials.cards', compact('coaches'))->render();
+        }
+
         return view('admin.coaches.index', compact('coaches'));
     }
 
@@ -29,15 +36,40 @@ class AdminCoachController extends Controller
             'phone' => ['required', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'specialization' => ['required', 'in:fitness,nutritionist'],
+            'avatar' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,heic,heif', 'max:2048'],
+            'cropped_avatar' => ['nullable', 'string'],
+            'is_active' => ['nullable', 'boolean'],
+            'expertise' => ['nullable', 'string', 'max:255'],
         ]);
 
-        User::create([
+        $avatarPath = null;
+        if ($request->filled('cropped_avatar')) {
+            $imageData = $request->input('cropped_avatar');
+            if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
+                $imageData = substr($imageData, strpos($imageData, ',') + 1);
+                $type = strtolower($type[1]);
+                $imageData = base64_decode($imageData);
+                $fileName = 'avatars/' . uniqid() . '.' . $type;
+                \Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $imageData);
+                $avatarPath = $fileName;
+            }
+        } elseif ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'role' => 'coach',
             'specialization' => $request->specialization,
+            'avatar' => $avatarPath,
+            'is_active' => $request->has('is_active') ? (bool) $request->is_active : true,
+        ]);
+
+        $user->coachProfile()->create([
+            'specialization' => $request->expertise,
         ]);
 
         return redirect()->route('admin.coaches.index')->with('success', 'Akun Coach berhasil dibuat.');
@@ -55,6 +87,10 @@ class AdminCoachController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $coach->id],
             'phone' => ['required', 'string', 'max:20'],
             'specialization' => ['required', 'in:fitness,nutritionist'],
+            'avatar' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,heic,heif', 'max:2048'],
+            'cropped_avatar' => ['nullable', 'string'],
+            'is_active' => ['nullable', 'boolean'],
+            'expertise' => ['nullable', 'string', 'max:255'],
         ];
 
         // Jika password diisi, maka tambahkan rule validasi password
@@ -69,13 +105,43 @@ class AdminCoachController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'specialization' => $request->specialization,
+            'is_active' => $request->has('is_active') ? (bool) $request->is_active : false,
         ];
 
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
 
+        if ($request->filled('cropped_avatar')) {
+            $imageData = $request->input('cropped_avatar');
+            if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
+                // Delete old avatar if exists
+                if ($coach->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($coach->avatar)) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($coach->avatar);
+                }
+                $imageData = substr($imageData, strpos($imageData, ',') + 1);
+                $type = strtolower($type[1]);
+                $imageData = base64_decode($imageData);
+                $fileName = 'avatars/' . uniqid() . '.' . $type;
+                \Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $imageData);
+                $data['avatar'] = $fileName;
+            }
+        } elseif ($request->hasFile('avatar')) {
+            // Delete old avatar if exists
+            if ($coach->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($coach->avatar)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($coach->avatar);
+            }
+            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
+
         $coach->update($data);
+
+        $coach->coachProfile()->updateOrCreate(
+            ['user_id' => $coach->id],
+            [
+                'specialization' => $request->expertise,
+            ]
+        );
 
         return redirect()->route('admin.coaches.index')->with('success', 'Data Coach berhasil diperbarui.');
     }

@@ -16,8 +16,16 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 Route::get('/dashboard', function () {
+    $role = auth()->user()->role;
+    if ($role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    } elseif ($role === 'coach') {
+        return redirect()->route('coach.dashboard');
+    } elseif ($role === 'client') {
+        return redirect()->route('client.dashboard');
+    }
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +42,8 @@ Route::middleware(['auth'])->group(function () {
 
         // Client Management
         Route::get('/clients', [\App\Http\Controllers\Admin\AdminClientController::class, 'index'])->name('clients.index');
+        Route::get('/clients/create', [\App\Http\Controllers\Admin\AdminClientController::class, 'create'])->name('clients.create');
+        Route::post('/clients', [\App\Http\Controllers\Admin\AdminClientController::class, 'store'])->name('clients.store');
 
         // Coach Management
         Route::get('/coaches', [\App\Http\Controllers\Admin\AdminCoachController::class, 'index'])->name('coaches.index');
@@ -63,8 +73,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/packages/{package}', [\App\Http\Controllers\Admin\AdminPackageController::class, 'show'])->name('packages.show');
 
 
-        // Admin Monitoring
         Route::resource('sessions', \App\Http\Controllers\Admin\AdminSessionController::class);
+        Route::patch('/sessions/{session}/status', [\App\Http\Controllers\Admin\AdminSessionController::class, 'updateStatus'])->name('sessions.update_status');
+        Route::get('/monitor-progress/{id}/pdf', [\App\Http\Controllers\Admin\AdminProgressController::class, 'downloadPdf'])->name('progress.pdf');
+        Route::get('/monitor-progress/client/{clientId}', [\App\Http\Controllers\Admin\AdminProgressController::class, 'clientTimeline'])->name('progress.client_timeline');
         Route::resource('monitor-progress', \App\Http\Controllers\Admin\AdminProgressController::class)
             ->only(['index', 'show'])
             ->names('progress');
@@ -78,6 +90,17 @@ Route::middleware(['auth'])->group(function () {
         // Verification Flows
         Route::get('/verification/{id}', [\App\Http\Controllers\Admin\AdminVerificationController::class, 'show'])->name('verification.show');
         Route::post('/verification/{id}', [\App\Http\Controllers\Admin\AdminVerificationController::class, 'update'])->name('verification.update');
+
+        // Finance Management
+        Route::get('/finance', [\App\Http\Controllers\Admin\AdminFinanceController::class, 'index'])->name('finance.index');
+        Route::get('/finance/export-pdf', [\App\Http\Controllers\Admin\AdminFinanceController::class, 'exportPdf'])->name('finance.export_pdf');
+        Route::get('/finance/export-excel', [\App\Http\Controllers\Admin\AdminFinanceController::class, 'exportExcel'])->name('finance.export_excel');
+        Route::post('/finance/expenses', [\App\Http\Controllers\Admin\AdminFinanceController::class, 'storeExpense'])->name('finance.expenses.store');
+        Route::put('/finance/expenses/{expense}', [\App\Http\Controllers\Admin\AdminFinanceController::class, 'updateExpense'])->name('finance.expenses.update');
+        Route::delete('/finance/expenses/{expense}', [\App\Http\Controllers\Admin\AdminFinanceController::class, 'destroyExpense'])->name('finance.expenses.destroy');
+
+        // Discount Management
+        Route::resource('discounts', \App\Http\Controllers\Admin\AdminDiscountController::class);
     });
 
     // Jalur khusus Coach
@@ -95,6 +118,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Monitoring
         Route::get('/progress', [\App\Http\Controllers\Coach\CoachClientProgressController::class, 'index'])->name('progress.index');
+        Route::get('/progress/{id}/pdf', [\App\Http\Controllers\Coach\CoachClientProgressController::class, 'downloadPdf'])->name('progress.pdf');
         Route::get('/progress/{id}', [\App\Http\Controllers\Coach\CoachClientProgressController::class, 'show'])->name('progress.show');
         Route::put('/progress/{id}', [\App\Http\Controllers\Coach\CoachClientProgressController::class, 'update'])->name('progress.update');
     });
@@ -109,6 +133,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/payment/{payment}', [\App\Http\Controllers\Client\ClientPaymentController::class, 'show'])->name('payment.show');
         Route::get('/payment/{payment}/edit', [\App\Http\Controllers\Client\ClientPaymentController::class, 'edit'])->name('payment.edit');
         Route::patch('/payment/{payment}', [\App\Http\Controllers\Client\ClientPaymentController::class, 'update'])->name('payment.update');
+        Route::post('/discount/validate', [\App\Http\Controllers\Client\ClientPaymentController::class, 'validateDiscount'])->middleware('throttle:10,1')->name('discount.validate');
 
         // Service Routes
         Route::get('/sessions', [\App\Http\Controllers\Client\ClientSessionController::class, 'index'])->name('sessions.index');
@@ -119,6 +144,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/progress/visuals', [\App\Http\Controllers\Client\ClientProgressController::class, 'charts'])->name('progress.charts');
         Route::get('/progress/create', [\App\Http\Controllers\Client\ClientProgressController::class, 'create'])->name('progress.create');
         Route::post('/progress', [\App\Http\Controllers\Client\ClientProgressController::class, 'store'])->name('progress.store');
+        Route::get('/progress/{id}/pdf', [\App\Http\Controllers\Client\ClientProgressController::class, 'downloadPdf'])->name('progress.pdf');
         Route::get('/progress/{id}', [\App\Http\Controllers\Client\ClientProgressController::class, 'show'])->name('progress.show');
         Route::get('/progress/{id}/edit', [\App\Http\Controllers\Client\ClientProgressController::class, 'edit'])->name('progress.edit');
         Route::put('/progress/{id}', [\App\Http\Controllers\Client\ClientProgressController::class, 'update'])->name('progress.update');

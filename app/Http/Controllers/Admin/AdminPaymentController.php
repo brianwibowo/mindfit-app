@@ -31,8 +31,28 @@ class AdminPaymentController extends Controller
                 'is_premium' => true,
                 'premium_until' => now()->addDays($durationDays),
             ]);
+
+            // Auto-assign PT if selected
+            if (isset($packageData['pt_id'])) {
+                $ptId = $packageData['pt_id'];
+                $ptCoach = User::find($ptId);
+                if ($ptCoach) {
+                    $payment->user->coaches()->detach($ptId);
+                    $payment->user->coaches()->attach($ptId, ['type' => 'fitness']);
+                }
+            }
+
+            // Auto-assign Nutritionist if selected
+            if (isset($packageData['nutritionist_id'])) {
+                $nutriId = $packageData['nutritionist_id'];
+                $nutriCoach = User::find($nutriId);
+                if ($nutriCoach) {
+                    $payment->user->coaches()->detach($nutriId);
+                    $payment->user->coaches()->attach($nutriId, ['type' => 'nutritionist']);
+                }
+            }
         } else {
-            // Jika rejected/revision, pastikan premium dicabut (jika sebelumnya pxremium)
+            // Jika rejected/revision, pastikan premium dicabut (jika sebelumnya premium)
             // Atau biarkan saja.
         }
 
