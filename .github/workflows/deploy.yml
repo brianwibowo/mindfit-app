@@ -34,19 +34,16 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ~/mindfit_app
-            
+
             # Tarik kode terbaru dari GitHub
             git pull origin main
-            
+
             # Pasang dependensi PHP (optimize autoloader)
             composer install --no-dev --optimize-autoloader
-            
+
             # Jalankan migrasi database
             php artisan migrate --force
 
-            # Jalankan seeder Coach & Nutritionist
-            php artisan db:seed --class=CoachSeeder --force
-            
             # Bersihkan dan buat cache konfigurasi/route baru
             php artisan optimize
 
