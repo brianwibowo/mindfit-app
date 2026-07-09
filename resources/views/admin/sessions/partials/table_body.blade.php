@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-hover align-middle mb-0">
+    <table class="table table-hover align-middle mb-0" style="min-width: 850px;">
         <thead>
             <tr>
                 <th style="font-size: 0.75rem; letter-spacing: 0.08em; color: #8d94a5;">TANGGAL</th>

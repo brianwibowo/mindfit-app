@@ -10,15 +10,18 @@ class CoachDashboardController extends Controller
     public function index()
     {
         $coach = \Illuminate\Support\Facades\Auth::user();
-        $clients = $coach->clients()->get();
+        
+        // Count total clients before paginating
+        $totalClients = $coach->clients()->count();
+        
+        // Paginate clients (10 per page)
+        $clients = $coach->clients()->paginate(10);
 
         $sessions = \App\Models\CoachingSession::where('coach_id', $coach->id)->get();
 
         $sessionsThisWeek = \App\Models\CoachingSession::where('coach_id', $coach->id)
             ->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])
             ->count();
-
-        $totalClients = $clients->count();
 
         $events = $sessions->map(function ($session) {
             return [

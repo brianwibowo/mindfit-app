@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-hover align-middle mb-0">
+    <table class="table table-hover align-middle mb-0" style="min-width: 800px;">
         <thead>
             <tr>
                 <th style="width: 80px;">Cover</th>

@@ -35,7 +35,7 @@ class ClientProgressController extends Controller
             'waist' => 'nullable|numeric',
             'height' => 'nullable|numeric',
             'type' => 'required|in:workout,nutrition,body_check',
-            'photo' => 'nullable|image|max:2048', // 2MB
+            'photo' => 'nullable|file|mimes:jpeg,png,jpg,heic,heif|max:2048', // 2MB
             'description' => 'nullable|string',
         ]);
 
@@ -80,7 +80,7 @@ class ClientProgressController extends Controller
             'waist' => 'nullable|numeric',
             'height' => 'nullable|numeric',
             'type' => 'required|in:workout,nutrition,body_check',
-            'photo' => 'nullable|image|max:2048',
+            'photo' => 'nullable|file|mimes:jpeg,png,jpg,heic,heif|max:2048',
             'description' => 'nullable|string',
         ]);
 

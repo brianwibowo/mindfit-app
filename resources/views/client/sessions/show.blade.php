@@ -25,7 +25,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <div class="card-title">Informasi Sesi Coaching</div>
@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ url()->previous() }}" class="btn btn-primary btn-border">Kembali</a>
+                    <a href="{{ url()->previous() }}" class="btn btn-primary btn-round px-4 text-white">Kembali</a>
                 </div>
             </div>
         </div>

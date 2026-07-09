@@ -121,7 +121,7 @@
                             </div>
                         </div>
                         <div class="card-body px-4 pb-4">
-                            <div class="chart-container" style="min-height: 280px; position: relative;">
+                            <div class="chart-container" style="position: relative; height: 280px; width: 100%; max-width: 100%; overflow: hidden;">
                                 <canvas id="registrationChart"></canvas>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                         </div>
                         <div class="card-body px-4 pb-4 pt-1">
                             <div class="table-responsive">
-                                <table class="table table-hover align-middle mb-0">
+                                <table class="table table-hover align-middle mb-0" style="min-width: 600px;">
                                     <thead>
                                         <tr>
                                             <th style="font-size: 0.72rem; letter-spacing: 0.08em; color: #8d94a5; font-weight: 700; text-transform: uppercase; padding: 12px 8px;">KLIEN</th>

@@ -5,11 +5,26 @@
     <title>Laporan Perkembangan Fisik - {{ $log->client->name }}</title>
     <style>
         body {
+            background-color: #f5f6fa;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             color: #333;
             line-height: 1.5;
-            margin: 40px;
+            margin: 0;
+            padding: 20px 0;
             font-size: 14px;
+        }
+
+        /* Container Paper A4 */
+        .paper {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm 15mm;
+            margin: 20px auto;
+            border-radius: 4px;
+            background: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            box-sizing: border-box;
+            position: relative;
         }
 
         /* Kop Surat (Letterhead) */
@@ -206,186 +221,256 @@
             height: 75px;
         }
 
+        /* Floating Back / Print Button for screen view */
+        .no-print-toolbar {
+            width: 210mm;
+            margin: 0 auto 10px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-toolbar {
+            text-decoration: none;
+            padding: 8px 16px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-toolbar-back {
+            background-color: #e2e8f0;
+            color: #475569;
+        }
+        .btn-toolbar-back:hover {
+            background-color: #cbd5e1;
+        }
+
+        .btn-toolbar-print {
+            background-color: #1a2035;
+            color: #ffffff;
+        }
+        .btn-toolbar-print:hover {
+            background-color: #2a3554;
+        }
+
         /* Hide elements in print dialog */
         @media print {
             @page {
                 size: A4;
                 margin: 20mm 15mm;
             }
-            .no-print {
+            .no-print, .no-print-toolbar {
                 display: none !important;
             }
             body {
+                background-color: #ffffff;
+                padding: 0;
                 margin: 0;
+            }
+            .paper {
+                width: 100%;
+                min-height: 100%;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+                border-radius: 0;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- KOP SURAT (LETTERHEAD) -->
-    <div class="kop-surat">
-        <div class="logo-container">
-            <img src="{{ asset('storage/images/logo.png') }}" class="logo-img" alt="MindFit Logo">
-        </div>
-        <div class="header-container">
-            <h1>MindFit Coaching Platform</h1>
-            <p style="font-style: italic; font-weight: bold; color: #1a2035; margin: 4px 0;">Train smart. Live balanced.</p>
-            <p>Email: admin@mindfit.co.id | WA: +62 851-9961-5786 | Website: https://mindfit.id</p>
-        </div>
+    <!-- SCREEN TOOLBAR (HIDDEN IN PRINT) -->
+    <div class="no-print-toolbar">
+        <a href="{{ route('client.progress.index') }}" class="btn-toolbar btn-toolbar-back">
+            &larr; Kembali ke Progress
+        </a>
+        <button onclick="window.print()" class="btn-toolbar btn-toolbar-print">
+            Cetak / Simpan PDF
+        </button>
     </div>
 
-    <!-- REPORT TITLE -->
-    <div class="report-title">
-        <h2>Laporan Perkembangan Fisik Klien</h2>
-        <p>Log Tanggal: {{ $log->date->format('d F Y') }}</p>
-    </div>
-
-    <!-- CLIENT & COACH INFORMATION -->
-    <table class="info-section">
-        <tr>
-            <td class="info-label">Nama Klien</td>
-            <td class="info-separator">:</td>
-            <td>{{ $log->client->name }}</td>
-            <td class="info-label">Pelatih (PT)</td>
-            <td class="info-separator">:</td>
-            <td>
-                @php
-                    $pt = $log->client->coaches()->where('specialization', 'fitness')->first();
-                @endphp
-                {{ $pt ? $pt->name : '-' }}
-            </td>
-        </tr>
-        <tr>
-            <td class="info-label">Email Klien</td>
-            <td class="info-separator">:</td>
-            <td>{{ $log->client->email }}</td>
-            <td class="info-label">Ahli Gizi</td>
-            <td class="info-separator">:</td>
-            <td>
-                @php
-                    $nutri = $log->client->coaches()->where('specialization', 'nutritionist')->first();
-                @endphp
-                {{ $nutri ? $nutri->name : '-' }}
-            </td>
-        </tr>
-    </table>
-
-    <!-- PROGRESS LOG TABLE -->
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Metrik Fisik</th>
-                <th>Hasil Pengukuran</th>
-                <th>Tipe Log</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Berat Badan</td>
-                <td><strong>{{ $log->weight ? $log->weight . ' kg' : '-' }}</strong></td>
-                <td>{{ ucfirst($log->type) }}</td>
-            </tr>
-            <tr>
-                <td>Lingkar Pinggang</td>
-                <td><strong>{{ $log->waist ? $log->waist . ' cm' : '-' }}</strong></td>
-                <td>{{ ucfirst($log->type) }}</td>
-            </tr>
-            <tr>
-                <td>Tinggi Badan</td>
-                <td><strong>{{ $log->height ? $log->height . ' cm' : '-' }}</strong></td>
-                <td>{{ ucfirst($log->type) }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    @php
-        // Find latest stats
-        $latestHeightLog = $clientLogs->where('height', '>', 0)->last();
-        $latestHeight = $latestHeightLog ? $latestHeightLog->height : null;
-
-        $latestWeightLog = $clientLogs->where('weight', '>', 0)->last();
-        $latestWeight = $latestWeightLog ? $latestWeightLog->weight : null;
-
-        $latestWaistLog = $clientLogs->where('waist', '>', 0)->last();
-        $latestWaist = $latestWaistLog ? $latestWaistLog->waist : null;
-
-        // Calculate BMI
-        $bmi = null;
-        $bmiStatus = 'Tidak Terpantau';
-        if ($latestHeight && $latestWeight) {
-            $bmi = $latestWeight / (($latestHeight / 100) ** 2);
-            if ($bmi < 18.5) $bmiStatus = 'Kurang (Underweight)';
-            elseif ($bmi < 25) $bmiStatus = 'Normal';
-            elseif ($bmi < 30) $bmiStatus = 'Berlebih (Overweight)';
-            else $bmiStatus = 'Obesitas';
-        }
-
-        // Calculations (earliest vs latest)
-        $earliestWeightLog = $clientLogs->where('weight', '>', 0)->first();
-        $earliestWeight = $earliestWeightLog ? $earliestWeightLog->weight : null;
-        $weightChange = null;
-        if ($earliestWeight && $latestWeight) {
-            $weightChange = $latestWeight - $earliestWeight;
-        }
-
-        $earliestWaistLog = $clientLogs->where('waist', '>', 0)->first();
-        $earliestWaist = $earliestWaistLog ? $earliestWaistLog->waist : null;
-        $waistChange = null;
-        if ($earliestWaist && $latestWaist) {
-            $waistChange = $latestWaist - $earliestWaist;
-        }
-    @endphp
-
-    <!-- VISUAL SUMMARY FOR REPORT -->
-    <div class="summary-box">
-        <h3>Ringkasan Transformasi Fisik</h3>
-        <div class="summary-grid">
-            <div class="summary-item">
-                <div class="summary-lbl">BMI Saat Ini</div>
-                <div class="summary-val">{{ $bmi ? number_format($bmi, 1) : '-' }}</div>
-                <div style="font-size: 11px; margin-top: 3px; font-weight: bold;">{{ $bmiStatus }}</div>
+    <!-- MAIN A4 PAPER CONTAINER -->
+    <div class="paper">
+        <!-- KOP SURAT (LETTERHEAD) -->
+        <div class="kop-surat">
+            <div class="logo-container">
+                <img src="{{ asset('storage/images/logo.png') }}" class="logo-img" alt="MindFit Logo">
             </div>
-            <div class="summary-item">
-                <div class="summary-lbl">Selisih Berat</div>
-                <div class="summary-val">{{ $weightChange !== null ? ($weightChange > 0 ? '+' : '') . number_format($weightChange, 1) . ' kg' : '-' }}</div>
-                <div style="font-size: 11px; margin-top: 3px;">{{ $weightChange < 0 ? 'Mengurangi Lemak' : ($weightChange > 0 ? 'Massa Otot Naik' : 'Stabil') }}</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-lbl">Selisih Pinggang</div>
-                <div class="summary-val">{{ $waistChange !== null ? ($waistChange > 0 ? '+' : '') . number_format($waistChange, 1) . ' cm' : '-' }}</div>
-                <div style="font-size: 11px; margin-top: 3px;">{{ $waistChange < 0 ? 'Menyusut' : ($waistChange > 0 ? 'Melebar' : 'Stabil') }}</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-lbl">Tinggi Badan</div>
-                <div class="summary-val">{{ $latestHeight ? number_format($latestHeight, 1) . ' cm' : '-' }}</div>
-                <div style="font-size: 11px; margin-top: 3px;">Fisik Terpantau</div>
+            <div class="header-container">
+                <h1>MindFit Coaching Platform</h1>
+                <p style="font-style: italic; font-weight: bold; color: #1a2035; margin: 4px 0;">Train smart. Live balanced.</p>
+                <p>Email: admin@mindfit.co.id | WA: +62 851-9961-5786 | Website: https://mindfit.id</p>
             </div>
         </div>
+
+        <!-- REPORT TITLE -->
+        <div class="report-title">
+            <h2>Laporan Perkembangan Fisik Klien</h2>
+            <p>Log Tanggal: {{ $log->date->format('d F Y') }}</p>
+        </div>
+
+        <!-- CLIENT & COACH INFORMATION -->
+        <table class="info-section">
+            <tr>
+                <td class="info-label">Nama Klien</td>
+                <td class="info-separator">:</td>
+                <td>{{ $log->client->name }}</td>
+                <td class="info-label">Pelatih (PT)</td>
+                <td class="info-separator">:</td>
+                <td>
+                    @php
+                        $pt = $log->client->coaches()->where('specialization', 'fitness')->first();
+                    @endphp
+                    {{ $pt ? $pt->name : '-' }}
+                </td>
+            </tr>
+            <tr>
+                <td class="info-label">Email Klien</td>
+                <td class="info-separator">:</td>
+                <td>{{ $log->client->email }}</td>
+                <td class="info-label">Ahli Gizi</td>
+                <td class="info-separator">:</td>
+                <td>
+                    @php
+                        $nutri = $log->client->coaches()->where('specialization', 'nutritionist')->first();
+                    @endphp
+                    {{ $nutri ? $nutri->name : '-' }}
+                </td>
+            </tr>
+        </table>
+
+        <!-- PROGRESS LOG TABLE -->
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Metrik Fisik</th>
+                    <th>Hasil Pengukuran</th>
+                    <th>Tipe Log</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Berat Badan</td>
+                    <td><strong>{{ $log->weight ? $log->weight . ' kg' : '-' }}</strong></td>
+                    <td>{{ ucfirst($log->type) }}</td>
+                </tr>
+                <tr>
+                    <td>Lingkar Pinggang</td>
+                    <td><strong>{{ $log->waist ? $log->waist . ' cm' : '-' }}</strong></td>
+                    <td>{{ ucfirst($log->type) }}</td>
+                </tr>
+                <tr>
+                    <td>Tinggi Badan</td>
+                    <td><strong>{{ $log->height ? $log->height . ' cm' : '-' }}</strong></td>
+                    <td>{{ ucfirst($log->type) }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        @php
+            // Find latest stats
+            $latestHeightLog = $clientLogs->where('height', '>', 0)->last();
+            $latestHeight = $latestHeightLog ? $latestHeightLog->height : null;
+
+            $latestWeightLog = $clientLogs->where('weight', '>', 0)->last();
+            $latestWeight = $latestWeightLog ? $latestWeightLog->weight : null;
+
+            $latestWaistLog = $clientLogs->where('waist', '>', 0)->last();
+            $latestWaist = $latestWaistLog ? $latestWaistLog->waist : null;
+
+            // Calculate BMI
+            $bmi = null;
+            $bmiStatus = 'Tidak Terpantau';
+            if ($latestHeight && $latestWeight) {
+                $bmi = $latestWeight / (($latestHeight / 100) ** 2);
+                if ($bmi < 18.5) $bmiStatus = 'Kurang (Underweight)';
+                elseif ($bmi < 25) $bmiStatus = 'Normal';
+                elseif ($bmi < 30) $bmiStatus = 'Berlebih (Overweight)';
+                else $bmiStatus = 'Obesitas';
+            }
+
+            // Calculations (earliest vs latest)
+            $earliestWeightLog = $clientLogs->where('weight', '>', 0)->first();
+            $earliestWeight = $earliestWeightLog ? $earliestWeightLog->weight : null;
+            $weightChange = null;
+            if ($earliestWeight && $latestWeight) {
+                $weightChange = $latestWeight - $earliestWeight;
+            }
+
+            $earliestWaistLog = $clientLogs->where('waist', '>', 0)->first();
+            $earliestWaist = $earliestWaistLog ? $earliestWaistLog->waist : null;
+            $waistChange = null;
+            if ($earliestWaist && $latestWaist) {
+                $waistChange = $latestWaist - $earliestWaist;
+            }
+        @endphp
+
+        <!-- VISUAL SUMMARY FOR REPORT -->
+        <div class="summary-box">
+            <h3>Ringkasan Transformasi Fisik</h3>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-lbl">BMI Saat Ini</div>
+                    <div class="summary-val">{{ $bmi ? number_format($bmi, 1) : '-' }}</div>
+                    <div style="font-size: 11px; margin-top: 3px; font-weight: bold;">{{ $bmiStatus }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-lbl">Selisih Berat</div>
+                    <div class="summary-val">{{ $weightChange !== null ? ($weightChange > 0 ? '+' : '') . number_format($weightChange, 1) . ' kg' : '-' }}</div>
+                    <div style="font-size: 11px; margin-top: 3px;">{{ $weightChange < 0 ? 'Mengurangi Lemak' : ($weightChange > 0 ? 'Massa Otot Naik' : 'Stabil') }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-lbl">Selisih Pinggang</div>
+                    <div class="summary-val">{{ $waistChange !== null ? ($waistChange > 0 ? '+' : '') . number_format($waistChange, 1) . ' cm' : '-' }}</div>
+                    <div style="font-size: 11px; margin-top: 3px;">{{ $waistChange < 0 ? 'Menyusut' : ($waistChange > 0 ? 'Melebar' : 'Stabil') }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-lbl">Tinggi Badan</div>
+                    <div class="summary-val">{{ $latestHeight ? number_format($latestHeight, 1) . ' cm' : '-' }}</div>
+                    <div style="font-size: 11px; margin-top: 3px;">Fisik Terpantau</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOTES / FEEDBACK -->
+        <div class="notes-container">
+            <div class="note-card">
+                <h4>Catatan Aktivitas Klien</h4>
+                <p>"{{ $log->description ?: 'Tidak ada catatan aktivitas.' }}"</p>
+            </div>
+            <div class="note-card" style="border-left-color: #2ecc71;">
+                <h4>Feedback Pelatih / Coach</h4>
+                <p>"{{ $log->coach_note ?: 'Belum ada feedback yang diberikan untuk log ini.' }}"</p>
+            </div>
+        </div>
+
+        <!-- SIGNATURE BLOCK -->
+        <div class="signature-section">
+            <div class="signature-box">
+                <p>Semarang, {{ date('d F Y') }}</p>
+                <p><strong>Pelatih Pendamping MindFit</strong></p>
+                <div class="signature-space"></div>
+                <hr style="width: 200px; margin: 0 auto 5px auto; border: none; border-top: 1px solid #333;">
+                <p>{{ $pt ? $pt->name : ($nutri ? $nutri->name : 'MindFit Coach') }}</p>
+            </div>
+        </div>
     </div>
 
-    <!-- NOTES / FEEDBACK -->
-    <div class="notes-container">
-        <div class="note-card">
-            <h4>Catatan Aktivitas Klien</h4>
-            <p>"{{ $log->description ?: 'Tidak ada catatan aktivitas.' }}"</p>
-        </div>
-        <div class="note-card" style="border-left-color: #2ecc71;">
-            <h4>Feedback Pelatih / Coach</h4>
-            <p>"{{ $log->coach_note ?: 'Belum ada feedback yang diberikan untuk log ini.' }}"</p>
-        </div>
-    </div>
-
-    <!-- SIGNATURE BLOCK -->
-    <div class="signature-section">
-        <div class="signature-box">
-            <p>Semarang, {{ date('d F Y') }}</p>
-            <p><strong>Pelatih Pendamping MindFit</strong></p>
-            <div class="signature-space"></div>
-            <hr style="width: 200px; margin: 0 auto 5px auto; border: none; border-top: 1px solid #333;">
-            <p>{{ $pt ? $pt->name : ($nutri ? $nutri->name : 'MindFit Coach') }}</p>
-        </div>
-    </div>
-
+    <!-- AUTO-TRIGGER PRINT DIALOG -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                window.print();
+            }, 600);
+        });
+    </script>
 </body>
 </html>

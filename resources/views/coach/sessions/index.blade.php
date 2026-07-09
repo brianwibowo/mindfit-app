@@ -389,6 +389,19 @@
             $('#edit-session-form').on('submit', function () {
                 $('#edit-submit-btn').prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Menyimpan...');
             });
+
+            // 4. Auto-open Create Session Modal from query parameters (dashboard shortcut)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('create') === 'true') {
+                const clientId = urlParams.get('client_id');
+                if (clientId) {
+                    $('#create-session-form select[name="client_id"]').val(clientId).change();
+                }
+                setTimeout(function() {
+                    let createModal = new bootstrap.Modal(document.getElementById('createSessionModal'));
+                    createModal.show();
+                }, 300);
+            }
         });
     </script>
     @endpush

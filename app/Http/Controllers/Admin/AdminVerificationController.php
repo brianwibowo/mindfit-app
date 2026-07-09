@@ -34,7 +34,28 @@ class AdminVerificationController extends Controller
                 'premium_until' => now()->addDays($payment->package_data['package_duration'] ?? 30),
             ]);
 
-            return redirect()->route('admin.clients.index')->with('success', 'Pendaftaran Disetujui! Klien kini Aktif.');
+            // Auto-assign PT if selected
+            $packageData = $payment->package_data;
+            if (isset($packageData['pt_id'])) {
+                $ptId = $packageData['pt_id'];
+                $ptCoach = \App\Models\User::find($ptId);
+                if ($ptCoach) {
+                    $payment->user->coaches()->detach($ptId);
+                    $payment->user->coaches()->attach($ptId, ['type' => 'fitness']);
+                }
+            }
+
+            // Auto-assign Nutritionist if selected
+            if (isset($packageData['nutritionist_id'])) {
+                $nutriId = $packageData['nutritionist_id'];
+                $nutriCoach = \App\Models\User::find($nutriId);
+                if ($nutriCoach) {
+                    $payment->user->coaches()->detach($nutriId);
+                    $payment->user->coaches()->attach($nutriId, ['type' => 'nutritionist']);
+                }
+            }
+
+            return redirect()->route('admin.clients.index')->with('success', 'Pendaftaran Disetujui! Klien kini Aktif dan Coach otomatis ditugaskan.');
 
         } elseif ($action == 'revision') {
             $request->validate(['admin_note' => 'required|string']);

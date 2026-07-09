@@ -566,7 +566,7 @@
                                 <i class="fas fa-chevron-left me-1"></i> Kembali ke Layanan
                             </button>
                             <button type="submit" class="btn btn-success px-4" id="btnSubmitForm">
-                                <i class="fas fa-check-circle me-1"></i> {{ $isEdit ? 'Simpan Perubahan' : 'Kirim Pendaftaran' }}
+                                <i class="fas fa-check-circle me-1"></i> {{ $isEdit ? 'Kirim Perbaikan' : 'Kirim Pendaftaran' }}
                             </button>
                         </div>
                     </div>
@@ -669,26 +669,26 @@
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-success text-white py-3">
                 <h5 class="modal-title text-white fw-bold" id="submitConfirmModalLabel">
-                    <i class="fas fa-check-circle me-2"></i> Konfirmasi Pendaftaran
+                    <i class="fas fa-check-circle me-2"></i> {{ $isEdit ? 'Konfirmasi Perbaikan' : 'Konfirmasi Pendaftaran' }}
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 text-center">
                 <i class="fas fa-file-invoice-dollar fa-4x text-success mb-3"></i>
-                <h4 class="fw-bold mb-2 text-dark">Kirim Pendaftaran Anda?</h4>
+                <h4 class="fw-bold mb-2 text-dark">{{ $isEdit ? 'Kirim Perbaikan Anda?' : 'Kirim Pendaftaran Anda?' }}</h4>
                 <p class="text-muted mb-4" style="font-size: 0.9rem;">
                     Pastikan nominal bukti transfer Anda sudah sesuai dengan total pembayaran sebesar:
                     <strong class="d-block text-primary fs-4 mt-2" id="confirm-total-price">Rp 0</strong>
                 </p>
                 <div class="alert alert-info text-start small mb-0 border-0 shadow-sm" style="background-color: #f0f6ff;">
                     <i class="fas fa-info-circle me-1 text-primary"></i> 
-                    Pendaftaran Anda akan ditinjau oleh tim admin dalam waktu maksimal 24 jam setelah pengiriman.
+                    {{ $isEdit ? 'Perbaikan Anda akan ditinjau oleh tim admin dalam waktu maksimal 24 jam setelah pengiriman.' : 'Pendaftaran Anda akan ditinjau oleh tim admin dalam waktu maksimal 24 jam setelah pengiriman.' }}
                 </div>
             </div>
             <div class="modal-footer bg-light p-3 border-top d-flex justify-content-between">
                 <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Periksa Kembali</button>
                 <button type="button" class="btn btn-success px-4" id="btnConfirmSubmit">
-                    Ya, Kirim Sekarang
+                    {{ $isEdit ? 'Ya, Kirim Perbaikan' : 'Ya, Kirim Sekarang' }}
                 </button>
             </div>
         </div>

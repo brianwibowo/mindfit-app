@@ -1,59 +1,87 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MindFit - Smart Health & Physical Coaching Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+MindFit adalah sebuah platform manajemen kesehatan dan kepelatihan fisik (*coaching*) terpadu berbasis web yang menghubungkan Klien, Pelatih Fisik (*Coach* / *Personal Trainer*), Ahli Gizi (*Nutritionist*), dan Admin secara efisien. Platform ini memfasilitasi pemantauan perkembangan fisik harian klien, konsultasi nutrisi, penjadwalan sesi kepelatihan, pembayaran paket, serta analisis kesehatan cerdas berbasis kecerdasan buatan (AI).
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Peran Pengguna (Multi-Role)
+*   **Admin**: Dashboard finansial (statistik pendapatan & pengeluaran harian/bulanan/tahunan), persetujuan invoice pembayaran paket klien, manajemen paket latihan, pembuatan kode diskon/promo, serta monitoring penugasan klien ke pelatih.
+*   **Coach & Nutritionist**: Manajemen penugasan klien, penjadwalan/pembaruan sesi latihan, pembaruan log perkembangan fisik klien, serta riwayat interaksi.
+*   **Client**: Pencatatan metrik fisik harian, unggah foto progres fisik, monitoring riwayat sesi kepelatihan aktif, transaksi pembelian paket, dan pengajuan konsultasi AI.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2. Fitur Premium
+*   **AI Health Analysis**: Analisis pola makan dan rekomendasi latihan fisik menggunakan AI terintegrasi.
+*   **Flexible Scheduling**: Penjadwalan interaktif antara klien dan pelatih.
+*   **Finance & Reporting**: Pencatatan pengeluaran operasional admin dan export data pemasukan/pengeluaran dalam format PDF & Excel.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🛠️ Tech Stack
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+*   **Backend**: Laravel 12.x (PHP 8.4)
+*   **Database**: MySQL
+*   **Frontend Layout**: HTML5 / Blade Template / Bootstrap 5 / Vanilla CSS
+*   **Admin Template**: KaiAdmin Dashboard Template
+*   **Build Tools**: Vite / npm
+*   **Deployment**: GitHub Actions SSH-Deploy (CI/CD)
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 💻 Cara Menjalankan Project di Lokal
 
-### Premium Partners
+### Prasyarat
+Pastikan Anda sudah menginstal:
+*   PHP >= 8.4
+*   Composer
+*   Node.js & npm
+*   MySQL
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Langkah Instalasi
+1.  **Clone Repositori**:
+    ```bash
+    git clone https://github.com/brianwibowo/mindfit-app.git
+    cd mindfit-app
+    ```
+2.  **Pasang Dependensi PHP**:
+    ```bash
+    composer install
+    ```
+3.  **Pasang Dependensi Javascript**:
+    ```bash
+    npm install
+    ```
+4.  **Konfigurasi Environment**:
+    Salin file `.env.example` menjadi `.env` lalu sesuaikan kredensial database lokal Anda:
+    ```bash
+    cp .env.example .env
+    ```
+5.  **Generate Application Key**:
+    ```bash
+    php artisan key:generate
+    ```
+6.  **Jalankan Migrasi & Seed Database**:
+    ```bash
+    php artisan migrate --seed
+    ```
+7.  **Compile Assets (Vite)**:
+    ```bash
+    npm run dev
+    ```
+8.  **Jalankan Server Lokal**:
+    ```bash
+    php artisan serve
+    ```
+    Akses web di browser melalui `http://127.0.0.1:8000`.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🌐 Deployment (CI/CD)
 
-## Code of Conduct
+Aplikasi ini menggunakan **GitHub Actions** (`.github/workflows/deploy.yml`) untuk proses deployment otomatis ke server hosting Rumahweb (`https://app.mindfit.id`):
+*   Setiap kali melakukan `git push` ke branch `main`, workflow akan otomatis meng-compile aset Vite.
+*   Workflow akan terhubung via SSH ke server hosting untuk menarik kode terbaru (`git pull`), menginstal dependensi (`composer install`), menjalankan migrasi database (`php artisan migrate`), dan mengunggah aset terkompilasi (`public/build`) ke cPanel via SCP.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+> [!IMPORTANT]
+> Jangan pernah memasukkan file `.env` ke dalam tracking Git (`gitignore` sudah dikonfigurasi). File `.env` di hosting dikelola secara terpisah langsung di direktori server cPanel demi alasan keamanan kredensial produksi.

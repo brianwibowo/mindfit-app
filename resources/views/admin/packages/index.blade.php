@@ -87,7 +87,7 @@
         /* Premium table adjustments */
         .table-responsive {
             border-radius: 8px;
-            overflow: hidden;
+            overflow-x: auto !important;
         }
         .table thead th {
             font-size: 0.72rem !important;

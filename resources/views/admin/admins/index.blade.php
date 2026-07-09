@@ -5,7 +5,7 @@
     <style>
         .table-responsive {
             border-radius: 8px;
-            overflow: hidden;
+            overflow-x: auto !important;
         }
         .table thead th {
             font-size: 0.72rem !important;
@@ -49,7 +49,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
+                        <table class="table table-hover align-middle mb-0" style="min-width: 600px;">
                             <thead>
                                 <tr>
                                     <th style="width: 60px;">#</th>
