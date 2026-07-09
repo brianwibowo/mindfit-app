@@ -85,10 +85,6 @@
         }
 
         /* Premium table adjustments */
-        .table-responsive {
-            border-radius: 8px;
-            overflow-x: auto !important;
-        }
         .table thead th {
             font-size: 0.72rem !important;
             letter-spacing: 0.06em;
@@ -122,26 +118,28 @@
                     </div>
                     
                     {{-- DUAL VIEW NAVIGATION TABS (Segmented Control style) --}}
-                    <ul class="nav nav-pills-segmented mt-3" id="filter-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link filter-btn filter-all {{ !request('type') ? 'active' : '' }}" 
-                               href="{{ route('admin.packages.index') }}">
-                                Semua
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link filter-btn filter-fitness {{ request('type') == 'fitness' ? 'active' : '' }}" 
-                               href="{{ route('admin.packages.index', ['type' => 'fitness']) }}">
-                                Fitness
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link filter-btn filter-nutritionist {{ request('type') == 'nutritionist' ? 'active' : '' }}" 
-                               href="{{ route('admin.packages.index', ['type' => 'nutritionist']) }}">
-                                Nutritionist
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="overflow-auto mt-3" style="white-space: nowrap; -webkit-overflow-scrolling: touch; max-width: 100%;">
+                        <ul class="nav nav-pills-segmented" id="filter-tabs" style="flex-wrap: nowrap; margin-top: 0 !important;">
+                            <li class="nav-item">
+                                <a class="nav-link filter-btn filter-all {{ !request('type') ? 'active' : '' }}" 
+                                   href="{{ route('admin.packages.index') }}">
+                                    Semua
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link filter-btn filter-fitness {{ request('type') == 'fitness' ? 'active' : '' }}" 
+                                   href="{{ route('admin.packages.index', ['type' => 'fitness']) }}">
+                                    Fitness
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link filter-btn filter-nutritionist {{ request('type') == 'nutritionist' ? 'active' : '' }}" 
+                                   href="{{ route('admin.packages.index', ['type' => 'nutritionist']) }}">
+                                    Nutritionist
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="card-body" style="padding: 24px;">
                     <div id="packages-table-container">

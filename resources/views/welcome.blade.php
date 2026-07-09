@@ -301,39 +301,12 @@
         }
 
         /* Responsive Breakpoints */
-        .mobile-gallery {
-            display: none;
-        }
-
         @media (max-width: 1120px) {
             .floating-card {
                 display: none; /* Hide floating cards on tablet and mobile for clean reading */
             }
             .hero-container {
                 padding: 24px 20px;
-            }
-            .mobile-gallery {
-                display: block;
-                width: 100%;
-                margin-top: 40px;
-            }
-            .mobile-gallery-card {
-                border-radius: 12px;
-                overflow: hidden;
-                border: 2px solid rgba(255, 255, 255, 0.08);
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
-                aspect-ratio: 1.5 / 1;
-                width: 100%;
-                transition: transform 0.25s ease;
-            }
-            .mobile-gallery-card img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-            .mobile-gallery-card:hover {
-                transform: scale(1.05);
-                border-color: rgba(255, 255, 255, 0.2);
             }
         }
     </style>
@@ -378,23 +351,6 @@
 
         <!-- Center Hero Block -->
         <div class="hero-center">
-            
-            <!-- Mobile-only Top Showcase (2 images: Nutritionist & Runner) -->
-            <div class="mobile-gallery mb-4" style="width: 100%;">
-                <div class="row g-2 justify-content-center">
-                    <div class="col-6">
-                        <div class="mobile-gallery-card">
-                            <img src="{{ asset('images/welcome_nutritionist.png') }}" alt="Nutritionist Consultation">
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="mobile-gallery-card">
-                            <img src="{{ asset('images/welcome_runner.png') }}" alt="Fitness Runner">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="smart-pill">
                 <i class="fas fa-heartbeat"></i> Smart Health Platform
             </div>
@@ -413,22 +369,6 @@
             @else
                 <a href="{{ route('register') }}" class="btn-cta">Daftar Gratis Sekarang</a>
             @endauth
-
-            <!-- Mobile-only Bottom Showcase (2 images: Gym Ball & Dumbbells) -->
-            <div class="mobile-gallery mt-4" style="width: 100%;">
-                <div class="row g-2 justify-content-center">
-                    <div class="col-6">
-                        <div class="mobile-gallery-card">
-                            <img src="{{ asset('images/welcome_fitness_ball.png') }}" alt="Gym Ball Training">
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="mobile-gallery-card">
-                            <img src="{{ asset('images/welcome_dumbbells.png') }}" alt="Weight Lifting dumbbells">
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Footer -->

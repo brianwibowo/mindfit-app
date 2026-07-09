@@ -94,21 +94,21 @@
         <div class="col-md-12">
             <div class="card border-0 shadow-sm" style="border-radius: 12px;">
                 <div class="card-header bg-transparent border-0 pb-0 pt-4 px-4">
-                    <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
                         <div>
                             <h3 class="fw-bold text-dark mb-1">Monitoring & Jadwal Sesi Pertemuan</h3>
                             <p class="text-muted text-xs mb-0">Jadwalkan sesi bimbingan nutrisi atau fitness secara langsung dengan klien.</p>
                         </div>
                         <!-- Modal Trigger Button -->
-                        <button type="button" class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#createSessionModal">
+                        <button type="button" class="btn btn-primary btn-round ms-md-auto mb-2 mb-md-0" data-bs-toggle="modal" data-bs-target="#createSessionModal">
                             <i class="fa fa-plus"></i> Buat Sesi Baru
                         </button>
                     </div>
                 </div>
                 <div class="card-body px-4 pb-4 pt-3">
                     {{-- Tabs navigation (Segmented Control style) --}}
-                    <div class="mb-4">
-                        <ul class="nav nav-pills-segmented" id="time-tabs">
+                    <div class="mb-4 overflow-auto" style="white-space: nowrap; -webkit-overflow-scrolling: touch; max-width: 100%;">
+                        <ul class="nav nav-pills-segmented" id="time-tabs" style="flex-wrap: nowrap; margin-bottom: 0 !important;">
                             <li class="nav-item">
                                 <a class="nav-link {{ $timeFilter == 'today' ? 'active' : '' }}" data-filter="today"
                                     href="{{ route('admin.sessions.index', ['time_filter' => 'today']) }}">

@@ -23,6 +23,27 @@
     </script>
     @endif
 
+    @if (session('warning'))
+    <script>
+        $(document).ready(function() {
+            swal({
+                title: "Peringatan!",
+                text: "{{ session('warning') }}",
+                icon: "warning",
+                buttons: {
+                    confirm: {
+                        text: "OK",
+                        value: true,
+                        visible: true,
+                        className: "btn btn-warning",
+                        closeModal: true
+                    }
+                }
+            });
+        });
+    </script>
+    @endif
+
     @if (session('error'))
     <script>
         $(document).ready(function() {

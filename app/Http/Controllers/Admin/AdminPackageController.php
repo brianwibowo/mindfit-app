@@ -17,7 +17,7 @@ class AdminPackageController extends Controller
             $query->where('type', $request->type);
         }
 
-        $packages = $query->paginate(10)->withQueryString();
+        $packages = $query->latest()->paginate(10)->withQueryString();
 
         if ($request->ajax()) {
             return view('admin.packages.partials.table', compact('packages'))->render();

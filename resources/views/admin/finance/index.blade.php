@@ -131,7 +131,7 @@
                         <!-- INCOME TAB -->
                         <div class="tab-pane fade show active" id="income" role="tabpanel" aria-labelledby="income-tab">
                             <div class="table-responsive">
-                                <table class="table table-hover table-striped">
+                                <table class="table table-hover table-striped" style="min-width: 800px;">
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>
@@ -180,7 +180,7 @@
                         <!-- EXPENSE TAB -->
                         <div class="tab-pane fade" id="expense" role="tabpanel" aria-labelledby="expense-tab">
                             <div class="table-responsive">
-                                <table class="table table-hover table-striped">
+                                <table class="table table-hover table-striped" style="min-width: 650px;">
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>

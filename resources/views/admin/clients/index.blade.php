@@ -183,9 +183,8 @@
                     </div>
                 </div>
                 <div class="card-body px-4 pb-4 pt-3">
-                    {{-- TABS (Segmented Control style) --}}
-                    <div class="mb-4">
-                        <ul class="nav nav-pills-segmented" id="status-tabs">
+                    <div class="mb-4 overflow-auto" style="white-space: nowrap; -webkit-overflow-scrolling: touch; max-width: 100%;">
+                        <ul class="nav nav-pills-segmented" id="status-tabs" style="flex-wrap: nowrap; margin-bottom: 0 !important;">
                             <li class="nav-item">
                                 <a class="nav-link {{ $status == 'pending' ? 'active' : '' }}" data-status="pending"
                                     href="{{ route('admin.clients.index', ['status' => 'pending']) }}">Baru (Pending)</a>

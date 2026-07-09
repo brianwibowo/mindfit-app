@@ -12,7 +12,7 @@ class AdminCoachController extends Controller
 {
     public function index(Request $request)
     {
-        $coaches = User::where('role', 'coach')->with(['coachProfile'])->withCount('clients')->paginate(8);
+        $coaches = User::where('role', 'coach')->with(['coachProfile'])->withCount('clients')->latest()->paginate(8);
 
         // Return partial HTML for AJAX
         // requests (pagination without full reload)
@@ -30,19 +30,21 @@ class AdminCoachController extends Controller
 
     public function store(Request $request)
     {
+        // 1. Validasi data utama tanpa avatar agar tidak langsung membatalkan input data teks jika upload avatar gagal
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'phone' => ['required', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'specialization' => ['required', 'in:fitness,nutritionist'],
-            'avatar' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,heic,heif', 'max:2048'],
             'cropped_avatar' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
             'expertise' => ['nullable', 'string', 'max:255'],
         ]);
 
         $avatarPath = null;
+        $avatarWarning = null;
+
         if ($request->filled('cropped_avatar')) {
             $imageData = $request->input('cropped_avatar');
             if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
@@ -54,7 +56,20 @@ class AdminCoachController extends Controller
                 $avatarPath = $fileName;
             }
         } elseif ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            // Validasi manual khusus file avatar agar data coach lainnya tetap dapat tersimpan
+            $avatarValidator = \Illuminate\Support\Facades\Validator::make($request->only('avatar'), [
+                'avatar' => ['file', 'mimes:jpeg,png,jpg,gif,heic,heif', 'max:2048'],
+            ]);
+
+            if ($avatarValidator->fails()) {
+                $avatarWarning = 'Namun, foto profil gagal diunggah karena ukuran terlalu besar (maksimal 2MB) atau format tidak didukung.';
+            } else {
+                try {
+                    $avatarPath = $request->file('avatar')->store('avatars', 'public');
+                } catch (\Exception $e) {
+                    $avatarWarning = 'Namun, foto profil gagal diunggah karena terjadi kesalahan sistem penyimpanan.';
+                }
+            }
         }
 
         $user = User::create([
@@ -72,6 +87,10 @@ class AdminCoachController extends Controller
             'specialization' => $request->expertise,
         ]);
 
+        if ($avatarWarning) {
+            return redirect()->route('admin.coaches.index')->with('warning', 'Akun Coach berhasil dibuat. ' . $avatarWarning);
+        }
+
         return redirect()->route('admin.coaches.index')->with('success', 'Akun Coach berhasil dibuat.');
     }
 
@@ -82,12 +101,12 @@ class AdminCoachController extends Controller
 
     public function update(Request $request, User $coach)
     {
+        // 1. Validasi data utama tanpa avatar agar tidak langsung membatalkan input data teks jika upload avatar gagal
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $coach->id],
             'phone' => ['required', 'string', 'max:20'],
             'specialization' => ['required', 'in:fitness,nutritionist'],
-            'avatar' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,heic,heif', 'max:2048'],
             'cropped_avatar' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
             'expertise' => ['nullable', 'string', 'max:255'],
@@ -112,6 +131,8 @@ class AdminCoachController extends Controller
             $data['password'] = Hash::make($request->password);
         }
 
+        $avatarWarning = null;
+
         if ($request->filled('cropped_avatar')) {
             $imageData = $request->input('cropped_avatar');
             if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
@@ -127,11 +148,24 @@ class AdminCoachController extends Controller
                 $data['avatar'] = $fileName;
             }
         } elseif ($request->hasFile('avatar')) {
-            // Delete old avatar if exists
-            if ($coach->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($coach->avatar)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($coach->avatar);
+            // Validasi manual khusus file avatar agar data coach lainnya tetap dapat diperbarui
+            $avatarValidator = \Illuminate\Support\Facades\Validator::make($request->only('avatar'), [
+                'avatar' => ['file', 'mimes:jpeg,png,jpg,gif,heic,heif', 'max:2048'],
+            ]);
+
+            if ($avatarValidator->fails()) {
+                $avatarWarning = 'Namun, foto profil baru gagal diunggah karena ukuran terlalu besar (maksimal 2MB) atau format tidak didukung.';
+            } else {
+                try {
+                    // Delete old avatar if exists
+                    if ($coach->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($coach->avatar)) {
+                        \Illuminate\Support\Facades\Storage::disk('public')->delete($coach->avatar);
+                    }
+                    $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+                } catch (\Exception $e) {
+                    $avatarWarning = 'Namun, foto profil baru gagal diunggah karena terjadi kesalahan sistem penyimpanan.';
+                }
             }
-            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
         }
 
         $coach->update($data);
@@ -142,6 +176,10 @@ class AdminCoachController extends Controller
                 'specialization' => $request->expertise,
             ]
         );
+
+        if ($avatarWarning) {
+            return redirect()->route('admin.coaches.index')->with('warning', 'Data Coach berhasil diperbarui. ' . $avatarWarning);
+        }
 
         return redirect()->route('admin.coaches.index')->with('success', 'Data Coach berhasil diperbarui.');
     }

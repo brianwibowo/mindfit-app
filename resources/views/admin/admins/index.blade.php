@@ -1,12 +1,7 @@
 <x-app-layout>
     <x-slot name="header">Manajemen Admin</x-slot>
 
-    <!-- Custom CSS for Premium Design Elements -->
     <style>
-        .table-responsive {
-            border-radius: 8px;
-            overflow-x: auto !important;
-        }
         .table thead th {
             font-size: 0.72rem !important;
             letter-spacing: 0.06em;

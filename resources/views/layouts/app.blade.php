@@ -58,10 +58,75 @@
             display: flex !important;
             flex-direction: column !important;
             width: 100% !important;
+            min-width: 0 !important;
+            overflow-x: auto !important;
         }
 
         .main-panel > .container > .page-inner {
             flex: 1 0 auto !important;
+            min-width: 0 !important;
+            overflow-x: auto !important;
+        }
+
+        /* ─── Force card content to stay within viewport ─── */
+        .page-inner .card {
+            max-width: 100% !important;
+        }
+        .page-inner .card > .card-header,
+        .page-inner .card > .card-body {
+            max-width: 100% !important;
+            overflow-x: auto !important;
+        }
+        .page-inner h3,
+        .page-inner h4,
+        .page-inner .card-title {
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+
+        /* ─── Global table responsive fix ─── */
+        .table-responsive {
+            overflow-x: auto !important;
+        }
+        .table-responsive > .table {
+            min-width: 700px;
+        }
+
+        /* ─── Global nav-pills / tab bar scroll fix ─── */
+        .nav-pills,
+        .nav-tabs {
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .nav-pills::-webkit-scrollbar,
+        .nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        @media (max-width: 767px) {
+            .page-inner .card-header .d-flex {
+                flex-wrap: wrap !important;
+            }
+        }
+
+        /* ─── Global Pagination Layout Fix ─── */
+        /* Force page numbers and pagination info to always be visible on mobile instead of hiding them */
+        nav[role="navigation"] .d-flex.justify-content-between.flex-fill.d-sm-none {
+            display: none !important;
+        }
+        nav[role="navigation"] .d-none.flex-sm-fill.d-sm-flex {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 12px;
+        }
+        @media (min-width: 576px) {
+            nav[role="navigation"] .d-none.flex-sm-fill.d-sm-flex {
+                flex-direction: row !important;
+                justify-content: space-between !important;
+            }
         }
 
         /* ─── Footer styling (standard static block pushed to bottom) ─── */
@@ -116,6 +181,14 @@
     </div>
 
     <script src="{{ asset('kaiadmin/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script>
+        // Global AJAX setup to bypass ngrok warning pages for dynamic AJAX elements
+        $.ajaxSetup({
+            headers: {
+                'ngrok-skip-browser-warning': 'true'
+            }
+        });
+    </script>
     <script src="{{ asset('kaiadmin/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('kaiadmin/js/core/bootstrap.min.js') }}"></script>
     <script src="{{ asset('kaiadmin/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
