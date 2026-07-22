@@ -47,7 +47,11 @@ jobs:
             # Buat link storage jika belum ada
             php artisan storage:link || true
 
-            # Bersihkan dan buat cache konfigurasi/route baru
+            # Bersihkan SEMUA cache lama (config, route, view, event)
+            php artisan optimize:clear
+            php artisan view:clear
+
+            # Buat cache konfigurasi/route baru
             php artisan optimize
 
       # 3. Upload folder public/build hasil compile ke server via SCP
