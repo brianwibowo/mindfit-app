@@ -57,8 +57,8 @@
 
                         <div class="form-group">
                             <label>Upload Foto Kondisi Fisik (Opsional)</label>
-                            <input type="file" name="photo" class="form-control" accept="image/*">
-                            <small class="text-muted">Format: JPG, PNG. Maks 2MB.</small>
+                            <input type="file" name="photo" id="photo" accept="image/*,.heic,.heif" class="form-control">
+                            <small class="text-muted">Format: JPG, PNG, GIF, HEIC, HEIF, WEBP. Maks 5MB.</small>
                         </div>
 
                         <div class="form-group">

@@ -27,7 +27,8 @@
                             </div>
                             <div class="mt-2">
                                 <label for="avatarInput" class="form-label text-muted small fw-bold">Ganti Foto Profil</label>
-                                <input type="file" name="avatar" id="avatarInput" accept="image/*" class="form-control form-control-sm mx-auto" style="max-width: 280px;" onchange="previewAvatar(this)">
+                                <input type="file" name="avatar" id="avatarInput" accept="image/*,.heic,.heif" class="form-control form-control-sm mx-auto" style="max-width: 280px;" onchange="previewAvatar(this)">
+                                <small class="text-muted d-block mt-1">Format: JPG, PNG, GIF, HEIC, HEIF, WEBP (Maksimal 5MB)</small>
                                 @error('avatar') <span class="text-danger d-block mt-1 small">{{ $message }}</span> @enderror
                             </div>
                         </div>

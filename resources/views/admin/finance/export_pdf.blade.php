@@ -236,13 +236,15 @@
             @php $noIncome = 1; @endphp
             @forelse($payments as $payment)
                 @php
-                    $incomeVal = $payment->package_data['total_price'] ?? $payment->package_data['package_price'] ?? 0;
+                    $pkgData = is_array($payment->package_data) ? $payment->package_data : (json_decode($payment->package_data ?? '', true) ?? []);
+                    $incomeVal = $pkgData['total_price'] ?? $pkgData['package_price'] ?? 0;
+                    $pkgName = $pkgData['package_name'] ?? 'Paket Premium';
                 @endphp
                 <tr>
                     <td class="text-center">{{ $noIncome++ }}</td>
-                    <td>{{ $payment->created_at->format('d/m/Y') }}</td>
+                    <td>{{ $payment->created_at ? $payment->created_at->format('d/m/Y') : '-' }}</td>
                     <td>{{ $payment->user->name ?? 'Klien Mindfit' }}</td>
-                    <td>{{ $payment->package_data['package_name'] ?? 'Paket Premium' }}</td>
+                    <td>{{ $pkgName }}</td>
                     <td class="text-right text-success">Rp {{ number_format($incomeVal, 0, ',', '.') }}</td>
                 </tr>
             @empty

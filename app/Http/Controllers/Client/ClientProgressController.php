@@ -35,7 +35,20 @@ class ClientProgressController extends Controller
             'waist' => 'nullable|numeric',
             'height' => 'nullable|numeric',
             'type' => 'required|in:workout,nutrition,body_check',
-            'photo' => 'nullable|file|mimes:jpeg,png,jpg,heic,heif|max:2048', // 2MB
+            'photo' => [
+                'nullable',
+                'file',
+                'max:5120',
+                function ($attribute, $value, $fail) {
+                    if ($value && $value->isValid()) {
+                        $ext = strtolower($value->getClientOriginalExtension());
+                        $allowedExts = ['jpeg', 'jpg', 'png', 'gif', 'heic', 'heif', 'webp'];
+                        if (!in_array($ext, $allowedExts)) {
+                            $fail('Format foto progress harus berupa jpeg, png, jpg, gif, heic, heif, atau webp.');
+                        }
+                    }
+                }
+            ],
             'description' => 'nullable|string',
         ]);
 
@@ -80,7 +93,20 @@ class ClientProgressController extends Controller
             'waist' => 'nullable|numeric',
             'height' => 'nullable|numeric',
             'type' => 'required|in:workout,nutrition,body_check',
-            'photo' => 'nullable|file|mimes:jpeg,png,jpg,heic,heif|max:2048',
+            'photo' => [
+                'nullable',
+                'file',
+                'max:5120',
+                function ($attribute, $value, $fail) {
+                    if ($value && $value->isValid()) {
+                        $ext = strtolower($value->getClientOriginalExtension());
+                        $allowedExts = ['jpeg', 'jpg', 'png', 'gif', 'heic', 'heif', 'webp'];
+                        if (!in_array($ext, $allowedExts)) {
+                            $fail('Format foto progress harus berupa jpeg, png, jpg, gif, heic, heif, atau webp.');
+                        }
+                    }
+                }
+            ],
             'description' => 'nullable|string',
         ]);
 

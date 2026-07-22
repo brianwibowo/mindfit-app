@@ -33,7 +33,21 @@ class ProfileController extends Controller
         }
 
         if ($request->hasFile('avatar')) {
-            $request->validate(['avatar' => 'file|mimes:jpeg,png,jpg,gif,heic,heif|max:2048']);
+            $request->validate([
+                'avatar' => [
+                    'file',
+                    'max:5120',
+                    function ($attribute, $value, $fail) {
+                        if ($value && $value->isValid()) {
+                            $ext = strtolower($value->getClientOriginalExtension());
+                            $allowedExts = ['jpeg', 'jpg', 'png', 'gif', 'heic', 'heif', 'webp'];
+                            if (!in_array($ext, $allowedExts)) {
+                                $fail('Format foto profil harus berupa jpeg, png, jpg, gif, heic, heif, atau webp.');
+                            }
+                        }
+                    }
+                ]
+            ]);
             
             // Delete old avatar file if exists
             if ($request->user()->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($request->user()->avatar)) {

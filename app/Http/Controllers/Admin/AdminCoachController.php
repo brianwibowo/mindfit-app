@@ -58,11 +58,23 @@ class AdminCoachController extends Controller
         } elseif ($request->hasFile('avatar')) {
             // Validasi manual khusus file avatar agar data coach lainnya tetap dapat tersimpan
             $avatarValidator = \Illuminate\Support\Facades\Validator::make($request->only('avatar'), [
-                'avatar' => ['file', 'mimes:jpeg,png,jpg,gif,heic,heif', 'max:2048'],
+                'avatar' => [
+                    'file',
+                    'max:5120',
+                    function ($attribute, $value, $fail) {
+                        if ($value && $value->isValid()) {
+                            $ext = strtolower($value->getClientOriginalExtension());
+                            $allowedExts = ['jpeg', 'jpg', 'png', 'gif', 'heic', 'heif', 'webp'];
+                            if (!in_array($ext, $allowedExts)) {
+                                $fail('Format file avatar harus berupa jpeg, png, jpg, gif, heic, heif, atau webp.');
+                            }
+                        }
+                    }
+                ],
             ]);
 
             if ($avatarValidator->fails()) {
-                $avatarWarning = 'Namun, foto profil gagal diunggah karena ukuran terlalu besar (maksimal 2MB) atau format tidak didukung.';
+                $avatarWarning = 'Namun, foto profil gagal diunggah karena ukuran terlalu besar (maksimal 5MB) atau format tidak didukung.';
             } else {
                 try {
                     $avatarPath = $request->file('avatar')->store('avatars', 'public');
@@ -150,11 +162,23 @@ class AdminCoachController extends Controller
         } elseif ($request->hasFile('avatar')) {
             // Validasi manual khusus file avatar agar data coach lainnya tetap dapat diperbarui
             $avatarValidator = \Illuminate\Support\Facades\Validator::make($request->only('avatar'), [
-                'avatar' => ['file', 'mimes:jpeg,png,jpg,gif,heic,heif', 'max:2048'],
+                'avatar' => [
+                    'file',
+                    'max:5120',
+                    function ($attribute, $value, $fail) {
+                        if ($value && $value->isValid()) {
+                            $ext = strtolower($value->getClientOriginalExtension());
+                            $allowedExts = ['jpeg', 'jpg', 'png', 'gif', 'heic', 'heif', 'webp'];
+                            if (!in_array($ext, $allowedExts)) {
+                                $fail('Format file avatar baru harus berupa jpeg, png, jpg, gif, heic, heif, atau webp.');
+                            }
+                        }
+                    }
+                ],
             ]);
 
             if ($avatarValidator->fails()) {
-                $avatarWarning = 'Namun, foto profil baru gagal diunggah karena ukuran terlalu besar (maksimal 2MB) atau format tidak didukung.';
+                $avatarWarning = 'Namun, foto profil baru gagal diunggah karena ukuran terlalu besar (maksimal 5MB) atau format tidak didukung.';
             } else {
                 try {
                     // Delete old avatar if exists

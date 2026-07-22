@@ -183,7 +183,8 @@ class AdminFinanceController extends Controller
 
         $totalIncome = 0;
         foreach ($payments as $payment) {
-            $totalIncome += $payment->package_data['total_price'] ?? $payment->package_data['package_price'] ?? 0;
+            $pkgData = is_array($payment->package_data) ? $payment->package_data : (json_decode($payment->package_data ?? '', true) ?? []);
+            $totalIncome += $pkgData['total_price'] ?? $pkgData['package_price'] ?? 0;
         }
         $totalExpenses = Expense::sum('amount');
         $netProfit = $totalIncome - $totalExpenses;
@@ -223,13 +224,15 @@ class AdminFinanceController extends Controller
 
         $row1 = 2;
         foreach ($payments as $index => $payment) {
-            $price = $payment->package_data['package_price'] ?? 0;
-            $total = $payment->package_data['total_price'] ?? $price;
+            $pkgData = is_array($payment->package_data) ? $payment->package_data : (json_decode($payment->package_data ?? '', true) ?? []);
+            $price = $pkgData['package_price'] ?? 0;
+            $total = $pkgData['total_price'] ?? $price;
+            $pkgName = $pkgData['package_name'] ?? 'Paket Premium';
             
             $sheet1->setCellValue('A' . $row1, $index + 1);
-            $sheet1->setCellValue('B' . $row1, $payment->created_at->format('d/m/Y'));
+            $sheet1->setCellValue('B' . $row1, $payment->created_at ? $payment->created_at->format('d/m/Y') : '-');
             $sheet1->setCellValue('C' . $row1, $payment->user->name ?? 'Klien Mindfit');
-            $sheet1->setCellValue('D' . $row1, $payment->package_data['package_name'] ?? 'Paket Premium');
+            $sheet1->setCellValue('D' . $row1, $pkgName);
             $sheet1->setCellValue('E' . $row1, $price);
             $sheet1->setCellValue('F' . $row1, $total);
             
