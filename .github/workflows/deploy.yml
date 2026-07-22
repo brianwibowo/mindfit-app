@@ -70,8 +70,8 @@ jobs:
               $PHP_BIN -r "unlink('composer-setup.php');"
             fi
 
-            # Install Composer Dependencies dengan memory limit unlimited
-            $PHP_BIN -d memory_limit=-1 composer.phar install --no-dev --optimize-autoloader
+            # Install Composer Dependencies dengan --no-scripts untuk menghindari batasan proc_open di cPanel
+            $PHP_BIN -d memory_limit=-1 composer.phar install --no-dev --no-scripts --optimize-autoloader
 
             # Jalankan migrasi database
             $PHP_BIN artisan migrate --force
