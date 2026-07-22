@@ -17,16 +17,17 @@
                         <div class="form-group text-center mb-4">
                             <div class="avatar-picker-container d-inline-block position-relative">
                                 <div class="avatar avatar-xxl mb-2 shadow-sm border border-4 border-white rounded-circle overflow-hidden bg-light" style="width: 110px; height: 110px; margin: 0 auto;">
-                                    <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('kaiadmin/img/profile.jpg') }}"
+                                    <img id="avatarPreview" src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('kaiadmin/img/profile.jpg') }}"
+                                        onerror="this.onerror=null;this.src='{{ asset('kaiadmin/img/profile.jpg') }}';"
                                         alt="image profile" class="avatar-img w-100 h-100 object-fit-cover rounded-circle">
                                 </div>
-                                <div class="upload-badge bg-primary text-white rounded-circle position-absolute bottom-0 end-0 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px; border: 2px solid white; transform: translate(-10px, -10px);">
+                                <div class="upload-badge bg-primary text-white rounded-circle position-absolute bottom-0 end-0 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px; border: 2px solid white; transform: translate(-10px, -10px); cursor: pointer;" onclick="document.getElementById('avatarInput').click();">
                                     <i class="fas fa-camera fa-xs"></i>
                                 </div>
                             </div>
                             <div class="mt-2">
                                 <label for="avatarInput" class="form-label text-muted small fw-bold">Ganti Foto Profil</label>
-                                <input type="file" name="avatar" id="avatarInput" class="form-control form-control-sm mx-auto" style="max-width: 280px;">
+                                <input type="file" name="avatar" id="avatarInput" accept="image/*" class="form-control form-control-sm mx-auto" style="max-width: 280px;" onchange="previewAvatar(this)">
                                 @error('avatar') <span class="text-danger d-block mt-1 small">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -92,4 +93,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function previewAvatar(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var preview = document.getElementById('avatarPreview');
+                    if (preview) {
+                        preview.src = e.target.result;
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 </x-app-layout>

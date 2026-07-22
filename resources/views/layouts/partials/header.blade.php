@@ -53,6 +53,7 @@
                     <a class="dropdown-toggle profile-pic d-flex align-items-center" data-bs-toggle="dropdown" href="#" aria-expanded="false" style="text-decoration: none;">
                         <div class="avatar-sm" style="width: 35px; height: 35px; min-width: 35px; height: 35px;">
                             <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('kaiadmin/img/profile.jpg') }}"
+                                onerror="this.onerror=null;this.src='{{ asset('kaiadmin/img/profile.jpg') }}';"
                                 alt="..." class="avatar-img rounded-circle" style="width: 35px; height: 35px; object-fit: cover;" />
                         </div>
                         <span class="profile-username ms-2 text-start">

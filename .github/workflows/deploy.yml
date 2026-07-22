@@ -44,6 +44,9 @@ jobs:
             # Jalankan migrasi database
             php artisan migrate --force
 
+            # Buat link storage jika belum ada
+            php artisan storage:link || true
+
             # Bersihkan dan buat cache konfigurasi/route baru
             php artisan optimize
 

@@ -171,7 +171,18 @@
     <table class="kop-table">
         <tr>
             <td class="logo-cell">
-                <img src="{{ public_path('storage/images/logo.png') }}" class="logo-img" alt="MindFit Logo">
+                @php
+                    $logoPath = storage_path('app/public/images/logo.png');
+                    if (!file_exists($logoPath)) {
+                        $logoPath = public_path('storage/images/logo.png');
+                    }
+                    $logoData = file_exists($logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath)) : null;
+                @endphp
+                @if($logoData)
+                    <img src="{{ $logoData }}" class="logo-img" alt="MindFit Logo">
+                @else
+                    <strong style="font-size: 18px; color: #1a2035;">MINDFIT</strong>
+                @endif
             </td>
             <td class="header-cell">
                 <h1>MindFit Coaching Platform</h1>
