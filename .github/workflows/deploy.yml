@@ -92,8 +92,9 @@ jobs:
               echo "Storage symlink created at $PUBLIC_HTML_DIR/storage"
             fi
 
-            # Hapus file cache bootstrap lama (mencegah error dev package provider)
+            # Hapus file cache bootstrap lama & temukan ulang paket produksi
             rm -f bootstrap/cache/*.php
+            $PHP_BIN artisan package:discover
 
             # Bersihkan SEMUA cache lama (config, route, view, event)
             $PHP_BIN artisan optimize:clear
