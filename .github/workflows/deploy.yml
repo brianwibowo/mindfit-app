@@ -13,7 +13,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 1. Setup Node dan Build Asset Vite di GitHub Runner
+      # 1. Setup PHP & Composer di GitHub Runner
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, dom, fileinfo, zip, gd, pdo_mysql
+
+      - name: Install Composer Dependencies
+        run: |
+          composer install --no-dev --optimize-autoloader
+
+      # 2. Setup Node dan Build Asset Vite di GitHub Runner
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -24,7 +35,18 @@ jobs:
           npm ci
           npm run build
 
-      # 2. Langkah SSH untuk masuk ke cPanel dan menjalankan perintah pembaruan
+      # 3. Upload vendor & public/build ke cPanel via SCP
+      - name: Upload compiled vendor & assets via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "vendor,public/build"
+          target: "~/mindfit_app"
+
+      # 4. Langkah SSH untuk masuk ke cPanel dan menjalankan perintah artisan
       - name: Execute SSH Commands on cPanel
         uses: appleboy/ssh-action@master
         with:
@@ -52,14 +74,6 @@ jobs:
             echo "Using PHP: $PHP_BIN"
             $PHP_BIN -v
 
-            # Pasang dependensi PHP dengan PHP binary yang benar
-            $PHP_BIN $(which composer) install --no-dev --optimize-autoloader 2>&1 || echo "Composer install completed with warnings"
-
-            # Verifikasi vendor packages ter-install
-            echo "=== Checking vendor packages ==="
-            ls -la vendor/barryvdh/laravel-dompdf/ 2>/dev/null || echo "WARNING: dompdf NOT installed!"
-            ls -la vendor/phpoffice/phpspreadsheet/ 2>/dev/null || echo "WARNING: phpspreadsheet NOT installed!"
-
             # Jalankan migrasi database
             $PHP_BIN artisan migrate --force
 
@@ -76,14 +90,3 @@ jobs:
 
             # Buat cache konfigurasi/route baru
             $PHP_BIN artisan optimize
-
-      # 3. Upload folder public/build hasil compile ke server via SCP
-      - name: Upload compiled assets via SCP
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          source: "public/build"
-          target: "~/mindfit_app"

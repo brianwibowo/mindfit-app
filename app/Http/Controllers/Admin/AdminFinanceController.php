@@ -199,7 +199,7 @@ class AdminFinanceController extends Controller
 
         $pdf->setPaper('a4', 'portrait');
 
-        return $pdf->stream('Laporan_Keuangan_Mindfit_' . date('Ymd_His') . '.pdf');
+        return $pdf->download('Laporan_Keuangan_Mindfit_' . date('Ymd_His') . '.pdf');
     }
 
     public function exportExcel()
@@ -228,14 +228,14 @@ class AdminFinanceController extends Controller
             $price = $pkgData['package_price'] ?? 0;
             $total = $pkgData['total_price'] ?? $price;
             $pkgName = $pkgData['package_name'] ?? 'Paket Premium';
-            
+
             $sheet1->setCellValue('A' . $row1, $index + 1);
             $sheet1->setCellValue('B' . $row1, $payment->created_at ? $payment->created_at->format('d/m/Y') : '-');
             $sheet1->setCellValue('C' . $row1, $payment->user->name ?? 'Klien Mindfit');
             $sheet1->setCellValue('D' . $row1, $pkgName);
             $sheet1->setCellValue('E' . $row1, $price);
             $sheet1->setCellValue('F' . $row1, $total);
-            
+
             $sheet1->getStyle('E' . $row1)->getNumberFormat()->setFormatCode('#,##0');
             $sheet1->getStyle('F' . $row1)->getNumberFormat()->setFormatCode('#,##0');
             $row1++;
