@@ -289,8 +289,8 @@
 
     <!-- SCREEN TOOLBAR (HIDDEN IN PRINT) -->
     <div class="no-print-toolbar">
-        <a href="{{ route('client.progress.index') }}" class="btn-toolbar btn-toolbar-back">
-            &larr; Kembali ke Progress
+        <a href="javascript:history.back()" class="btn-toolbar btn-toolbar-back">
+            &larr; Kembali
         </a>
         <button onclick="window.print()" class="btn-toolbar btn-toolbar-print">
             Cetak / Simpan PDF

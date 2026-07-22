@@ -86,9 +86,6 @@ class AdminProgressController extends Controller
             ->orderBy('date', 'asc')
             ->get();
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('layouts.pdf_report', compact('log', 'clientLogs'));
-        $pdf->setPaper('a4', 'portrait');
-
-        return $pdf->stream('Laporan_Progress_Klien_' . str_replace(' ', '_', $log->client->name) . '_' . date('Ymd') . '.pdf');
+        return view('layouts.pdf_report', compact('log', 'clientLogs'));
     }
 }
